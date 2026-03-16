@@ -1,0 +1,46 @@
+<div
+  class="bg-blackmain min-h-screen flex items-center justify-center font-sans"
+>
+  <div
+    class="relative flex flex-col items-center gap-4"
+    x-data="{ active: null }"
+  >
+    <div class="flex justify-center w-full">
+      <div
+        @mouseenter="active = 'wa'"
+        @mouseleave="active = null"
+        :class="active === 'wa' ? 'border-main scale-110' : 'border-graymid'"
+        class="circle-bot bg-whitemain shadow-lg cursor-pointer"
+      >
+        <span class="text-blackmain font-bold text-xl uppercase">WhatsApp</span>
+        <span class="text-main text-sm font-medium">Bot</span>
+      </div>
+    </div>
+
+    <div class="flex gap-8 -mt-8">
+      <div
+        @mouseenter="active = 'telegram'"
+        @mouseleave="active = null"
+        :class="active === 'telegram' ? 'border-main scale-110' : 'border-graymid'"
+        class="circle-bot bg-whitemain shadow-lg cursor-pointer"
+      >
+        <span class="text-blackmain font-bold text-xl uppercase">Telegram</span>
+        <span class="text-main text-sm font-medium">Bot</span>
+      </div>
+
+      <div
+        @mouseenter="active = 'discord'"
+        @mouseleave="active = null"
+        :class="active === 'discord' ? 'border-main scale-110' : 'border-graymid'"
+        class="circle-bot bg-whitemain shadow-lg cursor-pointer"
+      >
+        <span class="text-blackmain font-bold text-xl uppercase">Discord</span>
+        <span class="text-main text-sm font-medium">Bot</span>
+      </div>
+    </div>
+
+    <div class="mt-10 text-graymid text-sm italic">
+      Silahkan pilih bot untuk memulai
+    </div>
+  </div>
+</div>

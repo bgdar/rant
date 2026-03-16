@@ -1,0 +1,2 @@
+nantik semua Bot akan mengambil data Dummy dari database Monggo db 
+dan data.dummy.jdon adalah data default yang akan di isinkan ke database mongo selama datanya kosong

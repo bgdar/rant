@@ -1,0 +1,95 @@
+<div class="flex justify-center p-10 bg-[#FFFFFF]">
+  <div class="flex flex-col md:flex-row w-full lg:w-[80%] gap-8">
+    <div
+      class="w-full md:w-1/4 bg-main shadow-[0_10px_30px_rgba(0,0,0,0.1)] rounded-xl border-t-4 border-[#FF0000] p-8 h-fit transition-transform hover:-translate-y-1"
+    >
+      <div class="text-center">
+        <div
+          class="w-24 h-24 mx-auto rounded-full bg-[#999999]/20 flex items-center justify-center mb-4 border border-[#999999]/10"
+        >
+          <svg
+            class="w-12 h-12 text-[#999999]"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
+        </div>
+
+        <h2 class="font-bold text-[#000000] text-xl tracking-tight">
+          <%= author %>
+        </h2>
+        <p class="text-[#999999] text-sm uppercase tracking-widest mt-1">
+          Penulis Artikel
+        </p>
+
+        <div class="mt-8 border-t border-[#999999]/20 pt-6">
+          <p class="text-[#999999] text-xs font-semibold mb-2">SIGNATURE</p>
+          <div class="text-3xl font-serif italic text-[#FF0000] opacity-80">
+            ✍️
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="flex-1 bg-[#FFFFFF] shadow-[0_10px_40px_rgba(0,0,0,0.05)] rounded-xl p-8 md:p-12 border border-[#999999]/10"
+    >
+      <h1
+        class="text-4xl md:text-5xl font-extrabold text-[#000000] mb-6 leading-tight"
+      >
+        <%= title %>
+      </h1>
+
+      <div class="flex items-center gap-3 mb-10">
+        <span class="h-[1px] w-8 bg-[#FF0000]"></span>
+        <p class="text-[#999999] font-medium text-sm">
+          Diterbitkan pada: <span class="text-[#000000]"><%= date %></span>
+        </p>
+      </div>
+
+      <div
+        class="space-y-6 text-lg text-[#000000]/80 leading-relaxed font-light"
+      >
+        <p
+          class="first-letter:text-5xl first-letter:font-bold first-letter:text-[#FF0000] first-letter:mr-3 first-letter:float-left"
+        >
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua.
+        </p>
+
+        <p>
+          Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+          nisi ut aliquip ex ea commodo consequat.
+        </p>
+
+        <blockquote
+          class="border-l-4 border-[#FF0000] pl-6 py-2 my-8 italic text-[#999999] bg-[#999999]/5"
+        >
+          "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
+          dolore eu fugiat nulla pariatur."
+        </blockquote>
+
+        <p>
+          Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
+          officia deserunt mollit anim id est laborum.
+        </p>
+      </div>
+
+      <div class="mt-12 pt-8 border-t border-[#999999]/10 flex gap-2">
+        <span
+          class="px-3 py-1 bg-[#000000] text-[#FFFFFF] text-xs rounded shadow-sm"
+          >Teknologi</span
+        >
+        <span
+          class="px-3 py-1 bg-[#999999] text-[#FFFFFF] text-xs rounded shadow-sm"
+          >Desain</span
+        >
+      </div>
+    </div>
+  </div>
+</div>
