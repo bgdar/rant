@@ -1,0 +1,5 @@
+
+
+fiture supervisor
+di sini adalah supervisor atau admin yang mengelola user user yang ada 
+seperti memantau penggunaan grub dan lainya

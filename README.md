@@ -1,15 +1,23 @@
-<h1 align="center">
-  Rant 
-</h1>
+<div align="center">
+  <img src="./banner.png" />
+</div>
 > rant bot to detect abusive words on several social media that use bots
 
 ### Tech Stack
 
-<p align="left">
+<p align="center">
   <!-- NestJS -->
   <a href="https://nestjs.com/" target="_blank">
     <img src="https://img.shields.io/badge/NestJS-E0234E?style=for-the-badge&logo=nestjs&logoColor=white" alt="NestJS"/>
   </a>
+  <!-- WebSocket -->
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API" target="_blank">
+  <img src="https://img.shields.io/badge/WebSocket-010101?style=for-the-badge&logo=websocket&logoColor=white" alt="WebSocket"/>
+</a>
+<!-- Socket.IO -->
+<a href="https://socket.io/" target="_blank">
+  <img src="https://img.shields.io/badge/Socket.IO-010101?style=for-the-badge&logo=socket.io&logoColor=white" alt="Socket.IO"/>
+</a>
 <!-- Fastify -->
 <a href="https://fastify.dev/" target="_blank">
   <img src="https://img.shields.io/badge/Fastify-000000?style=for-the-badge&logo=fastify&logoColor=white" alt="Fastify"/>
@@ -36,29 +44,118 @@
 <a href="https://pnpm.io/" target="_blank">
   <img src="https://img.shields.io/badge/pnpm-F69220?style=for-the-badge&logo=pnpm&logoColor=white" alt="pnpm"/>
 </a>
+
 </p>
 
-- Tailwindcss : menggunakan Tailwincss CLI yang auto build
-- running server + client ( tailwindcss)
+**_Tech Lain_**
+
+- `argon` : algoritma hashing password
+- `class-validator` : validasi pada DTO
+- `@fastify/session` : untuk session , jadi project ini mengguankan session tampa perlu redis , kecuali nantik jika sudah gedek
+  > di sini tidak menggunkana `@secure-session` karena tidak cocok dengan flash message
+- `@fastify/cookie` : karena ada session pastinya ada cookies
+
+  > "@fastify/flash" : tidak stabil di **fastify**
+
+  > Walaupun mengguankan flash , tapi gunakan json return untuk informasi yang lebih interaktif , flash message cukup saat pertama di kirim aja
+
+  **_Tech Info_**
+
+- `Tailwindcss` : menggunakan Tailwincss CLI yang auto build
+  running server + client ( tailwindcss)
+- `session` + `cokiess` +`guard` : 2agar keamana di setiap view nantik
 
 ### Bot
 
 - `bot discord` : https://github.com/bgdar/bot-discord/tree/rant
+- `bot-telegram` : https://github.com/bgdar/bot-telegram/tree/rant
+- `bot-whatsApp` ( coming soon ):
+
+### User
+
+ada 2 jenis katori user
+**_User_**
+user biasa yang masuk ke grub atau berinteraksi dengan bot app
+user akan punya **akun** yang terkoneksi ke bot
+
+- `role` ( daftar keadaan suatu user ) :
+
+1. **Normal** (Normal)-> Toxic 0% - 20%: Pengguna berkomunikasi secara wajar, sopan, dan kooperatif.
+2. **Suspicious** (Mencurigakan) -> Toxic 21% - 40%: Mulai menggunakan sarkasme atau sindiran tipis yang berpotensi memancing emosi pengguna lain.
+3. **Dangerous** (Berbahaya) -> Toxic 41% - 60%: Frekuensi penggunaan kata-kata kasar atau provokasi mulai meningkat dan mengganggu kenyamanan.
+4. **Extreme** (Sangat Beracun) -> Toxic 61% - 100%: Pelanggaran berat seperti flaming, penghinaan, atau harassment (pelecehan) secara terang-terangan.
+
+**_Supervisor_**
+pendamping atau admin yang mengelola **grub**
+
+- `role` (status supervisor) :
+  > untuk bebera role `coming soon`
+
+1. **Trainee (Siswa / Magang)**: Pengawas pemula yang hanya bisa memantau dan melaporkan pelanggaran dasar tanpa hak eksekusi langsung.
+2. **Teacher (Guru / Moderator)** : Pengawas operasional yang berhak menegur, memberi peringatan, dan meredam situasi konflik ringan.
+3. **Manager (Manajer / Pengawas)** : Pengawas senior yang memiliki wewenang untuk membekukan akun sementara dan mengedit konten yang melanggar.
+4. **Director (Direktur / Kepala)**: Pengawas tingkat tinggi yang mengambil keputusan strategis dan menangani kasus pelanggaran berat.
+5. **CEO (Bos Besar / Pemilik)**: Pengawas tertinggi dengan kendali penuh atas sistem, kebijakan, serta otoritas mutlak untuk blokir permanen.
+
+### Dataset
+
+- **Jenis Data**
+
+1. data-keyword : daftar kata kata Lexicon (kata) , berguna untuk **filter** , **deteksi awal ( sebelum ke model )**
+2. database : daftar word ( kalimat ) yang di gunakan olek model AI (seperti : jigsaw-toxic-comment-classification-challenge )
+
+- **Dataset Column info**
+
+| Column          | Arti                | Penjelasan                                                                         |
+| --------------- | ------------------- | ---------------------------------------------------------------------------------- |
+| `text`          | Teks komentar       | Isi kalimat atau komentar yang dianalisis oleh model NLP                           |
+| `toxic`         | Beracun / Toxic     | Menandakan komentar mengandung unsur negatif, kasar, ofensif, atau tidak sopan     |
+| `severe_toxic`  | Sangat toxic        | Toxic tingkat berat, biasanya lebih agresif, ekstrem, atau sangat kasar            |
+| `obscene`       | Kata cabul / vulgar | Mengandung kata-kata kotor, porno, atau vulgar                                     |
+| `threat`        | Ancaman             | Mengandung ancaman kepada seseorang                                                |
+| `insult`        | Penghinaan          | Menghina, merendahkan, atau menyerang seseorang                                    |
+| `identity_hate` | Kebencian identitas | Ujaran kebencian terhadap identitas tertentu seperti ras, agama, suku, gender, dll |
+
+### Docker
+
+**_docker compose_** :
+
+- `mongodb` : database utama
+- `monggodb-express` : antarmuka adminitratif berbasis web
+
+```bash
+# test ping container
+docker exec -it mongo-express-rant ping mongodb-rant
+
+# login with password
+docker exec -it mongodb-rant mongosh -u dar -p dar-rant --authenticationDatabase admin
+```
 
 ### Database ( monggoDB )
 
 Database name : **`rant`**
 Biarkan WEb app ini menjadi pusat uatamanay , jadi semua data aakn di simpan di database 1 ini ( rant )
 
+> file dengan extensi nama_file.db.service.ts : adalah file model untuk database nya
+
 1. Data Dummmy untuk semua bot
 2. Table database rant menentukan spesifikasi bahasa untuk rant nya ( indo , aceh , english) itu berdasarkan table nya
 
 ### App Color
 
-- #FF0000 ( main color )
+- #ff0000 ( main color )
 - #000000
-- #FFFFFF
+- #ffffff
 - #999999 ( medium gray)
+
+### Folder info
+
+- `forums.module` : modular untuk forums di web ini yang mempunyai `chat` , `grub`
+- `rant
+
+### FIle info
+
+`nama.db.service` : untuk Model atau komunikasi ke database
 
 ### Poblem
 

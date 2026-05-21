@@ -1,28 +1,44 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { RantController } from './rant.controller';
 import { MongooseModule } from '@nestjs/mongoose';
-import { RantIndo, RantIndoSchema } from 'src/schemas/rant-indo.schema';
-import { RantAceh, RantAcehSchema } from 'src/schemas/rant-aceh.schema';
-import { RantIndoService } from './rant-indo.service';
-import { RantAcehService } from './rant-aceh.service';
+import {
+  RantKeywordIndo,
+  RantKeywordIndoSchema,
+} from 'src/schemas/rant-keyword-indo.schema';
+import {
+  RantKeywordAceh,
+  RantKeywordAcehSchema,
+} from 'src/schemas/rant-keyword-aceh.schema';
+import { RantKeywordIndoDbService } from './rant-keyword-indo.db.service';
+import { RantAcehDbService } from './rant-keyword-aceh.db.service';
+import {
+  RantDatasetIndo,
+  RantDatasetIndoSchema,
+} from 'src/schemas/rant-dataset-indo.schema';
+import { RantDatasetIndoService } from './rant-dataset.indo.service';
+import { BotComunication } from './bot.comunication';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
-      { name: RantIndo.name, schema: RantIndoSchema },
+      { name: RantKeywordIndo.name, schema: RantKeywordIndoSchema },
+      { name: RantDatasetIndo.name, schema: RantDatasetIndoSchema },
       // { name: RantAceh.name, schema: RantAceh } // gnakna aja nantik jika sudah meyakinkan dataset nya
     ]),
   ],
   providers: [
-    RantIndoService,
-    // RantAcehService
+    RantKeywordIndoDbService,
+    // RantAcehDbService
+    RantDatasetIndoService,
+    // BotComunication,
   ],
   controllers: [RantController],
 
   // jika di panggil module ini maka provider atau lainya bisa di akses juga
   exports: [
-    RantIndoService,
-    // RantAcehService
+    RantKeywordIndoDbService,
+    // RantAcehDbService
+    RantDatasetIndoService,
   ],
 })
 export class RantModule {}

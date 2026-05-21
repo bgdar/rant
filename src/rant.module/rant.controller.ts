@@ -1,5 +1,4 @@
 import { Controller, Get, Render } from '@nestjs/common';
-import { title } from 'process';
 
 @Controller('rant')
 export class RantController {

@@ -1,0 +1,79 @@
+[
+  {
+    "name": "hewan",
+    "level": "ugnest",
+    "severity": 0.5,
+    "value": [
+      "anjir",
+      "anjay",
+      "anjing",
+      "bajingan",
+      "monyet",
+      "bangsat",
+      "goblok",
+      "kucinggila",
+      "kampret",
+      "bangke",
+      "sialan",
+      "keparat",
+      "brengsek"
+    ]
+  },
+  {
+    "name": "anggota-tubuh",
+    "level": "ugnest",
+    "severity": 0.4,
+    "value": [
+      "brengsek",
+      "brengsek banget",
+      "tai",
+      "bajingan",
+      "dungu",
+      "bloon"
+    ]
+  },
+  {
+    "name": "sifat",
+    "level": "ugnest",
+    "severity": 0.3,
+    "value": [
+      "goblok",
+      "tolol",
+      "kampungan",
+      "dungu",
+      "alay",
+      "norak",
+      "bodoh",
+      "labil"
+    ]
+  },
+  {
+    "name": "ucapan",
+    "level": "normal",
+    "severity": 0.2,
+    "value": [
+      "anjay banget",
+      "edyan",
+      "buset",
+      "waduh",
+      "aduh",
+      "sial",
+      "parah banget",
+      "astaga"
+    ]
+  },
+  {
+    "name": "emosi",
+    "level": "normal",
+    "severity": 0.1,
+    "value": ["kesel", "marah", "jengkel", "bete", "ngambek", "frustasi"]
+  },
+  {
+    "name": "profesi/sikap",
+    "level": "sedang",
+
+    "severity": 0.1,
+
+    "value": ["pemalas", "pelit", "nyebelin", "pengangguran", "cemen"]
+  }
+]

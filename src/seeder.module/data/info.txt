@@ -1,0 +1,31 @@
+data akan di pisah berdasarkan collection di database Monggo
+di pisah dengan jenis bahasa , daerah , contry , and any 
+
+
+
+
+Alur 
+
+-> Web Dashboard -> seeder data ke database (monggo)
+-> Bot ( model ) mengakses data dari database untuk di gunkan 
+
+
+
+Jenis Data ( 2 )
+1. data-keyword : daftar kata kata Lexicon , berguna untuk **filter** , ** deteksi awal ( sebelum ke model )**
+2. database : daftar word ( kalimat ) yang di gunakan olek model AI (seperti : jigsaw-toxic-comment-classification-challenge )
+    Structure nya :
+  {
+  "text": "...",
+  "toxic": 0/1,
+  "severe_toxic": 0/1,
+  "obscene": 0/1,
+  "threat": 0/1,
+  "insult": 0/1,
+  "identity_hate": 0/1
+  }
+
+  *Bgdar : filter atau buat dataset yang punya kata kata kasar saja , yang di mana kata kata kasar tersebut memiliki katagory baik dan buruk
+          seperti kamu anjing ya ( toxik = 0) , hey anjing (toxik = 1) , ...
+          yang berarti KATA KATA SELAIN INI TIDAK DI CEK 
+          agar model tidak terlalu berat 

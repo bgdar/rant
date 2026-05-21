@@ -1,0 +1,278 @@
+<body
+  x-data="createForum()"
+  class="bg-white text-black min-h-screen flex items-center justify-center px-4 py-10"
+>
+  <div class="w-full max-w-2xl">
+    <div
+      class="bg-[#111111] border border-neutral-800 rounded-3xl shadow-2xl p-8 relative overflow-hidden"
+    >
+      <div
+        class="absolute w-[400px] h-[400px] bg-[#ff0000] opacity-10 blur-3xl -top-40 -right-40"
+      ></div>
+
+      <!-- HEADER -->
+      <div class="relative z-10 text-center mb-8">
+        <h1
+          class="text-white text-3xl font-black"
+        >
+          Create Forum
+        </h1>
+
+        <p class="text-[#999999] mt-2">
+          Build your own community space
+        </p>
+      </div>
+
+      <div
+        x-show="alert.show"
+        x-text="alert.message"
+        :class="alert.type === 'success'
+          ? 'bg-green-900 text-green-300 border-green-700'
+          : 'bg-red-900 text-red-300 border-red-700'"
+        class="mb-5 px-4 py-3 rounded-2xl text-sm border"
+      ></div>
+
+      <form
+        id="forumForm"
+        class="relative z-10 space-y-5"
+        @submit.prevent="submitForum"
+      >
+        <div>
+          <label class="text-white text-sm font-semibold">
+            Forum Name
+          </label>
+
+          <input
+            type="text"
+            x-model="form.name"
+            placeholder="e.g JavaScript Community"
+            class="w-full mt-2 px-4 py-3 rounded-2xl bg-neutral-900 border border-neutral-800 text-white focus:border-[#ff0000] outline-none"
+            required
+          />
+        </div>
+
+        <!-- SLUG -->
+        <div>
+          <label class="text-white text-sm font-semibold">
+            Slug
+          </label>
+
+          <input
+            type="text"
+            x-model="form.slug"
+            placeholder="javascript-community"
+            class="w-full mt-2 px-4 py-3 rounded-2xl bg-neutral-900 border border-neutral-800 text-white focus:border-[#ff0000] outline-none"
+            required
+          />
+        </div>
+
+        <!-- DESCRIPTION -->
+        <div>
+          <label class="text-white text-sm font-semibold">
+            Description
+          </label>
+
+          <textarea
+            x-model="form.description"
+            rows="4"
+            placeholder="Describe your forum..."
+            class="w-full mt-2 px-4 py-3 rounded-2xl bg-neutral-900 border border-neutral-800 text-white focus:border-[#ff0000] outline-none"
+          ></textarea>
+        </div>
+
+        <!-- IMAGE -->
+        <div>
+          <label class="text-white text-sm font-semibold">
+            Image URL
+          </label>
+
+          <input
+            type="text"
+            x-model="form.image"
+            placeholder="https://..."
+            class="w-full mt-2 px-4 py-3 rounded-2xl bg-neutral-900 border border-neutral-800 text-white focus:border-[#ff0000] outline-none"
+          />
+        </div>
+
+        <!-- VISIBILITY -->
+        <div>
+          <label class="text-white text-sm font-semibold">
+            Visibility
+          </label>
+
+          <select
+            x-model="form.visibility"
+            class="w-full mt-2 px-4 py-3 rounded-2xl bg-neutral-900 border border-neutral-800 text-white focus:border-[#ff0000] outline-none"
+          >
+            <option value="public">Public</option>
+            <option value="private">Private</option>
+            <option value="protected">Protected</option>
+          </select>
+        </div>
+
+        <!-- TAGS -->
+        <div>
+          <label class="text-white text-sm font-semibold">
+            Tags (press Enter)
+          </label>
+
+          <input
+            type="text"
+            x-model="tagInput"
+            @keydown.enter.prevent="addTag()"
+            placeholder="e.g javascript"
+            class="w-full mt-2 px-4 py-3 rounded-2xl bg-neutral-900 border border-neutral-800 text-white focus:border-[#ff0000] outline-none"
+          />
+
+          <!-- TAG LIST -->
+          <div class="flex flex-wrap gap-2 mt-3">
+            <template
+              x-for="(tag, index) in form.tags"
+              :key="index"
+            >
+              <span
+                class="bg-black border border-neutral-700 text-[#999999] px-3 py-1 rounded-xl text-sm flex items-center gap-2"
+              >
+                <span x-text="tag"></span>
+
+                <button
+                  type="button"
+                  @click="removeTag(index)"
+                  class="text-red-500 hover:text-red-400"
+                >
+                  ×
+                </button>
+              </span>
+            </template>
+          </div>
+        </div>
+
+        <!-- SUBMIT -->
+        <button
+          type="submit"
+          :disabled="loading"
+          class="w-full bg-[#ff0000] hover:opacity-90 transition text-white font-bold py-3 rounded-2xl shadow-lg"
+        >
+          <span x-show="!loading">
+            Create Forum
+          </span>
+
+          <span x-show="loading">
+            Creating...
+          </span>
+        </button>
+
+        <!-- BACK -->
+        <a
+          href="/forums"
+          class="block text-center text-[#999999] hover:text-white mt-4 text-sm"
+        >
+          Back to forums
+        </a>
+      </form>
+    </div>
+  </div>
+
+  <!-- ALPINE -->
+  <script>
+    function createForum() {
+      return {
+        loading: false,
+
+        tagInput: '',
+
+        alert: {
+          show: false,
+          message: '',
+          type: 'error',
+        },
+
+        form: {
+          name: '',
+          slug: '',
+          description: '',
+          image: '',
+          visibility: 'public',
+          tags: [],
+        },
+
+        addTag() {
+          const tag =
+            this.tagInput.trim();
+
+          if (
+            tag &&
+            !this.form.tags.includes(tag)
+          ) {
+            this.form.tags.push(tag);
+          }
+
+          this.tagInput = '';
+        },
+
+        removeTag(index) {
+          this.form.tags.splice(index, 1);
+        },
+
+        showAlert(message, type) {
+          this.alert.show = true;
+          this.alert.message = message;
+          this.alert.type = type;
+
+          setTimeout(() => {
+            this.alert.show = false;
+          }, 3000);
+        },
+
+        async submitForum() {
+          this.loading = true;
+
+          try {
+            const res = await fetch(
+              '/forums/create-forum',
+              {
+                method: 'POST',
+                headers: {
+                  'Content-Type':
+                    'application/json',
+                },
+                body: JSON.stringify(
+                  this.form,
+                ),
+              },
+            );
+
+            const data =
+              await res.json();
+
+            if (!res.ok) {
+              return this.showAlert(
+                data.message ||
+                  'Failed create forum',
+                'error',
+              );
+            }
+
+            this.showAlert(
+              data.message,
+              'success',
+            );
+
+            setTimeout(() => {
+              window.location.href =
+                '/forums';
+            }, 1200);
+          } catch (err) {
+            this.showAlert(
+              'Server error',
+              'error',
+            );
+          } finally {
+            this.loading = false;
+          }
+        },
+      };
+    }
+  </script>
+</body>
+

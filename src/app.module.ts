@@ -1,22 +1,34 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
+
 import { MongooseModule } from '@nestjs/mongoose';
-import { SeederModule } from './seeder.module/seeder.module';
-import { RantModule } from './rant.module/rant.module';
+// import { SeederModule } from './seeder.module/seeder.module';
 import { ForumsModule } from './forums.module/forums.module';
+
+// gak pake dulu
+// import { SupervisorModule } from './supervisor.module/supervisor.module';
+// import { RantModule } from './rant.module/rant.module';
+import { UserModule } from './user.module/user.module';
+import { MongoCongigService } from './mongo-congig.service';
 
 @Module({
   imports: [
     // kalau db rant gak ada maka otomatis di buat
-    MongooseModule.forRoot('mongodb://localhost/rant'),
-
+    MongooseModule.forRootAsync({
+      useClass: MongoCongigService,
+    }),
     // MongooseModule.forFeature([{ name: Rant.name, schema: RantSchema }]),
-    SeederModule,
-    RantModule,
     ForumsModule,
+    UserModule,
+
+    // ----matikan sementar - ----
+    // RantModule,
+    // SupervisorModule,
+
+    // SeederModule,
   ],
+  // kelola di mosule module di bawahnya aja , kecuali yang secara global butuh
   controllers: [AppController],
-  providers: [AppService],
+  // providers: [AppService],
 })
 export class AppModule {}

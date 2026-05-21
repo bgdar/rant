@@ -1,0 +1,4 @@
+Di sini tidak menggunakna *Middleware* melainkan Guard
+
+karena fastify tidak ke load pertama kali Middleware di jalanan sehingga Object yang seharusnya Fastyfy malah kembali ke node.js , dan beberapa function jadi tidak di excesui
+terkhussnya untuk Auth

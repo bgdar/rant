@@ -1,1 +1,1 @@
-template ynag akan di gunakan di database , Model dll
+template berupa type ynag akan di gunakan di database , Model , dll

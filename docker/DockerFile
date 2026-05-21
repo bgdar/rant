@@ -1,0 +1,9 @@
+
+
+# Menggunakan image resmi mongo
+# FROM  mongo:7.0
+# # Ekspos port default
+# EXPOSE 27017
+#
+
+

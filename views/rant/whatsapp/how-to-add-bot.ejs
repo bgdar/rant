@@ -1,0 +1,58 @@
+
+<div class="flex justify-center p-10">
+
+<div class="w-[80%] bg-white shadow-lg rounded-lg p-10">
+
+<!-- Title -->
+<h1 class="text-4xl font-bold text-blackmain mb-4">
+<%= title %>
+</h1>
+
+<p class="text-graymid mb-10">
+Tutorial Guide
+</p>
+
+<div x-data="{ openStep: null }" class="space-y-6">
+
+<% steps.forEach((step, index) => { %>
+
+<div class="border rounded-lg overflow-hidden">
+
+<div 
+@click="openStep === <%= index %> ? openStep = null : openStep = <%= index %>"
+class="flex items-center cursor-pointer p-6 hover:bg-gray-100">
+
+<!-- Step Number -->
+<div class="w-12 h-12 flex items-center justify-center bg-primary text-white font-bold rounded-full mr-6">
+<%= index + 1 %>
+</div>
+
+<h2 class="text-xl font-semibold text-blackmain">
+<%= step.title %>
+</h2>
+
+</div>
+
+<!-- Step Content -->
+<div 
+x-show="openStep === <%= index %>"
+x-transition
+class="p-6 border-t text-lg text-blackmain leading-relaxed">
+
+<p>
+<%= step.content %>
+</p>
+
+</div>
+
+</div>
+
+<% }) %>
+
+</div>
+
+</div>
+
+</div>
+
+

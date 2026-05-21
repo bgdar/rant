@@ -7,8 +7,8 @@ import {
 } from '@nestjs/platform-fastify';
 
 import fastifyCookie from '@fastify/cookie';
-import fastifyFlash from '@fastify/flash';
-import fastifySession from '@fastify/session';
+// import fastifyFlash from '@fastify/flash'; // gak stabil di fastify
+import session from '@fastify/session';
 
 import fastifyView from '@fastify/view';
 
@@ -54,7 +54,7 @@ async function bootstrap() {
   //   salt: 'mq9hDxBVDbspDR6n',
   // });
 
-  await app.register(fastifySession, {
+  await app.register(session, {
     secret: 'your-secret-session-salt-12345ytsjdfn', // ni secret sementara aja wkwkw
     cookie: {
       secure: process.env.NODE_ENV === 'production',
@@ -63,8 +63,7 @@ async function bootstrap() {
     },
   });
 
-  await app.register(fastifyFlash);
-
+  console.info('APP running on : localhost:3000');
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap().catch((err) => {

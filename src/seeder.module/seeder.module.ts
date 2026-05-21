@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
-import { DataDummyService } from './data-dummy.service';
+import { DataKeywordDummyService } from './data-keyword-dummy.service';
 import { RantModule } from 'src/rant.module/rant.module';
+import { DatasetIndoDummyService } from './dataset-indo-dummy.service';
 
 @Module({
   // RantModule : agar seederModule bisa  mengakses ke RantModel yang ada di module ini
   imports: [RantModule],
-  providers: [DataDummyService],
+  providers: [DataKeywordDummyService, DatasetIndoDummyService],
 })
-export class SeederModule { }
+export class SeederModule {}
