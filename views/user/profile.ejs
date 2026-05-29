@@ -1,1 +1,206 @@
-<div class=""></div>
+<div
+  class="bg-white-secondary min-h-screen flex items-center justify-center p-0 sm:p-4 antialiased font-sans"
+>
+  <div
+    class="bg-white-primary w-full max-w-md h-screen sm:h-[650px] sm:rounded-2xl shadow-xl border border-white-accent flex flex-col overflow-hidden"
+    x-data='{
+    user: <%- JSON.stringify(user) %>,
+    editing: { username: false, email: false },
+    tempData: { username: "", email: "" },
+
+    startEdit(field) {
+        this.editing[field] = true;
+        this.tempData[field] = this.user[field];
+
+        this.$nextTick(() => {
+            this.$refs[field + "Input"].focus();
+        });
+    },
+
+    saveEdit(field) {
+        if (this.tempData[field].trim() !== "") {
+            this.user[field] = this.tempData[field];
+        }
+
+        this.editing[field] = false;
+    },
+
+    cancelEdit(field) {
+        this.editing[field] = false;
+    }
+}'
+  >
+    <div
+      class="bg-black-primary p-5 text-white-primary flex items-end h-28 border-b-4 border-main-primary shrink-0"
+    >
+      <div class="flex items-center space-x-6 w-full">
+        <button
+          class="text-white-primary hover:text-main-accent transition-colors"
+        >
+          <i class="fas fa-arrow-left text-lg"></i>
+        </button>
+        <h1 class="text-xl font-bold tracking-wide">Profil</h1>
+      </div>
+    </div>
+
+    <div class="flex-1 overflow-y-auto bg-white-secondary">
+      <div
+        class="flex flex-col items-center justify-center py-7 bg-white-primary border-b border-white-accent"
+      >
+        <div class="relative group cursor-pointer">
+          <div
+            class="w-40 h-40 rounded-full bg-gray-muted border-4 border-white-secondary overflow-hidden flex items-center justify-center transition-all group-hover:opacity-80"
+          >
+            <i class="fas fa-user text-6xl text-gray-secondary"></i>
+          </div>
+          <!-- Overlay Hover Ubah Foto -->
+          <div
+            class="absolute inset-0 bg-black-primary/40 rounded-full flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-white-primary text-center p-2"
+          >
+            <i class="fas fa-camera text-xl mb-1"></i>
+            <span class="text-[10px] font-bold uppercase tracking-wider"
+              >Ubah Foto<br />Profil</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white-primary px-6 py-4 border-b border-white-accent">
+        <label
+          class="block text-xs font-semibold text-main-primary mb-2 tracking-wide uppercase"
+          >Nama Anda</label
+        >
+
+        <div
+          x-show="!editing.username"
+          class="flex items-center justify-between group"
+        >
+          <span
+            class="text-black-primary text-base font-medium"
+            x-text="user.username"
+          ></span>
+          <button
+            @click="startEdit('username')"
+            class="text-gray-secondary hover:text-black-primary p-1"
+          >
+            <i class="fas fa-pen text-sm"></i>
+          </button>
+        </div>
+
+        <div
+          x-show="editing.username"
+          x-cloak
+          class="flex items-center border-b-2 border-main-primary py-1"
+        >
+          <input
+            type="text"
+            x-model="tempData.username"
+            x-ref="usernameInput"
+            max="25"
+            @keyup.enter="saveEdit('username')"
+            @keyup.escape="cancelEdit('username')"
+            class="w-full bg-transparent text-black-primary text-base focus:outline-none py-0.5"
+          />
+          <div class="flex space-x-3 text-sm ml-2">
+            <button
+              @click="cancelEdit('username')"
+              class="text-gray-secondary hover:text-main-primary"
+            >
+              <i class="fas fa-xmark"></i>
+            </button>
+            <button
+              @click="saveEdit('username')"
+              class="text-main-primary hover:text-main-secondary"
+            >
+              <i class="fas fa-check"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- <p class="text-[11px] text-gray-secondary mt-2 leading-relaxed">
+                    Ini bukan nama pengguna atau PIN Anda. Nama ini akan terlihat oleh rekan kerja dan supervisor di panel.
+                </p> -->
+      </div>
+
+      <div class="bg-white-primary px-6 py-4 mt-3 border-y border-white-accent">
+        <label
+          class="block text-xs font-semibold text-main-primary mb-2 tracking-wide uppercase"
+          >Info</label
+        >
+
+        <div x-show="!editing.email" class="flex items-center justify-between">
+          <span class="text-black-primary text-base" x-text="user.email"></span>
+          <button
+            @click="startEdit('email')"
+            class="text-gray-secondary hover:text-black-primary p-1"
+          >
+            <i class="fas fa-pen text-sm"></i>
+          </button>
+        </div>
+
+        <div
+          x-show="editing.email"
+          x-cloak
+          class="flex items-center border-b-2 border-main-primary py-1"
+        >
+          <input
+            type="text"
+            x-model="tempData.email"
+            x-ref="emailInput"
+            @keyup.enter="saveEdit('email')"
+            @keyup.escape="cancelEdit('email')"
+            class="w-full bg-transparent text-black-primary text-base focus:outline-none py-0.5"
+          />
+          <div class="flex space-x-3 text-sm ml-2">
+            <button
+              @click="cancelEdit('email')"
+              class="text-gray-secondary hover:text-main-primary"
+            >
+              <i class="fas fa-xmark"></i>
+            </button>
+            <button
+              @click="saveEdit('email')"
+              class="text-main-primary hover:text-main-secondary"
+            >
+              <i class="fas fa-check"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="bg-white-primary px-6 py-4 mt-3 border-y border-white-accent space-y-4"
+      >
+        <div>
+          <label
+            class="block text-xs font-semibold text-gray-secondary mb-1 tracking-wide uppercase"
+            >Nomor Telepon</label
+          >
+          <span
+            class="text-black-accent text-base block"
+            x-text="user.phone"
+          ></span>
+        </div>
+        <hr class="border-white-accent" />
+        <div>
+          <label
+            class="block text-xs font-semibold text-gray-secondary mb-1 tracking-wide uppercase"
+            >Level Jabatan</label
+          >
+          <div class="flex items-center space-x-2 mt-1">
+            <span
+              class="bg-black-secondary text-white-primary text-xs font-bold px-2.5 py-1 rounded border border-black-accent"
+            >
+              <i
+                class="fas fa-user-shield text-[10px] mr-1 text-main-accent"
+              ></i>
+              <span x-text="user.role"></span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script></script>
+</div>

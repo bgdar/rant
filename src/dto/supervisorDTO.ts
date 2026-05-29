@@ -8,6 +8,13 @@ import {
   MinLength,
 } from 'class-validator';
 
+export enum SupervisorRole {
+  TRAINEE = 'Trainee',
+  TEACHER = 'Teacher',
+  MANAGER = 'Manager',
+  DIRECTOR = 'Director',
+  CEO = 'CEO',
+}
 /**
  * Basic Supervisor DTO
  *
@@ -46,6 +53,9 @@ export class SupervisorDTO {
   phone: string;
 
   address: string;
+
+  // bawaahan , yang di kaikan dengan supervisor
+  usersId?: string[];
 }
 
 /**
@@ -112,7 +122,7 @@ export class UpdateSupervisorDTO {
   password?: string;
 
   @IsOptional()
-  @IsEnum(['Trainee', 'Teacher', 'Manager', 'Director', 'CEO'])
+  @IsEnum(SupervisorRole)
   role?: string;
 
   @IsOptional()
@@ -163,7 +173,7 @@ export class LoginSupervisorDTO {
  * DTO update role.
  */
 export class UpdateSupervisorRoleDTO {
-  @IsEnum(['Trainee', 'Teacher', 'Manager', 'Director', 'CEO'])
+  @IsEnum(SupervisorRole)
   role: string;
 }
 

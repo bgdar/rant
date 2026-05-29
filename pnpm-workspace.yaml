@@ -1,0 +1,5 @@
+allowBuilds:
+  '@nestjs/core': false
+  '@parcel/watcher': false
+  argon2: false
+  unrs-resolver: false

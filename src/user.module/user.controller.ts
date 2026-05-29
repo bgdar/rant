@@ -14,20 +14,40 @@ import {
 import argon from 'argon2';
 import { UserDbService } from './user.db.service';
 import type { FastifyReply, FastifyRequest } from 'fastify';
-import { UserSignUpDTO } from 'src/dto/user.dto';
-import { AuthGuard } from 'src/guards/auth';
+import { UserSessionDTO, UserSignUpDTO } from 'src/dto/user.dto';
+import { AuthUserGuard } from 'src/guards/auth.user';
 // import { FastifySessionObject } from '@fastify/session';
 
-@UseGuards(AuthGuard)
+@UseGuards(AuthUserGuard)
 @Controller('/user')
 export class UserController {
-  constructor(private readonly userDbService: UserDbService) {}
+  constructor(private readonly userModel: UserDbService) {}
 
   @Get()
   @Render('user/home.ejs')
-  Home() {
+  Home(@Req() req: FastifyRequest) {
+    const user = (req as any).session?.user as UserSessionDTO;
+
     return {
       title: 'home In',
+      username: user.username,
+    };
+  }
+
+  @Get('/profile')
+  @Render('/user/profile.ejs')
+  async Profile(@Req() req: FastifyRequest) {
+    const user = (req as any).session?.user as UserSessionDTO;
+
+    const dataUser = await this.userModel.findById(user.id);
+
+    return {
+      title: 'User Profile',
+      user: {
+        username: dataUser.username,
+        role: dataUser.role,
+        email: dataUser.email,
+      },
     };
   }
 
@@ -46,12 +66,6 @@ export class UserController {
    * Login user menggunakan:
    * - Session
    * - Cookies
-   *
-   * Flow:
-   * 1. Cari user berdasarkan username/email
-   * 2. Compare password bcrypt
-   * 3. Simpan data ke session
-   * 4. Simpan cookie login
    */
   @Post('/signIn')
   async signInPost(
@@ -62,9 +76,9 @@ export class UserController {
 
     @Res() res: FastifyReply,
   ) {
-    const { username, password }: UserSignUpDTO = data;
+    const { email, password }: UserSignUpDTO = data;
 
-    const user = await this.userDbService.findByEmail(username);
+    const user = await this.userModel.findByEmail(email);
 
     if (!user) {
       return res.status(HttpStatus.OK).send({
@@ -72,7 +86,7 @@ export class UserController {
       });
     }
 
-    const isMatch = await argon.verify(password, user.password);
+    const isMatch = await argon.verify(user.password, password);
 
     if (!isMatch) {
       return res.status(HttpStatus.UNAUTHORIZED).send({
@@ -128,16 +142,14 @@ export class UserController {
     @Session() session: Record<string, any>,
 
     @Res() res: FastifyReply,
-    @Req() req: FastifyRequest,
   ) {
     const hashPassword = await argon.hash(data.password);
 
-    const user = await this.userDbService.create({
+    const user = await this.userModel.create({
       username: data.username,
       email: data.email,
       password: hashPassword,
     });
-    console.info('data user create', user);
 
     // req.session.set('user', {
     //   id: user._id.toString(),

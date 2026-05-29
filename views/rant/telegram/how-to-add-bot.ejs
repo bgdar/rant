@@ -1,58 +1,117 @@
+<div class="bg-white-secondary min-h-screen flex items-center justify-center p-0 sm:p-4 antialiased font-sans text-black-primary">
 
-<div class="flex justify-center p-10">
+    <div class="bg-white-primary w-full max-w-md h-screen sm:h-[650px] sm:rounded-2xl shadow-2xl border border-white-accent flex flex-col overflow-hidden"
+         x-data="{
+            botUsername: '@SistemManajemenBot',
+            chatId: '628394021',
+            copiedField: '',
+            
+            copyToClipboard(text, field) {
+                navigator.clipboard.writeText(text);
+                this.copiedField = field;
+                setTimeout(() => { this.copiedField = '' }, 2000);
+            }
+         }">
+         
+        <div class="bg-[#2481cc] p-4 text-white-primary flex items-center justify-between h-16 shrink-0 shadow-sm">
+            <div class="flex items-center space-x-4">
+                <button class="text-white-primary hover:opacity-80 transition-opacity">
+                    <i class="fas fa-arrow-left text-lg"></i>
+                </button>
+                <div class="flex flex-col">
+                    <div class="flex items-center space-x-1.5">
+                        <h1 class="text-base font-bold tracking-wide">Info Bot</h1>
+                        <i class="fas fa-circle-check text-xs text-white-primary"></i>
+                    </div>
+                    <p class="text-[11px] text-white-muted/90">bot panduan sistem</p>
+                </div>
+            </div>
+            <button class="text-white-primary hover:opacity-80">
+                <i class="fas fa-ellipsis-vertical text-lg"></i>
+            </button>
+        </div>
 
-<div class="w-[80%] bg-white shadow-lg rounded-lg p-10">
+        <div class="flex-1 overflow-y-auto bg-[#f1f5f9] p-4 space-y-4">
+            
+            <!-- Profil Detail Bot Bergaya Info Akun Telegram -->
+            <div class="bg-white-primary p-4 rounded-xl border border-white-accent flex items-center space-x-4 shadow-sm">
+                <div class="w-14 h-14 rounded-full bg-[#2481cc] flex items-center justify-center text-white-primary text-2xl font-bold shadow-sm shrink-0">
+                    <i class="fab fa-telegram"></i>
+                </div>
+                <div class="overflow-hidden">
+                    <div class="flex items-center space-x-1.5">
+                        <h2 class="text-sm font-bold text-black-primary">Sistem Manajemen Bot</h2>
+                        <i class="fas fa-circle-check text-xs text-[#2481cc]"></i>
+                    </div>
+                    <p class="text-xs text-gray-secondary mt-0.5 truncate" x-text="botUsername"></p>
+                    <p class="text-[11px] text-gray-primary mt-0.5">bot otomatis untuk notifikasi & log</p>
+                </div>
+            </div>
 
-<!-- Title -->
-<h1 class="text-4xl font-bold text-blackmain mb-4">
-<%= title %>
-</h1>
+            <div class="space-y-1.5">
+                <span class="text-[10px] font-bold text-gray-secondary uppercase tracking-wider px-2 block">Langkah 1: Aktivasi</span>
+                <div class="bg-white-primary p-4 rounded-xl border border-white-accent space-y-3 shadow-sm">
+                    <p class="text-xs text-black-accent leading-relaxed">
+                        Cari username bot resmi kami di Telegram, lalu klik tombol <strong class="text-[#2481cc]">Mulai / Start</strong> di bagian bawah obrolan.
+                    </p>
+                    <!-- Kotak Penyalinan Teks -->
+                    <div class="flex items-center justify-between bg-white-secondary p-2.5 rounded-lg border border-white-accent">
+                        <span class="text-xs font-mono font-bold text-black-primary select-all" x-text="botUsername"></span>
+                        <button @click="copyToClipboard(botUsername, 'username')" 
+                                class="px-3 py-1.5 rounded-md text-xs font-bold transition-all flex items-center space-x-1.5 shrink-0 border"
+                                :class="copiedField === 'username' ? 'bg-[#31b54a] text-white-primary border-[#31b54a]' : 'bg-white-primary text-[#2481cc] border-[#2481cc] hover:bg-white-secondary'">
+                            <i class="fas" :class="copiedField === 'username' ? 'fa-check' : 'fa-copy'"></i>
+                            <span x-text="copiedField === 'username' ? 'Tersalin' : 'Salin'"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
 
-<p class="text-graymid mb-10">
-Tutorial Guide
-</p>
+            <div class="space-y-1.5">
+                <span class="text-[10px] font-bold text-gray-secondary uppercase tracking-wider px-2 block">Langkah 2: Sinkronisasi</span>
+                <div class="bg-white-primary p-4 rounded-xl border border-white-accent space-y-3 shadow-sm">
+                    <p class="text-xs text-black-accent leading-relaxed">
+                        Kirimkan pesan perintah <code class="bg-white-secondary text-[#2481cc] px-1.5 py-0.5 rounded font-mono text-[11px] font-bold border border-white-accent">/myid</code> ke bot untuk mendapatkan nomor ID unik akun Telegram Anda.
+                    </p>
+                    <div class="flex items-center justify-between bg-white-secondary p-2.5 rounded-lg border border-white-accent">
+                        <span class="text-xs font-mono font-bold text-gray-secondary select-all" x-text="chatId"></span>
+                        <button @click="copyToClipboard(chatId, 'chatid')" 
+                                class="px-3 py-1.5 rounded-md text-xs font-bold transition-all flex items-center space-x-1.5 shrink-0 border"
+                                :class="copiedField === 'chatid' ? 'bg-[#31b54a] text-white-primary border-[#31b54a]' : 'bg-white-primary text-[#2481cc] border-[#2481cc] hover:bg-white-secondary'">
+                            <i class="fas" :class="copiedField === 'chatid' ? 'fa-check' : 'fa-copy'"></i>
+                            <span x-text="copiedField === 'chatid' ? 'Tersalin' : 'Salin'"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
 
-<div x-data="{ openStep: null }" class="space-y-6">
+            <div class="space-y-1.5 pb-6">
+                <span class="text-[10px] font-bold text-gray-secondary uppercase tracking-wider px-2 block">Daftar Perintah (Commands)</span>
+                <div class="bg-white-primary rounded-xl border border-white-accent divide-y divide-white-accent overflow-hidden shadow-sm">
+                    
+                    <!-- Row 1 -->
+                    <div class="p-3 flex items-start space-x-3 hover:bg-white-secondary/40 transition-colors">
+                        <span class="text-[#2481cc] font-mono text-xs font-bold shrink-0 w-16">/start</span>
+                        <div class="text-xs">
+                            <p class="font-bold text-black-primary">Mulai Sesi</p>
+                            <p class="text-gray-secondary mt-0.5">Mengaktifkan bot dan memunculkan pesan selamat datang.</p>
+                        </div>
+                    </div>
 
-<% steps.forEach((step, index) => { %>
+                    <!-- Row 2 -->
+                    <div class="p-3 flex items-start space-x-3 hover:bg-white-secondary/40 transition-colors">
+                        <span class="text-[#2481cc] font-mono text-xs font-bold shrink-0 w-16">/status</span>
+                        <div class="text-xs">
+                            <p class="font-bold text-black-primary">Cek Koneksi</p>
+                            <p class="text-gray-secondary mt-0.5">Memeriksa apakah ID akun Anda sudah terhubung ke panel web.</p>
+                        </div>
+                    </div>
 
-<div class="border rounded-lg overflow-hidden">
+                </div>
+            </div>
 
-<div 
-@click="openStep === <%= index %> ? openStep = null : openStep = <%= index %>"
-class="flex items-center cursor-pointer p-6 hover:bg-gray-100">
+        </div>
+    </div>
 
-<!-- Step Number -->
-<div class="w-12 h-12 flex items-center justify-center bg-primary text-white font-bold rounded-full mr-6">
-<%= index + 1 %>
 </div>
-
-<h2 class="text-xl font-semibold text-blackmain">
-<%= step.title %>
-</h2>
-
-</div>
-
-<!-- Step Content -->
-<div 
-x-show="openStep === <%= index %>"
-x-transition
-class="p-6 border-t text-lg text-blackmain leading-relaxed">
-
-<p>
-<%= step.content %>
-</p>
-
-</div>
-
-</div>
-
-<% }) %>
-
-</div>
-
-</div>
-
-</div>
-
 

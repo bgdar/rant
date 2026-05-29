@@ -7,6 +7,7 @@ import {
   Post,
   Query,
   Render,
+  Req,
   Res,
   Session,
   UseGuards,
@@ -21,52 +22,102 @@ import {
 } from 'src/dto/forumDTO';
 
 import { ForumsDbService } from './forums.db.service';
-import type { FastifyReply } from 'fastify';
-import { AuthGuard } from 'src/guards/auth';
-@UseGuards(AuthGuard)
+import type { FastifyReply, FastifyRequest } from 'fastify';
+import { AuthUserGuard } from 'src/guards/auth.user';
+import { request } from 'http';
+import { UserSessionDTO } from 'src/dto/user.dto';
+import { Types } from 'mongoose';
+@UseGuards(AuthUserGuard)
 @Controller('forums')
 export class ForumsController {
   constructor(private readonly forumsDbService: ForumsDbService) {}
 
   /**
    * Forums home page.
-   *
-   * Menampilkan:
-   * - daftar semua forum
-   * - latest forums
-   * - search forum
    */
   @Get()
   @Render('forums/home.ejs')
-  async home(@Query('search') search?: string) {
+  async home(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
     /*
-     | Search forums
+     | Search forums berdasarkan nama member ( supervisor akan punya tag khusu nantik )
      */
+    const user = (req as any).session?.user as UserSessionDTO;
 
-    const forums = search
-      ? await this.forumsDbService.searchForums(search)
-      : await this.forumsDbService.findAllForums();
+    if (user) {
+      const userId = new Types.ObjectId(user.id);
+      const forums = await this.forumsDbService.findAllUserForums(userId);
 
+      console.info('frums data : ', forums);
+      /*
+       | Stats
+       */
+
+      return {
+        title: 'Home Forums',
+
+        forums,
+      };
+    } else {
+      console.info('belum login');
+      return res.redirect('/user/signIn');
+    }
+  }
+
+  /**
+   * Forums home page.
+   */
+
+  @Get('search')
+  searchForumsView() {
+    const forums = this.forumsDbService.findAllForums();
+
+    return {
+      forums: forums,
+    };
+  }
+
+  @Post('search')
+  @Render('forums/search.ejs')
+  async searchForums(
+    @Res() res: FastifyReply,
+    @Query('search') search?: string,
+  ) {
     /*
+     | Search forums berdasarkan nama member ( supervisor akan punya tag khusu nantik )
+     */
+    console.info('search key : ', search);
+    const user = (request as any).session?.user as UserSessionDTO;
+
+    if (user) {
+      if (search) {
+        const userId = new Types.ObjectId(user.id);
+        const forums = await this.forumsDbService.searchforums(search, userId);
+
+        console.info('frums data : ', forums);
+        /*
      | Stats
      */
 
-    const totalForums = await this.forumsDbService.countForums();
+        const totalForums = await this.forumsDbService.countForums();
 
-    const totalChats = await this.forumsDbService.countChats();
+        const totalChats = await this.forumsDbService.countChats();
 
-    return {
-      title: 'Home Forums',
-
-      forums,
-
-      search,
-
-      stats: {
-        totalForums,
-        totalChats,
-      },
-    };
+        return {
+          title: 'Home Forums',
+          forums,
+          search,
+          stats: {
+            totalForums,
+            totalChats,
+          },
+        };
+      } else {
+        return res;
+      }
+    } else {
+      console.info('gagal login');
+      res.redirect('user/signIn');
+    }
   }
 
   /**

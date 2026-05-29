@@ -18,6 +18,21 @@ export class UserDTO {
   @IsString()
   role: string;
 }
+
+export class UserSessionDTO {
+  @IsString()
+  id: string;
+
+  @IsString()
+  username: string;
+  @IsString()
+  email: string;
+  @IsString()
+  password: string;
+  @IsString()
+  role: string;
+}
+
 export class CreateUserDTO {
   @IsString()
   username: string;

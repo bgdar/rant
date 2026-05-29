@@ -18,7 +18,7 @@ import { MongoCongigService } from './mongo-congig.service';
       useClass: MongoCongigService,
     }),
     // MongooseModule.forFeature([{ name: Rant.name, schema: RantSchema }]),
-    ForumsModule,
+    // ForumsModule,
     UserModule,
 
     // ----matikan sementar - ----

@@ -1,3 +1,126 @@
-<div>
-  <p>how to add bot discord</p>
+
+<div class="bg-black-primary min-h-screen flex items-center justify-center p-0 sm:p-4 antialiased font-sans text-white-secondary">
+
+    <div class="bg-black-secondary w-full max-w-md h-screen sm:h-[650px] sm:rounded-2xl shadow-2xl border border-black-accent flex flex-col overflow-hidden"
+         x-data="{
+            inviteLink: 'https://discord.com',
+            webhookUrl: 'https://discord.com',
+            copiedField: '',
+            
+            copyToClipboard(text, field) {
+                navigator.clipboard.writeText(text);
+                this.copiedField = field;
+                setTimeout(() => { this.copiedField = '' }, 2000);
+            }
+         }">
+         
+        <div class="bg-black-accent p-5 text-white-primary flex items-center justify-between h-20 border-b border-black-primary shrink-0 shadow-md">
+            <div class="flex items-center space-x-4">
+                <button class="text-gray-primary hover:text-white-primary transition-colors">
+                    <i class="fas fa-arrow-left text-lg"></i>
+                </button>
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-hashtag text-gray-primary text-xl font-bold"></i>
+                    <div>
+                        <h1 class="text-base font-bold tracking-wide text-white-primary">panduan-bot</h1>
+                        <p class="text-[11px] text-gray-primary">Integrasi bot ke server Discord Anda</p>
+                    </div>
+                </div>
+            </div>
+            <i class="fas fa-bell text-gray-primary hover:text-white-primary cursor-pointer transition-colors"></i>
+        </div>
+
+        <div class="flex-1 overflow-y-auto bg-black-secondary p-4 space-y-4">
+            
+            <div class="flex items-center space-x-4 bg-black-accent p-4 rounded-xl border border-black-primary">
+                <div class="relative shrink-0">
+                    <!-- Avatar Lingkaran -->
+                    <div class="w-16 h-16 rounded-full bg-main-primary flex items-center justify-center text-white-primary shadow-lg">
+                        <i class="fab fa-discord text-3xl"></i>
+                    </div>
+                    <!-- Status Hijau Discord -->
+                    <span class="absolute bottom-0 right-0 bg-[#23a55a] w-4 h-4 rounded-full border-4 border-black-accent"></span>
+                </div>
+                <div>
+                    <div class="flex items-center space-x-2">
+                        <h2 class="text-base font-bold text-white-primary">Sistem Log Bot</h2>
+                        <span class="bg-[#5865f2] text-white-primary text-[9px] font-extrabold px-1.5 py-0.5 rounded uppercase tracking-wider">Bot</span>
+                    </div>
+                    <p class="text-xs text-gray-primary mt-0.5">Dikembangkan khusus untuk panel manajemen.</p>
+                </div>
+            </div>
+
+            <!-- Langkah 1: Undang Bot -->
+            <div class="space-y-2">
+                <div class="flex items-center space-x-2 text-xs font-bold text-gray-primary uppercase tracking-wider px-1">
+                    <span>Langkah 1</span>
+                    <span class="h-px bg-black-accent flex-1"></span>
+                </div>
+                <div class="bg-black-accent p-4 rounded-xl border border-black-primary space-y-3">
+                    <p class="text-xs text-white-muted leading-relaxed">
+                        Salin tautan di bawah ini untuk memasukkan bot ke server Discord internal Anda. Berikan izin akses penuh.
+                    </p>
+                    <!-- Tampilan Input Teks Link -->
+                    <div class="flex items-center justify-between bg-black-primary p-2.5 rounded-lg border border-black-accent">
+                        <span class="text-xs font-mono text-gray-primary truncate mr-4 select-all" x-text="inviteLink"></span>
+                        <button @click="copyToClipboard(inviteLink, 'invite')" 
+                                class="px-3 py-1.5 rounded-md text-xs font-bold transition-all flex items-center space-x-1.5 shrink-0"
+                                :class="copiedField === 'invite' ? 'bg-[#23a55a] text-white-primary' : 'bg-[#5865f2] text-white-primary hover:bg-[#4752c4]'">
+                            <i class="fas" :class="copiedField === 'invite' ? 'fa-check' : 'fa-copy'"></i>
+                            <span x-text="copiedField === 'invite' ? 'Tersalin' : 'Salin'"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-2">
+                <div class="flex items-center space-x-2 text-xs font-bold text-gray-primary uppercase tracking-wider px-1">
+                    <span>Langkah 2</span>
+                    <span class="h-px bg-black-accent flex-1"></span>
+                </div>
+                <div class="bg-black-accent p-4 rounded-xl border border-black-primary space-y-3">
+                    <p class="text-xs text-white-muted leading-relaxed">
+                        Tempel URL Webhook berikut pada pengaturan integrasi channel untuk menyinkronkan aktivitas log sistem.
+                    </p>
+                    <!-- Tampilan Input Teks Webhook -->
+                    <div class="flex items-center justify-between bg-black-primary p-2.5 rounded-lg border border-black-accent">
+                        <span class="text-xs font-mono text-gray-primary truncate mr-4 select-all" x-text="webhookUrl"></span>
+                        <button @click="copyToClipboard(webhookUrl, 'webhook')" 
+                                class="px-3 py-1.5 rounded-md text-xs font-bold transition-all flex items-center space-x-1.5 shrink-0"
+                                :class="copiedField === 'webhook' ? 'bg-[#23a55a] text-white-primary' : 'bg-[#5865f2] text-white-primary hover:bg-[#4752c4]'">
+                            <i class="fas" :class="copiedField === 'webhook' ? 'fa-check' : 'fa-copy'"></i>
+                            <span x-text="copiedField === 'webhook' ? 'Tersalin' : 'Salin'"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-2 pb-6">
+                <div class="flex items-center space-x-2 text-xs font-bold text-gray-primary uppercase tracking-wider px-1">
+                    <span>Perintah Aplikasi ( / )</span>
+                    <span class="h-px bg-black-accent flex-1"></span>
+                </div>
+                
+                <div class="bg-black-accent rounded-xl border border-black-primary divide-y divide-black-primary overflow-hidden">
+                    <div class="p-3 flex items-start space-x-3 hover:bg-black-primary/30 transition-colors">
+                        <code class="text-[#00b0f4] font-mono text-xs font-bold bg-black-primary px-1.5 py-0.5 rounded border border-black-accent shrink-0">/verify</code>
+                        <div class="text-xs">
+                            <p class="font-bold text-white-primary">Hubungkan Akun</p>
+                            <p class="text-gray-primary mt-0.5">Sinkronisasi ID Discord staf dengan data akun di sistem.</p>
+                        </div>
+                    </div>
+                    <div class="p-3 flex items-start space-x-3 hover:bg-black-primary/30 transition-colors">
+                        <code class="text-[#00b0f4] font-mono text-xs font-bold bg-black-primary px-1.5 py-0.5 rounded border border-black-accent shrink-0">/log</code>
+                        <div class="text-xs">
+                            <p class="font-bold text-white-primary">Lihat Aktivitas</p>
+                            <p class="text-gray-primary mt-0.5">Memanggil ringkasan data log aktivitas operasional terbaru.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
 </div>
+

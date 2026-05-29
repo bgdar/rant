@@ -1,14 +1,11 @@
 // untuk menyimpan chat forums
 // src/dto/forum.dto.ts
 
-import { Type } from '@nestjs/common';
 import {
   IsArray,
   IsBoolean,
   IsEnum,
   IsMongoId,
-  IsNumber,
-  IsObject,
   IsOptional,
   IsString,
   MaxLength,
@@ -56,7 +53,7 @@ export class ForumMemberDTO {
    * User ID.
    */
   @IsMongoId()
-  userId: string;
+  userId: Types.ObjectId;
 
   /**
    * Member role.
@@ -147,8 +144,6 @@ export class ForumDTO {
    * Updated date.
    */
   updatedAt: Date;
-
-  sluq: string;
 }
 
 /**

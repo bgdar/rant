@@ -1,0 +1,212 @@
+
+<dic class="bg-white-secondary text-black-primary font-sans antialiased min-h-screen flex flex-col justify-between"
+      x-data="{ sidebarOpen: false, filterStatus: 'all', searchQuery: '' }">
+
+    <!-- TOP NAVIGATION BAR -->
+    <header class="bg-black-primary text-white-primary shadow-md px-6 py-4 flex justify-between items-center sticky top-0 z-50">
+        <div class="flex items-center space-x-4">
+            <button @click="sidebarOpen = !sidebarOpen" class="text-white-primary hover:text-main-accent focus:outline-none md:hidden">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+            <div class="flex items-center space-x-3">
+                <div class="bg-main-primary text-white-primary p-2 rounded-lg">
+                    <i class="fas fa-history text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold tracking-wide">Supervisor Panel</h1>
+                    <p class="text-xs text-gray-accent hidden sm:block">Log & Riwayat Teks</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="flex items-center space-x-4">
+            <span class="text-sm text-white-secondary hidden md:inline">Halo, <strong>Supervisor</strong></span>
+            <div class="w-10 h-10 rounded-full bg-main-secondary flex items-center justify-center text-white-primary font-bold border-2 border-main-accent">
+                SP
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN BODY CONTAINER -->
+    <div class="flex flex-grow">
+        
+        <!-- SIDEBAR NAVIGATION -->
+        <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'" 
+               class="fixed md:static inset-y-0 left-0 w-64 bg-black-secondary text-white-secondary p-4 space-y-6 transform md:translate-x-0 transition-transform duration-200 ease-in-out z-40 flex flex-col justify-between border-r border-black-accent">
+            
+            <div class="space-y-4">
+                <div class="text-xs font-bold tracking-wider text-gray-primary uppercase px-3">Menu Utama</div>
+                <nav class="space-y-1">
+                    <a href="home.html" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-black-accent text-gray-accent hover:text-white-primary transition duration-200">
+                        <i class="fas fa-home w-5"></i> <span>Overview</span>
+                    </a>
+                    <a href="create-user.html" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-black-accent text-gray-accent hover:text-white-primary transition duration-200">
+                        <i class="fas fa-user-plus w-5"></i> <span>Create New User</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg bg-main-primary text-white-primary transition duration-200">
+                        <i class="fas fa-history w-5"></i> <span>History Kata-Kata</span>
+                    </a>
+                </nav>
+            </div>
+
+            <div>
+                <button class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg bg-black-accent hover:bg-main-secondary text-white-primary text-sm font-semibold transition duration-200">
+                    <i class="fas fa-sign-out-alt w-5"></i> <span>Keluar / Logout</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="flex-grow p-4 md:p-8 space-y-6">
+            
+            <!-- Page Header Card -->
+            <div class="bg-white-primary p-6 rounded-xl shadow-sm border border-white-accent flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <h2 class="text-xl md:text-2xl font-bold text-black-primary">Riwayat Log Kata-Kata</h2>
+                    <p class="text-sm text-black-muted mt-1">Daftar rekaman teks, pengumuman, atau broadcast yang telah dikirim oleh sistem/operator.</p>
+                </div>
+                <button class="bg-black-primary hover:bg-black-secondary text-white-primary text-xs font-semibold px-4 py-2.5 rounded-lg shadow transition flex items-center gap-2">
+                    <i class="fas fa-download"></i> Ekspor Log (.CSV)
+                </button>
+            </div>
+
+            <!-- FILTER & SEARCH CONTROL BAR -->
+            <div class="bg-white-primary p-4 rounded-xl shadow-sm border border-white-accent flex flex-col md:flex-row justify-between items-center gap-4">
+                <!-- Tabs Filter (Alpine.js) -->
+                <div class="flex bg-white-secondary p-1 rounded-lg border border-white-accent w-full md:w-auto">
+                    <button @click="filterStatus = 'all'" 
+                            :class="filterStatus === 'all' ? 'bg-black-primary text-white-primary' : 'text-black-muted hover:text-black-primary'"
+                            class="flex-1 md:flex-none text-xs font-semibold px-4 py-2 rounded-md transition duration-150">
+                        Semua (<span class="text-main-accent">3</span>)
+                    </button>
+                    <button @click="filterStatus = 'important'" 
+                            :class="filterStatus === 'important' ? 'bg-main-primary text-white-primary' : 'text-black-muted hover:text-main-primary'"
+                            class="flex-1 md:flex-none text-xs font-semibold px-4 py-2 rounded-md transition duration-150">
+                        <i class="fas fa-exclamation-circle mr-1"></i> Penting
+                    </button>
+                    <button @click="filterStatus = 'info'" 
+                            :class="filterStatus === 'info' ? 'bg-black-accent text-white-primary' : 'text-black-muted hover:text-black-accent'"
+                            class="flex-1 md:flex-none text-xs font-semibold px-4 py-2 rounded-md transition duration-150">
+                        <i class="fas fa-info-circle mr-1"></i> Info Umum
+                    </button>
+                </div>
+
+                <!-- Live Search Input -->
+                <div class="relative w-full md:w-72">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-secondary">
+                        <i class="fas fa-search text-xs"></i>
+                    </span>
+                    <input type="text" x-model="searchQuery"
+                           placeholder="Cari kata kunci kalimat..." 
+                           class="w-full pl-9 pr-4 py-2 bg-white-secondary border border-white-muted rounded-lg focus:outline-none focus:border-main-primary text-xs transition">
+                </div>
+            </div>
+
+            <!-- HISTORY LIST CONTAINER (TIMELINE STYLE) -->
+            <div class="space-y-4">
+                
+                <!-- Item 1 (Penting / Merah) -->
+                <div x-show="(filterStatus === 'all' || filterStatus === 'important') && ('SOP Darurat K3'.toLowerCase().includes(searchQuery.toLowerCase()) || 'Ahmad Fauzi'.toLowerCase().includes(searchQuery.toLowerCase()))"
+                     class="bg-white-primary rounded-xl border border-white-accent p-5 shadow-sm transition hover:shadow-md border-l-4 border-l-main-primary">
+                    <div class="flex flex-col sm:flex-row justify-between items-start gap-2 border-b border-white-accent pb-3 mb-3">
+                        <div class="flex items-center space-x-2.5">
+                            <span class="bg-main-muted text-main-secondary text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded">
+                                <i class="fas fa-exclamation-triangle mr-1"></i> Penting
+                            </span>
+                            <span class="text-xs text-gray-secondary">ID: #LOG-8821</span>
+                        </div>
+                        <div class="text-xs text-gray-secondary flex items-center gap-1.5">
+                            <i class="far fa-clock"></i> 28 Mei 2026 • 14:22 WIB
+                        </div>
+                    </div>
+                    <!-- Konten Kata-kata -->
+                    <p class="text-sm font-medium text-black-secondary leading-relaxed bg-white-secondary p-3.5 rounded-lg border border-white-accent italic">
+                        "Pemberitahuan kepada seluruh operator shift C: Mohon periksa kembali katup tekanan udara pada mesin kompresor utama sebelum melakukan hand-over. Pastikan mengisi lembar checklist SOP Darurat K3 secara berkala!"
+                    </p>
+                    <!-- Metadata Kreator -->
+                    <div class="mt-3 flex items-center justify-between text-xs text-black-muted">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-6 h-6 rounded-full bg-black-muted text-white-primary flex items-center justify-center font-bold text-[10px]">AF</div>
+                            <span>Oleh: <strong class="text-black-primary">Ahmad Fauzi</strong> (Operator)</span>
+                        </div>
+                        <span class="text-[11px] text-gray-secondary bg-white-secondary px-2 py-1 rounded border border-white-accent"><i class="fas fa-tag"></i> K3, Broadcast</span>
+                    </div>
+                </div>
+
+                <!-- Item 2 (Info Umum) -->
+                <div x-show="(filterStatus === 'all' || filterStatus === 'info') && ('Pemeliharaan Server'.toLowerCase().includes(searchQuery.toLowerCase()) || 'Siti Aminah'.toLowerCase().includes(searchQuery.toLowerCase()))"
+                     class="bg-white-primary rounded-xl border border-white-accent p-5 shadow-sm transition hover:shadow-md border-l-4 border-l-black-primary">
+                    <div class="flex flex-col sm:flex-row justify-between items-start gap-2 border-b border-white-accent pb-3 mb-3">
+                        <div class="flex items-center space-x-2.5">
+                            <span class="bg-white-accent text-black-accent text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded">
+                                <i class="fas fa-info-circle mr-1"></i> Info Umum
+                            </span>
+                            <span class="text-xs text-gray-secondary">ID: #LOG-8790</span>
+                        </div>
+                        <div class="text-xs text-gray-secondary flex items-center gap-1.5">
+                            <i class="far fa-clock"></i> 28 Mei 2026 • 09:15 WIB
+                        </div>
+                    </div>
+                    <!-- Konten Kata-kata -->
+                    <p class="text-sm font-medium text-black-secondary leading-relaxed bg-white-secondary p-3.5 rounded-lg border border-white-accent italic">
+                        "Akan dilakukan maintenance sistem pelaporan internal pada hari Sabtu pukul 23:00 WIB selama maksimal 2 jam. Selama pemeliharaan berlangsung, input data log harian dapat dicatat manual terlebih dahulu."
+                    </p>
+                    <!-- Metadata Kreator -->
+                    <div class="mt-3 flex items-center justify-between text-xs text-black-muted">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-6 h-6 rounded-full bg-main-secondary text-white-primary flex items-center justify-center font-bold text-[10px]">SA</div>
+                            <span>Oleh: <strong class="text-black-primary">Siti Aminah</strong> (Analyst)</span>
+                        </div>
+                        <span class="text-[11px] text-gray-secondary bg-white-secondary px-2 py-1 rounded border border-white-accent"><i class="fas fa-tag"></i> Maintenance</span>
+                    </div>
+                </div>
+
+                <!-- Item 3 (Info Umum / Biasa) -->
+                <div x-show="(filterStatus === 'all' || filterStatus === 'info') && ('Audit Internal'.toLowerCase().includes(searchQuery.toLowerCase()) || 'Supervisor'.toLowerCase().includes(searchQuery.toLowerCase()))"
+                     class="bg-white-primary rounded-xl border border-white-accent p-5 shadow-sm transition hover:shadow-md border-l-4 border-l-gray-primary">
+                    <div class="flex flex-col sm:flex-row justify-between items-start gap-2 border-b border-white-accent pb-3 mb-3">
+                        <div class="flex items-center space-x-2.5">
+                            <span class="bg-white-accent text-gray-secondary text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded">
+                                <i class="fas fa-info-circle mr-1"></i> Info Umum
+                            </span>
+                            <span class="text-xs text-gray-secondary">ID: #LOG-8765</span>
+                        </div>
+                        <div class="text-xs text-gray-secondary flex items-center gap-1.5">
+                            <i class="far fa-clock"></i> 27 Mei 2026 • 17:00 WIB
+                        </div>
+                    </div>
+                    <!-- Konten Kata-kata -->
+                    <p class="text-sm font-medium text-black-secondary leading-relaxed bg-white-secondary p-3.5 rounded-lg border border-white-accent italic">
+                        "Seluruh berkas arsip laporan kuartal pertama wajib diunggah ke cloud server paling lambat hari Jumat ini untuk persiapan pra-audit internal bersama tim manajemen pusat."
+                    </p>
+                    <!-- Metadata Kreator -->
+                    <div class="mt-3 flex items-center justify-between text-xs text-black-muted">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-6 h-6 rounded-full bg-main-primary text-white-primary flex items-center justify-center font-bold text-[10px]">SP</div>
+                            <span>Oleh: <strong class="text-black-primary">Supervisor</strong> (Anda)</span>
+                        </div>
+                        <span class="text-[11px] text-gray-secondary bg-white-secondary px-2 py-1 rounded border border-white-accent"><i class="fas fa-tag"></i> Audit, Arsip</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- PAGINATION FOOTER -->
+            <div class="bg-white-primary p-4 rounded-xl border border-white-accent flex justify-between items-center text-xs text-black-muted">
+                <div>Menampilkan <strong class="text-black-primary">3</strong> dari <strong class="text-black-primary">3</strong> entri data</div>
+                <div class="flex space-x-1">
+                    <button class="px-2.5 py-1.5 rounded border border-white-accent bg-white-secondary text-gray-primary cursor-not-allowed" disabled><i class="fas fa-chevron-left"></i></button>
+                    <button class="px-3 py-1.5 rounded bg-black-primary text-white-primary font-bold">1</button>
+                    <button class="px-2.5 py-1.5 rounded border border-white-accent bg-white-primary text-black-accent hover:bg-white-secondary"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-black-secondary text-gray-primary text-center py-3 text-xs border-t border-black-accent">
+        &copy; 2026 Admin Panel — Crafted for Supervisor. All rights reserved.
+    </footer>
+
+</div>

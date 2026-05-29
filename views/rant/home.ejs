@@ -1,46 +1,116 @@
-<div
-  class="bg-blackmain min-h-screen flex items-center justify-center font-sans"
->
-  <div
-    class="relative flex flex-col items-center gap-4"
-    x-data="{ active: null }"
-  >
-    <div class="flex justify-center w-full">
-      <div
-        @mouseenter="active = 'wa'"
-        @mouseleave="active = null"
-        :class="active === 'wa' ? 'border-main scale-110' : 'border-graymid'"
-        class="circle-bot bg-whitemain shadow-lg cursor-pointer"
-      >
-        <span class="text-blackmain font-bold text-xl uppercase">WhatsApp</span>
-        <span class="text-main text-sm font-medium">Bot</span>
-      </div>
+<div class="bg-white-secondary min-h-screen flex items-center justify-center p-0 sm:p-4 antialiased font-sans text-black-primary">
+    <div class="bg-white-primary w-full max-w-md h-screen sm:h-[650px] sm:rounded-2xl shadow-2xl border border-white-accent flex flex-col overflow-hidden"
+         x-data="{
+            botUsername: '@SistemManajemenBot',
+            chatId: '628394021',
+            copiedField: '',
+            
+            copyToClipboard(text, field) {
+                navigator.clipboard.writeText(text);
+                this.copiedField = field;
+                setTimeout(() => { this.copiedField = '' }, 2000);
+            }
+         }">
+         
+        <div class="bg-black-primary p-4 text-white-primary flex items-center justify-between h-16 shrink-0 shadow-md border-b-2 border-main-primary">
+            <div class="flex items-center space-x-4">
+                <button class="text-white-primary hover:text-main-accent transition-colors">
+                    <i class="fas fa-arrow-left text-lg"></i>
+                </button>
+                <div class="flex flex-col">
+                    <div class="flex items-center space-x-1.5">
+                        <h1 class="text-base font-bold tracking-wide">Info Bot</h1>
+                        <i class="fas fa-circle-check text-xs text-main-primary"></i>
+                    </div>
+                    <p class="text-[11px] text-gray-accent">bot panduan sistem</p>
+                </div>
+            </div>
+            <button class="text-white-primary hover:text-main-accent transition-colors">
+                <i class="fas fa-ellipsis-vertical text-lg"></i>
+            </button>
+        </div>
+
+        <div class="flex-1 overflow-y-auto bg-white-secondary p-4 space-y-4">
+            
+            <div class="bg-white-primary p-4 rounded-xl border border-white-accent flex items-center space-x-4 shadow-sm">
+                <div class="w-14 h-14 rounded-full bg-black-secondary border border-main-accent flex items-center justify-center text-main-primary text-2xl font-bold shadow-sm shrink-0">
+                    <i class="fab fa-telegram"></i>
+                </div>
+                <div class="overflow-hidden">
+                    <div class="flex items-center space-x-1.5">
+                        <h2 class="text-sm font-bold text-black-primary">Sistem Manajemen Bot</h2>
+                        <i class="fas fa-circle-check text-xs text-main-primary"></i>
+                    </div>
+                    <p class="text-xs text-black-accent mt-0.5 truncate" x-text="botUsername"></p>
+                    <p class="text-[11px] text-gray-secondary mt-0.5">bot otomatis untuk notifikasi & log</p>
+                </div>
+            </div>
+
+            <div class="space-y-1.5">
+                <span class="text-[10px] font-bold text-gray-secondary uppercase tracking-wider px-2 block">Langkah 1: Aktivasi</span>
+                <div class="bg-white-primary p-4 rounded-xl border border-white-accent space-y-3 shadow-sm">
+                    <p class="text-xs text-black-accent leading-relaxed">
+                        Cari username bot resmi kami di Telegram, lalu klik tombol <strong class="text-main-primary">Mulai / Start</strong> di bagian bawah obrolan.
+                    </p>
+                    <!-- Kotak Penyalinan Teks -->
+                    <div class="flex items-center justify-between bg-white-secondary p-2.5 rounded-lg border border-white-accent">
+                        <span class="text-xs font-mono font-bold text-black-primary select-all" x-text="botUsername"></span>
+                        <button @click="copyToClipboard(botUsername, 'username')" 
+                                class="px-3 py-1.5 rounded-md text-xs font-bold transition-all flex items-center space-x-1.5 shrink-0 border"
+                                :class="copiedField === 'username' ? 'bg-main-muted text-main-secondary border-main-accent' : 'bg-white-primary text-black-primary border-black-accent hover:bg-white-accent'">
+                            <i class="fas" :class="copiedField === 'username' ? 'fa-check' : 'fa-copy'"></i>
+                            <span x-text="copiedField === 'username' ? 'Tersalin' : 'Salin'"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-1.5">
+                <span class="text-[10px] font-bold text-gray-secondary uppercase tracking-wider px-2 block">Langkah 2: Sinkronisasi</span>
+                <div class="bg-white-primary p-4 rounded-xl border border-white-accent space-y-3 shadow-sm">
+                    <p class="text-xs text-black-accent leading-relaxed">
+                        Kirimkan pesan perintah <code class="bg-main-muted text-main-secondary px-1.5 py-0.5 rounded font-mono text-[11px] font-bold border border-main-accent">/myid</code> ke bot untuk mendapatkan nomor ID unik akun Telegram Anda.
+                    </p>
+                    <!-- Kotak Penyalinan Teks -->
+                    <div class="flex items-center justify-between bg-white-secondary p-2.5 rounded-lg border border-white-accent">
+                        <span class="text-xs font-mono font-bold text-gray-secondary select-all" x-text="chatId"></span>
+                        <button @click="copyToClipboard(chatId, 'chatid')" 
+                                class="px-3 py-1.5 rounded-md text-xs font-bold transition-all flex items-center space-x-1.5 shrink-0 border"
+                                :class="copiedField === 'chatid' ? 'bg-main-muted text-main-secondary border-main-accent' : 'bg-white-primary text-black-primary border-black-accent hover:bg-white-accent'">
+                            <i class="fas" :class="copiedField === 'chatid' ? 'fa-check' : 'fa-copy'"></i>
+                            <span x-text="copiedField === 'chatid' ? 'Tersalin' : 'Salin'"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-1.5 pb-6">
+                <span class="text-[10px] font-bold text-gray-secondary uppercase tracking-wider px-2 block">Daftar Perintah (Commands)</span>
+                <div class="bg-white-primary rounded-xl border border-white-accent divide-y divide-white-accent overflow-hidden shadow-sm">
+                    
+                    <!-- Row 1 -->
+                    <div class="p-3 flex items-start space-x-3 hover:bg-white-secondary/40 transition-colors">
+                        <span class="text-main-primary font-mono text-xs font-bold shrink-0 w-16">/start</span>
+                        <div class="text-xs">
+                            <p class="font-bold text-black-primary">Mulai Sesi</p>
+                            <p class="text-gray-secondary mt-0.5">Mengaktifkan bot dan memunculkan pesan selamat datang.</p>
+                        </div>
+                    </div>
+
+                    <!-- Row 2 -->
+                    <div class="p-3 flex items-start space-x-3 hover:bg-white-secondary/40 transition-colors">
+                        <span class="text-main-primary font-mono text-xs font-bold shrink-0 w-16">/status</span>
+                        <div class="text-xs">
+                            <p class="font-bold text-black-primary">Cek Koneksi</p>
+                            <p class="text-gray-secondary mt-0.5">Memeriksa apakah ID akun Anda sudah terhubung ke panel web.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
     </div>
 
-    <div class="flex gap-8 -mt-8">
-      <div
-        @mouseenter="active = 'telegram'"
-        @mouseleave="active = null"
-        :class="active === 'telegram' ? 'border-main scale-110' : 'border-graymid'"
-        class="circle-bot bg-whitemain shadow-lg cursor-pointer"
-      >
-        <span class="text-blackmain font-bold text-xl uppercase">Telegram</span>
-        <span class="text-main text-sm font-medium">Bot</span>
-      </div>
-
-      <div
-        @mouseenter="active = 'discord'"
-        @mouseleave="active = null"
-        :class="active === 'discord' ? 'border-main scale-110' : 'border-graymid'"
-        class="circle-bot bg-whitemain shadow-lg cursor-pointer"
-      >
-        <span class="text-blackmain font-bold text-xl uppercase">Discord</span>
-        <span class="text-main text-sm font-medium">Bot</span>
-      </div>
-    </div>
-
-    <div class="mt-10 text-graymid text-sm italic">
-      Silahkan pilih bot untuk memulai
-    </div>
-  </div>
 </div>
+

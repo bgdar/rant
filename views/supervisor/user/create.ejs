@@ -1,1 +1,148 @@
-<p>create user</p>
+
+<div class="bg-white-secondary text-black-primary font-sans antialiased min-h-screen flex flex-col justify-between">
+
+    <header class="bg-black-primary text-white-primary shadow-md px-6 py-4 flex justify-between items-center">
+        <div class="flex items-center space-x-3">
+            <div class="bg-main-primary text-white-primary p-2 rounded-lg">
+                <i class="fas fa-user-shield text-xl"></i>
+            </div>
+            <div>
+                <h1 class="text-lg font-bold tracking-wide">Supervisor Panel</h1>
+                <p class="text-xs text-gray-accent">Management Dashboard</p>
+            </div>
+        </div>
+        <div class="flex items-center space-x-4">
+            <span class="text-sm text-white-secondary hidden md:inline">Welcome, <strong>Supervisor</strong></span>
+            <div class="w-10 h-10 rounded-full bg-main-secondary flex items-center justify-center text-white-primary font-bold border-2 border-main-accent">
+                SP
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow flex items-center justify-center p-4 md:p-8">
+        <div class="bg-white-primary w-full max-w-2xl rounded-xl shadow-lg border border-white-accent overflow-hidden" 
+             x-data="{ 
+                showPassword: false, 
+                role: 'operator',
+                username: '',
+                email: '',
+                password: '',
+                name: ''
+             }">
+            
+            <div class="bg-gradient-to-r from-black-secondary to-black-accent p-6 text-white-primary flex items-center justify-between">
+                <div>
+                    <h2 class="text-xl font-bold"><i class="fas fa-user-plus mr-2 text-main-accent"></i> Create New User</h2>
+                    <p class="text-xs text-gray-muted mt-1">Tambahkan pengguna baru ke dalam sistem aplikasi.</p>
+                </div>
+                <a href="#" class="text-sm bg-black-muted hover:bg-main-primary text-white-primary px-3 py-1.5 rounded-lg transition duration-200">
+                    <i class="fas fa-arrow-left mr-1"></i> Kembali
+                </a>
+            </div>
+
+            <form @submit.prevent="alert('User ' + name + ' (' + role + ') berhasil dibuat!')" class="p-6 space-y-6">
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-black-accent mb-2">Nama Lengkap</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-secondary">
+                                <i class="fas fa-id-card"></i>
+                            </span>
+                            <input type="text" x-model="name" required
+                                   class="w-full pl-10 pr-4 py-2.5 bg-white-secondary border border-white-muted rounded-lg focus:outline-none focus:border-main-primary focus:ring-1 focus:ring-main-primary text-sm transition"
+                                   placeholder="John Doe">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-black-accent mb-2">Username</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-secondary">
+                                <i class="fas fa-user"></i>
+                            </span>
+                            <input type="text" x-model="username" required
+                                   class="w-full pl-10 pr-4 py-2.5 bg-white-secondary border border-white-muted rounded-lg focus:outline-none focus:border-main-primary focus:ring-1 focus:ring-main-primary text-sm transition"
+                                   placeholder="johndoe123">
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-black-accent mb-2">Alamat Email</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-secondary">
+                            <i class="fas fa-envelope"></i>
+                        </span>
+                        <input type="email" x-model="email" required
+                               class="w-full pl-10 pr-4 py-2.5 bg-white-secondary border border-white-muted rounded-lg focus:outline-none focus:border-main-primary focus:ring-1 focus:ring-main-primary text-sm transition"
+                               placeholder="johndoe@email.com">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-black-accent mb-2">Password</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-secondary">
+                                <i class="fas fa-lock"></i>
+                            </span>
+                            <input :type="showPassword ? 'text' : 'password'" x-model="password" required
+                                   class="w-full pl-10 pr-10 py-2.5 bg-white-secondary border border-white-muted rounded-lg focus:outline-none focus:border-main-primary focus:ring-1 focus:ring-main-primary text-sm transition"
+                                   placeholder="••••••••">
+                            <button type="button" @click="showPassword = !showPassword" 
+                                    class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-secondary hover:text-black-primary focus:outline-none">
+                                <i class="fas" :class="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-black-accent mb-2">Role / Hak Akses</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-secondary">
+                                <i class="fas fa-user-tag"></i>
+                            </span>
+                            <select x-model="role"
+                                    class="w-full pl-10 pr-4 py-2.5 bg-white-secondary border border-white-muted rounded-lg focus:outline-none focus:border-main-primary focus:ring-1 focus:ring-main-primary text-sm transition appearance-none cursor-pointer">
+                                <option value="operator">Operator / Staff</option>
+                                <option value="analyst">Analyst</option>
+                                <option value="auditor">Auditor</option>
+                            </select>
+                            <span class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-secondary">
+                                <i class="fas fa-chevron-down text-xs"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-main-muted border-l-4 border-main-primary p-3 rounded-r-lg">
+                    <div class="flex items-start space-x-2">
+                        <i class="fas fa-info-circle text-main-secondary mt-0.5"></i>
+                        <p class="text-xs text-black-secondary leading-relaxed">
+                            Sebagai <strong>Supervisor</strong>, Anda bertanggung jawab penuh atas akun yang dibuat. Pastikan email aktif untuk keperluan verifikasi berkala.
+                        </p>
+                    </div>
+                </div>
+
+                <hr class="border-white-accent">
+
+                <div class="flex items-center justify-end space-x-3">
+                    <button type="reset" 
+                            class="px-5 py-2.5 bg-white-accent hover:bg-gray-muted text-black-accent font-medium text-sm rounded-lg transition duration-200">
+                        <i class="fas fa-undo mr-1"></i> Reset
+                    </button>
+                    <button type="submit" 
+                            class="px-6 py-2.5 bg-main-primary hover:bg-main-secondary text-white-primary font-semibold text-sm rounded-lg shadow-md hover:shadow-lg transition duration-200">
+                        <i class="fas fa-paper-plane mr-1"></i> Simpan User
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer class="bg-black-secondary text-gray-primary text-center py-3 text-xs border-t border-black-accent">
+        &copy; 2026 Admin Panel — Crafted for Supervisor. All rights reserved.
+    </footer>
+
+</div>

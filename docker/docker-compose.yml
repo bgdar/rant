@@ -47,6 +47,24 @@ services:
     networks:
       - rant-network
 
+
+  # RabitMQ yang akan di gunakan di project ini, untuk komunikasi ( message broken) antar aplikais , alasannya cek READMe.md 
+  # services:
+  # rabbitmq:
+  #   image: rabbitmq:4.3.0-management-alpine
+  #   container_name: rabbitmq-rant
+  #   restart: always
+  #   environment:
+  #     RABBITMQ_DEFAULT_USER: guest
+  #     RABBITMQ_DEFAULT_PASS: guest
+  #   ports:
+  #     - "5672:5672"   # AMQP protocol port
+  #     - "15672:15672" # Management UI port
+  #   volumes:
+  #     - rabbitmq_data:./data/var/lib/rabbitmq
+  #   networks:
+  #     - rant-network
+  #
 networks:
   rant-network:
     driver: bridge

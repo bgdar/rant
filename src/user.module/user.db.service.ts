@@ -73,7 +73,7 @@ export class UserDbService {
    * Akan dilempar jika user tidak ditemukan
    * ```
    */
-  async findById(id: string) {
+  async findById(id: string): Promise<UserDTO> {
     const user = await this.userModel.findById(id).select('-password');
 
     if (!user) {
@@ -141,7 +141,7 @@ export class UserDbService {
    * await userDbService.searchByUsername('zer');
    * ```
    */
-  async searchByUsername(username: string) {
+  async searchByUsername(username: string): Promise<UserDTO[]> {
     return this.userModel.find({
       username: {
         $regex: username,

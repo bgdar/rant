@@ -5,13 +5,12 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
+import { Transport, MicroserviceOptions } from '@nestjs/microservices';
 
 import fastifyCookie from '@fastify/cookie';
 // import fastifyFlash from '@fastify/flash'; // gak stabil di fastify
 import session from '@fastify/session';
-
 import fastifyView from '@fastify/view';
-
 import { join } from 'path';
 // import expressLayout from 'express-ejs-layouts'; // untuk express , dengan ejs sudha ada fastify/view
 import ejs from 'ejs';
@@ -21,6 +20,17 @@ async function bootstrap() {
     AppModule,
     new FastifyAdapter(),
   );
+
+  // Microservice RabbitMQ yang di guankan di projeck ini
+  app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.RMQ,
+    options: {
+      urls: [process.env.RABBIT_URL || 'amqp://localhost:5672'],
+      // queue: 'queue-webDashb',
+      // queueOptions: { durable: false },
+    },
+  });
+
   app.useStaticAssets({
     root: join(__dirname, '..', 'public'),
     prefix: '/public/',
@@ -62,6 +72,8 @@ async function bootstrap() {
       maxAge: 1000 * 60 * 60 * 24, // 1 hari
     },
   });
+
+  await app.startAllMicroservices();
 
   console.info('APP running on : localhost:3000');
   await app.listen(process.env.PORT ?? 3000);

@@ -1,20 +1,23 @@
-<div x-data="forumsHome()" class="bg-white text-black overflow-hidden">
+<div
+  x-data="forumsHome(<%= JSON.stringify(forums))"
+  class="bg-white text-black overflow-hidden"
+>
   <!-- MAIN -->
   <div class="flex h-screen">
     <!-- SIDEBAR -->
     <aside
-      class="w-[85px] bg-black border-r border-neutral-800 flex flex-col items-center py-5 gap-4"
+      class="w-21.25 bg-black border-r border-neutral-800 flex flex-col items-center py-5 gap-4"
     >
       <!-- LOGO -->
       <div
-        class="w-14 h-14 rounded-2xl bg-[#ff0000] flex items-center justify-center shadow-lg"
+        class="w-14 h-14 rounded-2xl bg-main-prtext-main-primary flex items-center justify-center shadow-lg"
       >
         <span class="text-white font-bold text-2xl"> R </span>
       </div>
 
       <a
         href="/forums/create-forum"
-        class="w-14 h-14 rounded-2xl bg-neutral-900 hover:bg-[#ff0000] transition flex items-center justify-center text-white text-3xl"
+        class="w-14 h-14 rounded-2xl bg-neutral-900 hover:bg-main-prtext-main-primary transition flex items-center justify-center text-white text-3xl"
       >
         +
       </a>
@@ -40,7 +43,7 @@
 
     <!-- FORUM LIST -->
     <section
-      class="w-[340px] bg-[#111111] border-r border-neutral-800 flex flex-col"
+      class="w-85 bg-[#111111] border-r border-neutral-800 flex flex-col"
     >
       <!-- HEADER -->
       <div class="px-5 py-5 border-b border-neutral-800">
@@ -48,12 +51,12 @@
           <div>
             <h1 class="text-white font-bold text-2xl">Forums</h1>
 
-            <p class="text-[#999999] text-sm mt-1">Community discussions</p>
+            <p class="text-gray-primary text-sm mt-1">Community discussions</p>
           </div>
 
           <a
             href="/forums/create-forum"
-            class="bg-[#ff0000] hover:opacity-90 transition text-white px-4 py-2 rounded-xl text-sm font-semibold"
+            class="bg-main-primary hover:opacity-90 transition text-white px-4 py-2 rounded-xl text-sm font-semibold"
           >
             New
           </a>
@@ -65,7 +68,7 @@
             type="text"
             placeholder="Search forums..."
             x-model="search"
-            class="w-full bg-neutral-900 border border-neutral-800 focus:border-[#ff0000] outline-none rounded-2xl px-4 py-3 text-white placeholder:text-[#777]"
+            class="w-full bg-neutral-900 border border-neutral-800 focus:border-main-prtext-main-primary outline-none rounded-2xl px-4 py-3 text-white placeholder:text-[#777]"
           />
         </div>
       </div>
@@ -101,14 +104,14 @@
               </div>
 
               <p
-                class="text-sm text-[#999999] truncate mt-1"
+                class="text-sm text-gray-primary truncate mt-1"
                 x-text="forum.message"
               ></p>
 
               <div class="flex items-center gap-2 mt-2">
                 <template x-for="tag in forum.tags">
                   <span
-                    class="text-[11px] px-2 py-1 rounded-lg bg-neutral-800 text-[#999999]"
+                    class="text-[11px] px-2 py-1 rounded-lg bg-neutral-800 text-gray-primary"
                     x-text="tag"
                   ></span>
                 </template>
@@ -118,7 +121,7 @@
             <!-- COUNT -->
             <div
               x-show="forum.unread > 0"
-              class="min-w-6 h-6 px-2 rounded-full bg-[#ff0000] flex items-center justify-center text-xs font-bold text-white"
+              class="min-w-6 h-6 px-2 rounded-full bg-main-prtext-main-primary flex items-center justify-center text-xs font-bold text-white"
               x-text="forum.unread"
             ></div>
           </a>
@@ -131,7 +134,7 @@
       <!-- BACKGROUND -->
       <div class="absolute inset-0 opacity-10">
         <div
-          class="absolute w-[500px] h-[500px] bg-[#ff0000] rounded-full blur-3xl top-[-200px] right-[-100px]"
+          class="absolute w-125 h-125 bg-main-prtext-main-primary rounded-full blur-3xl top-[-200px] right-[-100px]"
         ></div>
       </div>
 
@@ -141,19 +144,17 @@
       >
         <!-- ICON -->
         <div
-          class="w-28 h-28 rounded-[2rem] bg-[#ff0000] flex items-center justify-center shadow-2xl"
+          class="w-28 h-28 rounded-[2rem] bg-main-prtext-main-primary flex items-center justify-center shadow-2xl"
         >
           <span class="text-white text-5xl font-bold"> R </span>
         </div>
 
-        <!-- TITLE -->
         <h1 class="text-white text-5xl font-black mt-10 leading-tight">
           Welcome to <br />
-          Realtime Forums
+          Forums
         </h1>
 
-        <!-- DESC -->
-        <p class="text-[#999999] max-w-2xl mt-6 text-lg leading-relaxed">
+        <p class="text-gray-primary max-w-2xl mt-6 text-lg leading-relaxed">
           Join communities, discuss technology, gaming, anime, programming,
           design, and many more in realtime conversation.
         </p>
@@ -162,13 +163,13 @@
         <div class="flex items-center gap-5 mt-10">
           <a
             href="/forums/create-forum"
-            class="bg-[#ff0000] hover:opacity-90 transition px-7 py-4 rounded-2xl text-white font-bold shadow-lg"
+            class="bg-main-prtext-main-primary hover:opacity-90 transition px-7 py-4 rounded-2xl text-white font-bold shadow-lg"
           >
             Create Forum
           </a>
 
           <button
-            class="border border-neutral-700 hover:border-[#ff0000] hover:text-[#ff0000] transition px-7 py-4 rounded-2xl text-white font-semibold"
+            class="border border-neutral-700 hover:border-main-primary hover:text-main-primary transition px-7 py-4 rounded-2xl text-white font-semibold"
           >
             Explore
           </button>
@@ -181,7 +182,7 @@
           >
             <h3 class="text-4xl font-black text-white">120+</h3>
 
-            <p class="text-[#999999] mt-2">Active Forums</p>
+            <p class="text-gray-primary mt-2">Active Forums</p>
           </div>
 
           <div
@@ -189,7 +190,7 @@
           >
             <h3 class="text-4xl font-black text-white">5K+</h3>
 
-            <p class="text-[#999999] mt-2">Online Users</p>
+            <p class="text-gray-primary mt-2">Online Users</p>
           </div>
 
           <div
@@ -197,7 +198,7 @@
           >
             <h3 class="text-4xl font-black text-white">20K+</h3>
 
-            <p class="text-[#999999] mt-2">Messages Today</p>
+            <p class="text-gray-primary mt-2">Messages Today</p>
           </div>
         </div>
       </div>
@@ -206,10 +207,11 @@
 
   <!-- ALPINE -->
   <script>
-    function forumsHome() {
+    function forumsHome(forums) {
       return {
         search: '',
 
+        // nantik aja
         rooms: [
           {
             id: 1,
@@ -237,79 +239,7 @@
           },
         ],
 
-        forums: [
-          {
-            id: 1,
-
-            slug: 'javascript',
-
-            name: 'JavaScript Community',
-
-            image: 'https://i.pravatar.cc/150?img=10',
-
-            message: 'Discuss modern JS frameworks and tooling.',
-
-            unread: 4,
-
-            time: '2m',
-
-            tags: ['javascript', 'frontend'],
-          },
-
-          {
-            id: 2,
-
-            slug: 'linux',
-
-            name: 'Linux Users',
-
-            image: 'https://i.pravatar.cc/150?img=15',
-
-            message: 'Arch Linux customization showcase.',
-
-            unread: 1,
-
-            time: '5m',
-
-            tags: ['linux', 'oss'],
-          },
-
-          {
-            id: 3,
-
-            slug: 'gaming',
-
-            name: 'Gaming Lounge',
-
-            image: 'https://i.pravatar.cc/150?img=50',
-
-            message: 'What are you currently playing?',
-
-            unread: 0,
-
-            time: '12m',
-
-            tags: ['games', 'community'],
-          },
-
-          {
-            id: 4,
-
-            slug: 'anime',
-
-            name: 'Anime World',
-
-            image: 'https://i.pravatar.cc/150?img=35',
-
-            message: 'Latest seasonal anime discussion.',
-
-            unread: 12,
-
-            time: '18m',
-
-            tags: ['anime', 'manga'],
-          },
-        ],
+        forums: forums,
 
         get filteredForums() {
           return this.forums.filter(

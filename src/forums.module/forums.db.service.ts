@@ -13,6 +13,7 @@ import {
   CreateChatDTO,
   CreateForumDTO,
   ForumMemberRole,
+  ForumVisibility,
   UpdateChatDTO,
   UpdateForumDTO,
 } from 'src/dto/forumDTO';
@@ -57,13 +58,16 @@ export class ForumsDbService {
     }
 
     /*
-     |--------------------------------------------------------------------------
      | Create forum
-     |--------------------------------------------------------------------------
      */
 
     const forum = await this.forumModel.create({
       ...data,
+      // id : data.
+      // members : data.members?.map(member => {
+      //   ...member,
+
+      // })
 
       totalMembers: data.members?.length || 0,
 
@@ -75,6 +79,16 @@ export class ForumsDbService {
     });
 
     return forum;
+  }
+
+  /**
+   * Dapatkan seamuForum yang user n
+   * - pakek di home
+   **/
+  async findAllUserForums(userId: Types.ObjectId) {
+    return this.forumModel.find({
+      'members.userId': userId,
+    });
   }
 
   /**
@@ -91,7 +105,7 @@ export class ForumsDbService {
    */
   async findPublicForums() {
     return this.forumModel.find({
-      visibility: 'public',
+      visibility: ForumVisibility.PUBLIC,
     });
   }
 
@@ -125,8 +139,9 @@ export class ForumsDbService {
 
   /**
    * Search forums.
+   * userId : untuk forums yang ada usernta di sini
    */
-  async searchForums(keyword: string) {
+  async searchforums(keyword: string, userId: Types.ObjectId) {
     return this.forumModel.find({
       $or: [
         {
@@ -135,6 +150,8 @@ export class ForumsDbService {
             $options: 'i',
           },
         },
+        // cari berdasarkan id members
+        { 'members.userId': userId },
 
         {
           description: {
@@ -143,6 +160,7 @@ export class ForumsDbService {
           },
         },
 
+        // sesuakan member
         {
           tags: {
             $in: [keyword],
@@ -305,6 +323,12 @@ export class ForumsDbService {
 
     return forum;
   }
+
+  /**
+   * Cek jika member ada , guankan saat forums di tampilkan
+   **/
+  // async cekMemberInForums(name : string ) :  boolean {
+  // }
 
   /**
    * Update member role.

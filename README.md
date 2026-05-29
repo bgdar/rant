@@ -1,6 +1,9 @@
 <div align="center">
-  <img src="./banner.png" />
+  <img src="banner.png" />
 </div>
+
+<br>
+
 > rant bot to detect abusive words on several social media that use bots
 
 ### Tech Stack
@@ -13,6 +16,10 @@
   <!-- WebSocket -->
 <a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API" target="_blank">
   <img src="https://img.shields.io/badge/WebSocket-010101?style=for-the-badge&logo=websocket&logoColor=white" alt="WebSocket"/>
+</a>
+ <!-- RabitMq -->
+<a href="https://www.rabbitmq.com/" target="_blank">
+  <img src="https://img.shields.io/badge/RabbitMQ-FF6600?style=for-the-badge&logo=rabbitmq&logoColor=white" alt="RabbitMQ"/>
 </a>
 <!-- Socket.IO -->
 <a href="https://socket.io/" target="_blank">
@@ -47,8 +54,11 @@
 
 </p>
 
-**_Tech Lain_**
+**_Tech_** :
 
+- `RabbitMQ` : Messaging yang cocok untuk komunikasi ke **api model server** dan aplikasi **_Bot_** lain
+  > Default port and port now : `5672`
+  > default password : `guest` , username : `guest`
 - `argon` : algoritma hashing password
 - `class-validator` : validasi pada DTO
 - `@fastify/session` : untuk session , jadi project ini mengguankan session tampa perlu redis , kecuali nantik jika sudah gedek
@@ -63,6 +73,14 @@
 
 - `Tailwindcss` : menggunakan Tailwincss CLI yang auto build
   running server + client ( tailwindcss)
+  ```bash
+  # running tailwindcss untuk generate code
+  pnpm run client
+  ```
+- `fontawesome` : font di project ini
+  cek di web aslinya :
+  [font icon](https://fontawesome.com/kits/999cf0108d/icons)
+
 - `session` + `cokiess` +`guard` : 2agar keamana di setiap view nantik
 
 ### Bot
@@ -116,12 +134,28 @@ pendamping atau admin yang mengelola **grub**
 | `insult`        | Penghinaan          | Menghina, merendahkan, atau menyerang seseorang                                    |
 | `identity_hate` | Kebencian identitas | Ujaran kebencian terhadap identitas tertentu seperti ras, agama, suku, gender, dll |
 
+### Model Api
+
+> ada di branch :[Model server]("https://github.com/bgdar/rant/tree/model-api")
+
+- di sini model **AI** untuk prediksi di jalakna dan juga handle response untuk menghasilkan response text untuk **Bots** gunakan
+- di sini iniasialisais pertama _RabbitMQ_ untuk membuat daftar **queue - queue** yang di perlukna untuk komunikasi aplikasi
+
 ### Docker
 
 **_docker compose_** :
 
 - `mongodb` : database utama
 - `monggodb-express` : antarmuka adminitratif berbasis web
+  > akses di web : localhost = `http://localhost:8081/db/rant/`
+
+```bash
+# jalanakn di directory docker
+cd docker
+
+# jalanak compise file
+docker compose run -d
+```
 
 ```bash
 # test ping container

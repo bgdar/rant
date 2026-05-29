@@ -55,7 +55,11 @@ pids
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
+# css 
+# style.css gak perlu di include , karena saat building , akan di buatkan otomatis 
 
+./public/css/style.css
+public/css/style.css
 
 # docker 
 

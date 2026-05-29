@@ -9,13 +9,16 @@ import {
   Req,
   Res,
   Session,
+  UseGuards,
 } from '@nestjs/common';
 import argon from 'argon2';
 import { SupervisorDbService } from './supervisor.db.service';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import { CreateUserDTO, UpdateUserDTO } from 'src/dto/user.dto';
+import { AuthSupervisorGuard } from 'src/guards/auth.supervisor';
 
 @Controller('supervisor')
+@UseGuards(AuthSupervisorGuard)
 export class SupervisorController {
   constructor(private readonly supervisorDbService: SupervisorDbService) {}
 
@@ -100,7 +103,6 @@ export class SupervisorController {
     @Body() data: CreateUserDTO,
     @Session() session: Record<string, any>,
     @Res() res: FastifyReply,
-    @Req() req: FastifyRequest,
   ) {
     try {
       const hashPassword = await argon.hash(data.password);

@@ -1,0 +1,351 @@
+<div
+  class="bg-white-secondary text-black-primary font-sans antialiased min-h-screen flex flex-col justify-between"
+  x-data="{ sidebarOpen: false, searchQuery: '' }"
+>
+  <header
+    class="bg-black-primary text-white-primary shadow-md px-6 py-4 flex justify-between items-center sticky top-0 z-50"
+  >
+    <div class="flex items-center space-x-4">
+      <!-- Mobile Menu Button -->
+      <button
+        @click="sidebarOpen = !sidebarOpen"
+        class="text-white-primary hover:text-main-accent focus:outline-none md:hidden"
+      >
+        <i class="fas fa-bars text-xl"></i>
+      </button>
+      <div class="flex items-center space-x-3">
+        <div class="bg-main-primary text-white-primary p-2 rounded-lg">
+          <i class="fas fa-comments text-xl"></i>
+        </div>
+        <div>
+          <h1 class="text-lg font-bold tracking-wide">Supervisor Panel</h1>
+          <p class="text-xs text-gray-accent hidden sm:block">
+            Manajemen Grup Diskusi & Forum
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex items-center space-x-4">
+      <span class="text-sm text-white-secondary hidden md:inline"
+        >Halo, <strong>Supervisor</strong></span
+      >
+      <div
+        class="w-10 h-10 rounded-full bg-main-secondary flex items-center justify-center text-white-primary font-bold border-2 border-main-accent"
+      >
+        SP
+      </div>
+    </div>
+  </header>
+  <div class="flex grow">
+    <aside
+      :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
+      class="fixed md:static inset-y-0 left-0 w-64 bg-black-secondary text-white-secondary p-4 space-y-6 transform md:translate-x-0 transition-transform duration-200 ease-in-out z-40 flex flex-col justify-between border-r border-black-accent"
+    >
+      <div class="space-y-4">
+        <div
+          class="text-xs font-bold tracking-wider text-gray-primary uppercase px-3"
+        >
+          Menu Utama
+        </div>
+        <nav class="space-y-1">
+          <a
+            href="home.html"
+            class="flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-black-accent text-gray-accent hover:text-white-primary transition duration-200"
+          >
+            <i class="fas fa-home w-5"></i> <span>Overview</span>
+          </a>
+          <a
+            href="create-user.html"
+            class="flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-black-accent text-gray-accent hover:text-white-primary transition duration-200"
+          >
+            <i class="fas fa-user-plus w-5"></i> <span>Create New User</span>
+          </a>
+          <a
+            href="history.html"
+            class="flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-black-accent text-gray-accent hover:text-white-primary transition duration-200"
+          >
+            <i class="fas fa-history w-5"></i> <span>History Kata-Kata</span>
+          </a>
+          <a
+            href="#"
+            class="flex items-center space-x-3 px-3 py-2.5 rounded-lg bg-main-primary text-white-primary transition duration-200"
+          >
+            <i class="fas fa-comments w-5"></i> <span>Grup & Forum</span>
+          </a>
+        </nav>
+      </div>
+
+      <div>
+        <button
+          class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg bg-black-accent hover:bg-main-secondary text-white-primary text-sm font-semibold transition duration-200"
+        >
+          <i class="fas fa-sign-out-alt w-5"></i> <span>Keluar / Logout</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-grow p-4 md:p-8 space-y-6">
+      <!-- Page Header Card -->
+      <div
+        class="bg-white-primary p-6 rounded-xl shadow-sm border border-white-accent flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+      >
+        <div>
+          <h2 class="text-xl md:text-2xl font-bold text-black-primary">
+            Daftar Grup & Sub-Forum
+          </h2>
+          <p class="text-sm text-black-muted mt-1">
+            Pantau, moderasi, dan kelola semua ruang diskusi aktif tim di bawah
+            pengawasan Anda.
+          </p>
+        </div>
+        <button
+          class="bg-main-primary hover:bg-main-secondary text-white-primary text-xs font-semibold px-4 py-2.5 rounded-lg shadow transition flex items-center gap-2"
+        >
+          <i class="fas fa-folder-plus"></i> Buat Grup Baru
+        </button>
+      </div>
+
+      <div
+        class="bg-white-primary p-4 rounded-xl shadow-sm border border-white-accent"
+      >
+        <div class="relative w-full">
+          <span
+            class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-secondary"
+          >
+            <i class="fas fa-search"></i>
+          </span>
+          <input
+            type="text"
+            x-model="searchQuery"
+            placeholder="Cari nama grup atau topik sub-forum..."
+            class="w-full pl-10 pr-4 py-2.5 bg-white-secondary border border-white-muted rounded-lg focus:outline-none focus:border-main-primary text-sm transition"
+          />
+        </div>
+      </div>
+
+      <div class="space-y-6">
+        <div
+          x-data="{ open: true }"
+          x-show="'Operasional Produksi Utama'.toLowerCase().includes(searchQuery.toLowerCase()) || 'SOP'.toLowerCase().includes(searchQuery.toLowerCase()) || 'Mesin'.toLowerCase().includes(searchQuery.toLowerCase())"
+          class="bg-white-primary rounded-xl border border-white-accent shadow-sm overflow-hidden"
+        >
+          <!-- Group Header -->
+          <div
+            @click="open = !open"
+            class="bg-black-secondary text-white-primary p-4 flex justify-between items-center cursor-pointer select-none border-b border-black-accent"
+          >
+            <div class="flex items-center space-x-3">
+              <div
+                class="w-10 h-10 rounded-lg bg-main-primary text-white-primary flex items-center justify-center text-lg"
+              >
+                <i class="fas fa-industry"></i>
+              </div>
+              <div>
+                <h3 class="font-bold text-sm md:text-base tracking-wide">
+                  Operasional Produksi Utama
+                </h3>
+                <p class="text-xs text-gray-accent">
+                  3 Forum Diskusi • 18 Anggota Aktif
+                </p>
+              </div>
+            </div>
+            <i
+              class="fas text-gray-primary text-sm transition-transform duration-200"
+              :class="open ? 'fa-chevron-up' : 'fa-chevron-down'"
+            ></i>
+          </div>
+
+          <!-- Forum List Inside Group -->
+          <div
+            x-show="open"
+            x-collapse
+            class="divide-y divide-white-accent bg-white-primary"
+          >
+            <!-- Sub Forum 1 -->
+            <div
+              class="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-white-secondary/50 transition"
+            >
+              <div class="flex items-start space-x-3">
+                <div class="text-main-primary mt-1">
+                  <i class="fas fa-bullhorn text-sm"></i>
+                </div>
+                <div>
+                  <a
+                    href="#"
+                    class="font-bold text-sm text-black-primary hover:text-main-primary transition"
+                    >Forum Koordinasi Shift & Handover</a
+                  >
+                  <p class="text-xs text-black-muted mt-0.5">
+                    Ruang serah terima laporan harian antar-shift dan catatan
+                    kendala lapangan.
+                  </p>
+                  <span
+                    class="inline-block mt-2 text-[10px] bg-main-muted text-main-secondary font-semibold px-2 py-0.5 rounded"
+                    >Penting</span
+                  >
+                </div>
+              </div>
+              <div
+                class="flex items-center justify-between sm:justify-end gap-6 text-xs text-gray-secondary border-t sm:border-t-0 pt-2 sm:pt-0 border-white-accent"
+              >
+                <div class="text-center">
+                  <span class="block font-bold text-black-accent">42</span>
+                  <span class="text-[10px] text-gray-primary uppercase"
+                    >Topik</span
+                  >
+                </div>
+                <div class="text-right min-w-[120px]">
+                  <span class="block text-black-secondary font-medium truncate"
+                    >Ahmad Fauzi</span
+                  >
+                  <span class="text-[10px]">2 menit yang lalu</span>
+                </div>
+                <a
+                  href="#"
+                  class="p-2 bg-white-accent hover:bg-black-primary hover:text-white-primary rounded-lg transition text-black-accent"
+                >
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+
+            <!-- Sub Forum 2 -->
+            <div
+              class="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-white-secondary/50 transition"
+            >
+              <div class="flex items-start space-x-3">
+                <div class="text-black-accent mt-1">
+                  <i class="fas fa-tools text-sm"></i>
+                </div>
+                <div>
+                  <a
+                    href="#"
+                    class="font-bold text-sm text-black-primary hover:text-main-primary transition"
+                    >Troubleshooting & Perbaikan Mesin</a
+                  >
+                  <p class="text-xs text-black-muted mt-0.5">
+                    Diskusi teknis penanganan error kode er-04 dan perawatan
+                    rutin mingguan.
+                  </p>
+                </div>
+              </div>
+              <div
+                class="flex items-center justify-between sm:justify-end gap-6 text-xs text-gray-secondary border-t sm:border-t-0 pt-2 sm:pt-0 border-white-accent"
+              >
+                <div class="text-center">
+                  <span class="block font-bold text-black-accent">19</span>
+                  <span class="text-[10px] text-gray-primary uppercase"
+                    >Topik</span
+                  >
+                </div>
+                <div class="text-right min-w-[120px]">
+                  <span class="block text-black-secondary font-medium truncate"
+                    >Rian Hidayat</span
+                  >
+                  <span class="text-[10px]">1 jam yang lalu</span>
+                </div>
+                <a
+                  href="#"
+                  class="p-2 bg-white-accent hover:bg-black-primary hover:text-white-primary rounded-lg transition text-black-accent"
+                >
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          x-data="{ open: true }"
+          x-show="'Quality Assurance & Audit'.toLowerCase().includes(searchQuery.toLowerCase()) || 'ISO'.toLowerCase().includes(searchQuery.toLowerCase()) || 'Laporan'.toLowerCase().includes(searchQuery.toLowerCase())"
+          class="bg-white-primary rounded-xl border border-white-accent shadow-sm overflow-hidden"
+        >
+          <!-- Group Header -->
+          <div
+            @click="open = !open"
+            class="bg-black-secondary text-white-primary p-4 flex justify-between items-center cursor-pointer select-none border-b border-black-accent"
+          >
+            <div class="flex items-center space-x-3">
+              <div
+                class="w-10 h-10 rounded-lg bg-black-muted text-white-primary flex items-center justify-center text-lg"
+              >
+                <i class="fas fa-shield-check"></i>
+              </div>
+              <div>
+                <h3 class="font-bold text-sm md:text-base tracking-wide">
+                  Quality Assurance & Audit
+                </h3>
+                <p class="text-xs text-gray-accent">
+                  1 Forum Diskusi • 6 Anggota Aktif
+                </p>
+              </div>
+            </div>
+            <i
+              class="fas text-gray-primary text-sm transition-transform duration-200"
+              :class="open ? 'fa-chevron-up' : 'fa-chevron-down'"
+            ></i>
+          </div>
+
+          <!-- Forum List Inside Group -->
+          <div
+            x-show="open"
+            x-collapse
+            class="divide-y divide-white-accent bg-white-primary"
+          >
+            <!-- Sub Forum 1 -->
+            <div
+              class="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-white-secondary/50 transition"
+            >
+              <div class="flex items-start space-x-3">
+                <div class="text-gray-secondary mt-1">
+                  <i class="fas fa-file-check text-sm"></i>
+                </div>
+                <div>
+                  <a
+                    href="#"
+                    class="font-bold text-sm text-black-primary hover:text-main-primary transition"
+                    >Kepatuhan Standar ISO & Pra-Audit</a
+                  >
+                  <p class="text-xs text-black-muted mt-0.5">
+                    Penyusunan berkas, validasi standarisasi mutu, dan persiapan
+                    jelang audit eksternal.
+                  </p>
+                </div>
+              </div>
+              <div
+                class="flex items-center justify-between sm:justify-end gap-6 text-xs text-gray-secondary border-t sm:border-t-0 pt-2 sm:pt-0 border-white-accent"
+              >
+                <div class="text-center">
+                  <span class="block font-bold text-black-accent">8</span>
+                  <span class="text-[10px] text-gray-primary uppercase"
+                    >Topik</span
+                  >
+                </div>
+                <div class="text-right min-w-[120px]">
+                  <span class="block text-black-secondary font-medium truncate"
+                    >Siti Aminah</span
+                  >
+                  <span class="text-[10px]">Kemarin, 16:45</span>
+                </div>
+                <a
+                  href="#"
+                  class="p-2 bg-white-accent hover:bg-black-primary hover:text-white-primary rounded-lg transition text-black-accent"
+                >
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <footer
+    class="bg-black-secondary text-gray-primary text-center py-3 text-xs border-t border-black-accent"
+  >
+    &copy; 2026 Admin Panel — Crafted for Supervisor. All rights reserved.
+  </footer>
+</div>

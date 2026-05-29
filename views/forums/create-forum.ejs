@@ -10,7 +10,6 @@
         class="absolute w-[400px] h-[400px] bg-[#ff0000] opacity-10 blur-3xl -top-40 -right-40"
       ></div>
 
-      <!-- HEADER -->
       <div class="relative z-10 text-center mb-8">
         <h1
           class="text-white text-3xl font-black"
@@ -51,7 +50,6 @@
           />
         </div>
 
-        <!-- SLUG -->
         <div>
           <label class="text-white text-sm font-semibold">
             Slug
@@ -65,8 +63,6 @@
             required
           />
         </div>
-
-        <!-- DESCRIPTION -->
         <div>
           <label class="text-white text-sm font-semibold">
             Description
@@ -80,7 +76,6 @@
           ></textarea>
         </div>
 
-        <!-- IMAGE -->
         <div>
           <label class="text-white text-sm font-semibold">
             Image URL
@@ -93,8 +88,6 @@
             class="w-full mt-2 px-4 py-3 rounded-2xl bg-neutral-900 border border-neutral-800 text-white focus:border-[#ff0000] outline-none"
           />
         </div>
-
-        <!-- VISIBILITY -->
         <div>
           <label class="text-white text-sm font-semibold">
             Visibility
@@ -110,7 +103,6 @@
           </select>
         </div>
 
-        <!-- TAGS -->
         <div>
           <label class="text-white text-sm font-semibold">
             Tags (press Enter)
@@ -120,11 +112,10 @@
             type="text"
             x-model="tagInput"
             @keydown.enter.prevent="addTag()"
-            placeholder="e.g javascript"
+            placeholder="e.g akademik"
             class="w-full mt-2 px-4 py-3 rounded-2xl bg-neutral-900 border border-neutral-800 text-white focus:border-[#ff0000] outline-none"
           />
 
-          <!-- TAG LIST -->
           <div class="flex flex-wrap gap-2 mt-3">
             <template
               x-for="(tag, index) in form.tags"
@@ -147,7 +138,6 @@
           </div>
         </div>
 
-        <!-- SUBMIT -->
         <button
           type="submit"
           :disabled="loading"
@@ -173,7 +163,6 @@
     </div>
   </div>
 
-  <!-- ALPINE -->
   <script>
     function createForum() {
       return {
@@ -223,6 +212,8 @@
             this.alert.show = false;
           }, 3000);
         },
+
+
 
         async submitForum() {
           this.loading = true;

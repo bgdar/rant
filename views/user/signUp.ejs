@@ -74,7 +74,6 @@
           />
         </div>
 
-        <!-- Password -->
         <div>
           <label class="block text-sm font-semibold text-dark mb-2">
             Password
@@ -130,7 +129,6 @@
           </div>
         </div>
 
-        <!-- Terms -->
         <label class="flex items-start gap-3 cursor-pointer">
           <input
             type="checkbox"
@@ -154,7 +152,6 @@
           </span>
         </label>
 
-        <!-- Button -->
         <button
           type="submit"
           :disabled="loading"
@@ -194,10 +191,8 @@
       <p class="text-center text-graysoft text-sm mt-8">
         Already have an account?
 
-        <a
-          href="/user/signIn"
-          class="text-primary font-semibold hover:underline"
-        >
+        <!-- url sekarang + /singIn -->
+        <a href="/signIn" class="text-primary font-semibold hover:underline">
           Sign In
         </a>
       </p>
@@ -226,6 +221,7 @@
       alert: {
         show: false,
         type: 'error',
+        // masuk dari JSOSN Server
         message: '',
       },
 
@@ -294,9 +290,10 @@
             acceptTerms: false,
           };
 
-          setTimeout(() => {
-            window.location.href = '/';
-          }, 1200);
+          // jangan pindah manual
+          //setTimeout(() => {
+          //window.location.href = '/';
+          // }, 1200);
         } catch (error) {
           console.error(error);
 

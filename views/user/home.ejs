@@ -1,5 +1,10 @@
-<div class="bg-gray-100 min-h-screen">
-  <!-- Navbar -->
+<div
+  class="bg-gray-100 min-h-screen"
+  x-data="{
+    username: '<%= username %>',
+    mobileMenu: false
+  }"
+>
   <header class="bg-light shadow-md sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4">
       <div class="flex items-center justify-between h-16">
@@ -8,13 +13,13 @@
           <div
             class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shadow-md"
           >
-            <span class="text-light font-bold text-lg"> R </span>
+            <span class="text-light font-bold text-lg">R</span>
           </div>
 
-          <span class="text-xl font-bold text-dark"> Rant </span>
+          <span class="text-xl font-bold text-dark">Rant</span>
         </a>
 
-        <!-- Desktop Menu -->
+        <!-- Desktop -->
         <nav class="hidden md:flex items-center gap-4">
           <a
             href="/"
@@ -31,10 +36,10 @@
           </a>
 
           <a
-            href="/profile"
+            href="/user/profile"
             class="px-4 py-2 rounded-xl bg-primary text-light hover:opacity-90 transition font-medium shadow-md"
           >
-            Profile
+            <span x-text="username"></span>
           </a>
         </nav>
 
@@ -48,12 +53,17 @@
       </div>
 
       <!-- Mobile Menu -->
-      <div x-show="mobileMenu" x-transition class="md:hidden pb-4 space-y-2">
+      <div
+        x-show="mobileMenu"
+        x-transition
+        x-cloak
+        class="md:hidden pb-4 space-y-2"
+      >
         <a
           href="/"
           class="block px-4 py-3 rounded-xl hover:bg-gray-100 transition font-medium"
         >
-          Home
+          Dashboard
         </a>
 
         <a
@@ -64,16 +74,16 @@
         </a>
 
         <a
-          href="/profile"
+          href="/user/profile"
           class="block px-4 py-3 rounded-xl bg-primary text-light transition font-medium"
         >
-          Profile
+          <span x-text="username"></span>
         </a>
       </div>
     </div>
   </header>
 
-  <!-- Hero Section -->
+  <!-- Hero -->
   <section class="max-w-7xl mx-auto px-4 py-16">
     <div class="grid lg:grid-cols-2 gap-12 items-center">
       <!-- Left -->
@@ -81,13 +91,12 @@
         <span
           class="inline-block bg-primary/10 text-primary font-semibold px-4 py-2 rounded-full mb-6"
         >
-          Welcome Back 👋
+          Welcome Back
         </span>
 
         <h1 class="text-5xl font-bold text-dark leading-tight">
-          Join The Best
-          <span class="text-primary"> Discussion </span>
-          Community
+          Hello,
+          <span class="text-primary" x-text="username"></span>
         </h1>
 
         <p class="text-graysoft text-lg mt-6 leading-relaxed">
@@ -104,7 +113,7 @@
           </a>
 
           <a
-            href="/profile"
+            href="/user/profile"
             class="border border-gray-300 px-6 py-3 rounded-2xl font-semibold hover:bg-gray-100 transition"
           >
             My Profile
@@ -119,13 +128,16 @@
             <div
               class="w-14 h-14 rounded-2xl bg-primary flex items-center justify-center"
             >
-              <span class="text-light text-xl font-bold"> Z </span>
+              <span
+                class="text-light text-xl font-bold uppercase"
+                x-text="username.charAt(0)"
+              ></span>
             </div>
 
             <div>
-              <h3 class="font-bold text-dark text-lg">Zero</h3>
+              <h3 class="font-bold text-dark text-lg" x-text="username"></h3>
 
-              <p class="text-graysoft text-sm">Full Stack Developer</p>
+              <p class="text-graysoft text-sm">Community Member</p>
             </div>
           </div>
 
@@ -149,55 +161,55 @@
         </div>
       </div>
     </div>
-  </section>
 
-  <!-- Feature Section -->
-  <section class="max-w-7xl mx-auto px-4 pb-20">
-    <div class="grid md:grid-cols-3 gap-6">
-      <!-- Card -->
-      <div class="bg-light p-6 rounded-3xl shadow-lg border border-gray-200">
-        <div
-          class="w-14 h-14 bg-primary rounded-2xl flex items-center justify-center text-light text-2xl mb-5"
-        >
-          💬
+    <!-- Feature Section -->
+    <section class="max-w-7xl mx-auto px-4 pb-20">
+      <div class="grid md:grid-cols-3 gap-6">
+        <!-- Card -->
+        <div class="bg-light p-6 rounded-3xl shadow-lg border border-gray-200">
+          <div
+            class="w-14 h-14 bg-primary rounded-2xl flex items-center justify-center text-light text-2xl mb-5"
+          >
+            💬
+          </div>
+
+          <h3 class="text-xl font-bold text-dark mb-3">Active Discussions</h3>
+
+          <p class="text-graysoft leading-relaxed">
+            Participate in thousands of community discussions every day.
+          </p>
         </div>
 
-        <h3 class="text-xl font-bold text-dark mb-3">Active Discussions</h3>
+        <!-- Card -->
+        <div class="bg-light p-6 rounded-3xl shadow-lg border border-gray-200">
+          <div
+            class="w-14 h-14 bg-primary rounded-2xl flex items-center justify-center text-light text-2xl mb-5"
+          >
+            👥
+          </div>
 
-        <p class="text-graysoft leading-relaxed">
-          Participate in thousands of community discussions every day.
-        </p>
-      </div>
+          <h3 class="text-xl font-bold text-dark mb-3">Friendly Community</h3>
 
-      <!-- Card -->
-      <div class="bg-light p-6 rounded-3xl shadow-lg border border-gray-200">
-        <div
-          class="w-14 h-14 bg-primary rounded-2xl flex items-center justify-center text-light text-2xl mb-5"
-        >
-          👥
+          <p class="text-graysoft leading-relaxed">
+            Meet developers, designers, and creators from around the world.
+          </p>
         </div>
 
-        <h3 class="text-xl font-bold text-dark mb-3">Friendly Community</h3>
+        <!-- Card -->
+        <div class="bg-light p-6 rounded-3xl shadow-lg border border-gray-200">
+          <div
+            class="w-14 h-14 bg-primary rounded-2xl flex items-center justify-center text-light text-2xl mb-5"
+          >
+            🚀
+          </div>
 
-        <p class="text-graysoft leading-relaxed">
-          Meet developers, designers, and creators from around the world.
-        </p>
-      </div>
+          <h3 class="text-xl font-bold text-dark mb-3">Share Your Ideas</h3>
 
-      <!-- Card -->
-      <div class="bg-light p-6 rounded-3xl shadow-lg border border-gray-200">
-        <div
-          class="w-14 h-14 bg-primary rounded-2xl flex items-center justify-center text-light text-2xl mb-5"
-        >
-          🚀
+          <p class="text-graysoft leading-relaxed">
+            Create posts, ask questions, and build your audience easily.
+          </p>
         </div>
-
-        <h3 class="text-xl font-bold text-dark mb-3">Share Your Ideas</h3>
-
-        <p class="text-graysoft leading-relaxed">
-          Create posts, ask questions, and build your audience easily.
-        </p>
       </div>
-    </div>
+    </section>
   </section>
 </div>

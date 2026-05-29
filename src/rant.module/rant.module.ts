@@ -16,7 +16,9 @@ import {
   RantDatasetIndoSchema,
 } from 'src/schemas/rant-dataset-indo.schema';
 import { RantDatasetIndoService } from './rant-dataset.indo.service';
-import { BotComunication } from './bot.comunication';
+
+import { RabbitMqDashboardClientProvider } from './rabbitMq.dashboard.client.provider';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
   imports: [
@@ -25,12 +27,29 @@ import { BotComunication } from './bot.comunication';
       { name: RantDatasetIndo.name, schema: RantDatasetIndoSchema },
       // { name: RantAceh.name, schema: RantAceh } // gnakna aja nantik jika sudah meyakinkan dataset nya
     ]),
+
+    ClientsModule.register([
+      {
+        name: 'DAHBOARD_CLIENT',
+        transport: Transport.RMQ,
+        options: {
+          urls: ['amqp://localhost:5672'],
+          queue: process.env.RABBITDWEB || 'queue-dashboard', // queue mengiri reques
+          replyQueue:
+            process.env.RABBITDWEBRESPONSE || 'queue-dashboard-response', // hasil response dengan queue berbea
+          queueOptions: {
+            durable: true,
+          },
+        },
+      },
+    ]),
   ],
   providers: [
     RantKeywordIndoDbService,
     // RantAcehDbService
     RantDatasetIndoService,
-    // BotComunication,
+
+    RabbitMqDashboardClientProvider,
   ],
   controllers: [RantController],
 

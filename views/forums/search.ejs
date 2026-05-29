@@ -1,0 +1,263 @@
+
+<div class="bg-white-secondary text-black-primary font-sans antialiased">
+
+  <header class="bg-black-primary text-white-primary shadow-md sticky top-0 z-50">
+    <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+      <div class="flex items-center space-x-3">
+        <div class="bg-main-primary p-2 rounded-lg text-white-primary">
+          <i class="fas fa-users text-xl"></i>
+        </div>
+        <span class="text-xl font-bold tracking-wider">RED<span class="text-main-primary">FORUMS</span></span>
+      </div>
+      <nav class="hidden md:flex space-x-6 text-sm font-medium">
+        <a href="#" class="hover:text-main-accent transition-colors">Dashboard</a>
+        <a href="/forums/search" class="text-main-primary"> main Forums</a>
+      </nav>
+      <div class="flex items-center space-x-2 text-xs text-gray-accent">
+        <i class="fas fa-circle text-green-500 animate-pulse"></i>
+        <span>Server Connected</span>
+      </div>
+    </div>
+  </header>
+
+
+  <!-- Ambil dari data dari server yang di kirim -->
+  <main 
+    class="container mx-auto px-4 py-8 max-w-5xl" 
+    x-data="forumSearchHandler(<%= JSON.stringify(forums) %>)"
+  >
+    
+    <div class="text-center mb-8">
+      <h1 class="text-3xl md:text-4xl font-extrabold text-black-secondary mb-2">
+        Find Your <span class="text-main-primary">Community</span>
+      </h1>
+      <p class="text-black-muted text-sm md:text-base">Explore public and restricted forums based on your interests.</p>
+    </div>
+
+    <div class="bg-white-primary rounded-xl shadow-sm border border-white-accent p-4 md:p-6 mb-6">
+      <form @submit.prevent class="flex flex-col md:flex-row gap-3">
+        <div class="relative flex-1">
+          <i class="fas fa-search absolute left-4 top-3.5 text-gray-primary"></i>
+          <input 
+            type="text" 
+            x-model="searchQuery"
+            placeholder="Search forum by name, description, or tags..." 
+            class="w-full bg-white-secondary text-black-secondary pl-11 pr-4 py-3 rounded-lg border border-white-muted focus:outline-none focus:border-main-primary focus:ring-1 focus:ring-main-primary transition-all text-sm"
+          >
+        </div>
+        <div class="flex gap-2">
+          <select 
+            x-model="selectedTag"
+            class="bg-white-secondary text-black-secondary px-4 py-3 rounded-lg border border-white-muted focus:outline-none focus:border-main-primary text-sm font-medium cursor-pointer"
+          >
+            <option value="all">All Tags</option>
+            <template x-for="tag in availableTags" :key="tag">
+              <option :value="tag" x-text="'#' + tag"></option>
+            </template>
+          </select>
+        </div>
+      </form>
+
+      <div class="flex flex-wrap items-center gap-2 mt-4 pt-4 border-t border-white-accent text-xs">
+        <span class="text-black-muted font-medium"><i class="fas fa-tags text-main-primary mr-1"></i> Popular Tags:</span>
+        <template x-for="tag in availableTags.slice(0, 6)" :key="tag">
+          <button 
+            @click="selectedTag = tag" 
+            :class="selectedTag === tag ? 'bg-main-primary text-white-primary' : 'bg-main-muted text-main-secondary hover:bg-main-primary hover:text-white-primary'"
+            class="font-medium px-2.5 py-1 rounded transition-colors text-2xs"
+            x-text="'#' + tag"
+          ></button>
+        </template>
+        <button x-show="selectedTag !== 'all'" @click="selectedTag = 'all'" class="text-2xs text-black-muted underline ml-auto">Reset Tag</button>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+      
+      <div class="lg:col-span-1 space-y-4">
+        <div class="bg-white-primary p-4 rounded-xl border border-white-accent shadow-sm">
+          <h3 class="font-bold text-black-secondary text-sm mb-3 flex items-center">
+            <i class="fas fa-sliders-h text-main-primary mr-2"></i> Sort By
+          </h3>
+          <div class="space-y-2 text-sm">
+            <label class="flex items-center space-x-2 cursor-pointer text-black-muted hover:text-black-primary">
+              <input type="radio" name="sort" value="newest" x-model="sortBy" class="accent-main-primary">
+              <span>Newest Forum</span>
+            </label>
+            <label class="flex items-center space-x-2 cursor-pointer text-black-muted hover:text-black-primary">
+              <input type="radio" name="sort" value="members" x-model="sortBy" class="accent-main-primary">
+              <span>Most Members</span>
+            </label>
+            <label class="flex items-center space-x-2 cursor-pointer text-black-muted hover:text-black-primary">
+              <input type="radio" name="sort" value="activity" x-model="sortBy" class="accent-main-primary">
+              <span>Last Activity</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="bg-white-primary p-4 rounded-xl border border-white-accent shadow-sm">
+          <h3 class="font-bold text-black-secondary text-sm mb-3 flex items-center">
+            <i class="fas fa-eye text-main-primary mr-2"></i> Visibility
+          </h3>
+          <div class="space-y-2 text-sm">
+            <label class="flex items-center space-x-2 cursor-pointer text-black-muted hover:text-black-primary">
+              <input type="radio" name="visibility" value="all" x-model="filterVisibility" class="accent-main-primary">
+              <span>Show All</span>
+            </label>
+            <label class="flex items-center space-x-2 cursor-pointer text-black-muted hover:text-black-primary">
+              <input type="radio" name="visibility" value="public" x-model="filterVisibility" class="accent-main-primary">
+              <span>Public Only</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="lg:col-span-3">
+        <div class="flex justify-between items-center mb-4 text-sm text-black-muted">
+          <div>
+            Showing <span class="font-bold text-black-primary" x-text="filteredForums.length"></span> Forums
+          </div>
+        </div>
+
+        <div class="space-y-4">
+          <template x-for="forum in filteredForums" :key="forum.slug || forum.sluq">
+            <article class="bg-white-primary rounded-xl border border-white-accent hover:border-main-accent shadow-2xs hover:shadow-sm transition-all overflow-hidden flex flex-col sm:flex-row">
+              
+              <div class="sm:w-48 bg-black-secondary relative flex items-center justify-center min-h-[120px] sm:min-h-full">
+                <template x-if="forum.image">
+                  <img :src="forum.image" alt="Forum Image" class="w-full h-full object-cover absolute inset-0">
+                </template>
+                <template x-if="!forum.image">
+                  <i class="fas fa-image text-3xl text-black-muted"></i>
+                </template>
+                
+                <div x-show="forum.isLocked" class="absolute top-2 left-2 bg-main-primary text-white-primary px-2 py-0.5 rounded text-3xs font-bold uppercase tracking-wider">
+                  <i class="fas fa-lock mr-1"></i> Locked
+                </div>
+              </div>
+
+              <div class="p-5 flex-1 flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between gap-2 mb-1.5 flex-wrap">
+                    <span 
+                      :class="forum.visibility.toLowerCase() === 'public' ? 'bg-green-100 text-green-800' : 'bg-amber-100 text-amber-800'"
+                      class="px-2 py-0.5 rounded-sm font-semibold text-3xs uppercase tracking-wide" 
+                      x-text="forum.visibility"
+                    ></span>
+                    
+                    <span class="text-3xs text-gray-secondary font-mono" x-text="'ID: ' + forum.supervisorId"></span>
+                  </div>
+
+                  <h2 class="text-lg font-bold text-black-secondary hover:text-main-primary transition-colors mb-1">
+                    <a :href="'/forums/view/' + (forum.slug || forum.sluq)" x-text="forum.name"></a>
+                  </h2>
+
+                  <p class="text-black-muted text-xs md:text-sm line-clamp-2 mb-3" x-text="forum.description || 'No description provided for this community.'"></p>
+                </div>
+
+                <div class="flex items-center justify-between text-xs pt-3 border-t border-white-accent mt-2 flex-wrap gap-2">
+                  <div class="flex space-x-4 text-gray-secondary font-medium">
+                    <span class="flex items-center space-x-1">
+                      <i class="fas fa-users text-black-muted"></i> 
+                      <span class="text-black-primary font-bold" x-text="forum.totalMembers || 0"></span> 
+                      <span class="text-2xs">members</span>
+                    </span>
+                    <span class="flex items-center space-x-1">
+                      <i class="fas fa-envelope text-black-muted"></i> 
+                      <span class="text-black-primary font-bold" x-text="forum.totalMessages || 0"></span> 
+                      <span class="text-2xs">chats</span>
+                    </span>
+                  </div>
+
+                  <div class="flex flex-wrap gap-1">
+                    <template x-for="tag in forum.tags" :key="tag">
+                      <span @click="selectedTag = tag" class="bg-white-secondary text-black-muted text-3xs px-2 py-0.5 rounded border border-white-muted cursor-pointer hover:bg-main-muted hover:text-main-primary transition-colors" x-text="'#'+tag"></span>
+                    </template>
+                  </div>
+                </div>
+
+                <div class="text-3xs text-gray-secondary mt-2 text-right italic" x-show="forum.lastMessageAt">
+                  Active: <span x-text="new Date(forum.lastMessageAt).toLocaleDateString('id-ID', {day: 'numeric', month: 'short', year: 'numeric'})"></span>
+                </div>
+              </div>
+            </article>
+          </template>
+
+          <div x-show="filteredForums.length === 0" class="bg-white-primary rounded-xl border border-white-accent p-12 text-center">
+            <div class="text-main-primary mb-3 animate-bounce">
+              <i class="fas fa-folder-open text-4xl"></i>
+            </div>
+            <h3 class="text-lg font-bold text-black-secondary mb-1">No Forums Match Your Search</h3>
+            <p class="text-black-muted text-sm max-w-md mx-auto">We couldn't find any communities matching those terms. Try adjusting your filters or clearing the search text.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    function forumSearchHandler(initialForums) {
+      return {
+        forumsList: initialForums || [],
+        searchQuery: '',
+        selectedTag: 'all',
+        sortBy: 'newest',
+        filterVisibility: 'all',
+
+        // Mengambil semua list tag unik dari objek data EJS untuk dijadikan filter otomatis
+        get availableTags() {
+          let tagsSet = new Set();
+          this.forumsList.forEach(forum => {
+            if (forum.tags && Array.isArray(forum.tags)) {
+              forum.tags.forEach(t => tagsSet.add(t.toLowerCase()));
+            }
+          });
+          return Array.from(tagsSet);
+        },
+
+        // Komputasi pemrosesan filter client-side secara dinamis
+        get filteredForums() {
+          let result = this.forumsList;
+
+          // 1. Text Query Filter (Name, Description, and Tags)
+          if (this.searchQuery.trim() !== '') {
+            const q = this.searchQuery.toLowerCase();
+            result = result.filter(f => 
+              f.name.toLowerCase().includes(q) || 
+              (f.description && f.description.toLowerCase().includes(q)) ||
+              f.tags.some(tag => tag.toLowerCase().includes(q))
+            );
+          }
+
+          // 2. Dropdown / Top Category Tags Filter
+          if (this.selectedTag !== 'all') {
+            result = result.filter(f => f.tags.some(tag => tag.toLowerCase() === this.selectedTag.toLowerCase()));
+          }
+
+          // 3. Visibility Filter
+          if (this.filterVisibility !== 'all') {
+            result = result.filter(f => f.visibility.toLowerCase() === this.filterVisibility.toLowerCase());
+          }
+
+          // 4. Sorting Logic
+          if (this.sortBy === 'members') {
+            result.sort((a, b) => (b.totalMembers || 0) - (a.totalMembers || 0));
+          } else if (this.sortBy === 'activity') {
+            result.sort((a, b) => {
+              const dateA = a.lastMessageAt ? new Date(a.lastMessageAt).getTime() : 0;
+              const dateB = b.lastMessageAt ? new Date(b.lastMessageAt).getTime() : 0;
+              return dateB - dateA;
+            });
+          } else {
+            // Default "newest" dari createdAt
+            result.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+          }
+
+          return result;
+        }
+      }
+    }
+  </script>
+
+  </div>
