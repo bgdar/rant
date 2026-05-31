@@ -1,8 +1,8 @@
-package main
+package core
 
 import (
-	"fmt"
-	ort "github.com/yalue/onnxruntime_go"
+	// "fmt"
+
 )
 
 // ---------- Strcut decalraci ------------
@@ -32,7 +32,7 @@ type ResponseData struct {
 
 
 // --------------Global Variabel ---------------
-var YLabel = []string{
+var YLabels = []string{
     "toxic",
     "severe_toxic",
     "obscene",
@@ -40,33 +40,5 @@ var YLabel = []string{
     "insult",
     "identity_hate",
 }
-const pathIndoOnxx = "./onxx/rant_model.onnx"
-var ( 
-	IndoSession *ort.DynamicAdvancedSession
-	InputIndoNames []string
-	OuputIndoNames []string
-	ErrInfoIndo error
-)
 
 
-func InitIndo() error {
-    var err error
-
-    InputIndoNames, OuputIndoNames, err = ContextInputOuput(pathIndoOnxx)
-    if err != nil {
-        return fmt.Errorf("gagal mendapat input/output: %w", err)
-    }
-
-    IndoSession, err = ort.NewDynamicAdvancedSession(
-        pathIndoOnxx,
-        InputIndoNames,
-        OuputIndoNames,
-        nil,
-    )
-    if err != nil {
-        return fmt.Errorf("gagal membuat session: %w", err)
-    }
-
-    // Destroy dipanggil di main() lewat: defer IndoSession.Destroy()
-    return nil
-}
