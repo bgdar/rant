@@ -1,25 +1,21 @@
-<body
-  x-data="createForum()"
+
+<div
+  x-data='createForum(<%- JSON.stringify(supervisor) %>, <%- JSON.stringify(forumsVisibility) %>)'
   class="bg-white text-black min-h-screen flex items-center justify-center px-4 py-10"
 >
+
   <div class="w-full max-w-2xl">
     <div
       class="bg-[#111111] border border-neutral-800 rounded-3xl shadow-2xl p-8 relative overflow-hidden"
     >
       <div
-        class="absolute w-[400px] h-[400px] bg-[#ff0000] opacity-10 blur-3xl -top-40 -right-40"
+        class="absolute w-100 h-100 bg-main-primary opacity-10 blur-3xl -top-40 -right-40"
       ></div>
 
       <div class="relative z-10 text-center mb-8">
-        <h1
-          class="text-white text-3xl font-black"
-        >
-          Create Forum
-        </h1>
+        <h1 class="text-white text-3xl font-black">Create Forum</h1>
 
-        <p class="text-[#999999] mt-2">
-          Build your own community space
-        </p>
+        <p class="text-gray-primary mt-2">Build your own community space</p>
       </div>
 
       <div
@@ -37,69 +33,68 @@
         @submit.prevent="submitForum"
       >
         <div>
-          <label class="text-white text-sm font-semibold">
-            Forum Name
-          </label>
+          <label class="text-white text-sm font-semibold"> Forum Name </label>
 
           <input
             type="text"
             x-model="form.name"
             placeholder="e.g JavaScript Community"
-            class="w-full mt-2 px-4 py-3 rounded-2xl bg-neutral-900 border border-neutral-800 text-white focus:border-[#ff0000] outline-none"
+            class="w-full mt-2 px-4 py-3 rounded-2xl bg-neutral-900 border border-neutral-800 text-white focus:border-mainbg-main-primary outline-none"
             required
           />
         </div>
 
         <div>
-          <label class="text-white text-sm font-semibold">
-            Slug
-          </label>
+          <label class="text-white text-sm font-semibold"> Slug </label>
 
           <input
             type="text"
             x-model="form.slug"
             placeholder="javascript-community"
-            class="w-full mt-2 px-4 py-3 rounded-2xl bg-neutral-900 border border-neutral-800 text-white focus:border-[#ff0000] outline-none"
+            class="w-full mt-2 px-4 py-3 rounded-2xl bg-neutral-900 border border-neutral-800 text-white focus:border-mainbg-main-primary outline-none"
             required
           />
         </div>
         <div>
-          <label class="text-white text-sm font-semibold">
-            Description
-          </label>
+          <label class="text-white text-sm font-semibold"> Description </label>
 
           <textarea
             x-model="form.description"
             rows="4"
             placeholder="Describe your forum..."
-            class="w-full mt-2 px-4 py-3 rounded-2xl bg-neutral-900 border border-neutral-800 text-white focus:border-[#ff0000] outline-none"
+            class="w-full mt-2 px-4 py-3 rounded-2xl bg-neutral-900 border border-neutral-800 text-white focus:border-mainbg-main-primary outline-none"
           ></textarea>
         </div>
 
         <div>
-          <label class="text-white text-sm font-semibold">
-            Image URL
-          </label>
+          <label class="text-white text-sm font-semibold"> Image URL </label>
 
           <input
             type="text"
             x-model="form.image"
-            placeholder="https://..."
-            class="w-full mt-2 px-4 py-3 rounded-2xl bg-neutral-900 border border-neutral-800 text-white focus:border-[#ff0000] outline-none"
+            placeholder="https://contoh-img.png"
+            class="w-full mt-2 px-4 py-3 rounded-2xl bg-neutral-900 border border-neutral-800 text-white focus:border-mainbg-main-primary outline-none"
           />
         </div>
         <div>
-          <label class="text-white text-sm font-semibold">
-            Visibility
-          </label>
+          <label class="text-white text-sm font-semibold"> Visibility </label>
 
           <select
             x-model="form.visibility"
-            class="w-full mt-2 px-4 py-3 rounded-2xl bg-neutral-900 border border-neutral-800 text-white focus:border-[#ff0000] outline-none"
+            class="w-full mt-2 px-4 py-3 rounded-2xl bg-neutral-900 border border-neutral-800 text-white focus:border-mainbg-main-primary outline-none"
+            required
           >
-            <option value="public">Public</option>
+<!-- WAJIB ADA: Opsi default agar form tidak mengirim string kosong atau teks acak -->
+  <option value="" disabled selected>Select Visibility</option>
+
+          <template x-for="(visiblel, index) in visibilities" :key="index">
+              <option :value="visiblel" x-text="visiblel"></option>
+            </template>
+
+            <!-- ini manula , di ganti dengan data dariserver di atas 
+             <option value="public">Public</option>
             <option value="private">Private</option>
-            <option value="protected">Protected</option>
+            <option value="protected">Protected</option> -->
           </select>
         </div>
 
@@ -113,16 +108,13 @@
             x-model="tagInput"
             @keydown.enter.prevent="addTag()"
             placeholder="e.g akademik"
-            class="w-full mt-2 px-4 py-3 rounded-2xl bg-neutral-900 border border-neutral-800 text-white focus:border-[#ff0000] outline-none"
+            class="w-full mt-2 px-4 py-3 rounded-2xl bg-neutral-900 border border-neutral-800 text-white focus:border-mainbg-main-primary outline-none"
           />
 
           <div class="flex flex-wrap gap-2 mt-3">
-            <template
-              x-for="(tag, index) in form.tags"
-              :key="index"
-            >
+            <template x-for="(tag, index) in form.tags" :key="index">
               <span
-                class="bg-black border border-neutral-700 text-[#999999] px-3 py-1 rounded-xl text-sm flex items-center gap-2"
+                class="bg-black border border-neutral-700 text-gray-primary px-3 py-1 rounded-xl text-sm flex items-center gap-2"
               >
                 <span x-text="tag"></span>
 
@@ -141,21 +133,17 @@
         <button
           type="submit"
           :disabled="loading"
-          class="w-full bg-[#ff0000] hover:opacity-90 transition text-white font-bold py-3 rounded-2xl shadow-lg"
+          class="w-full bg-main-primary hover:opacity-90 transition text-white font-bold py-3 rounded-2xl shadow-lg"
         >
-          <span x-show="!loading">
-            Create Forum
-          </span>
+          <span x-show="!loading"> Create Forum </span>
 
-          <span x-show="loading">
-            Creating...
-          </span>
+          <span x-show="loading"> Creating... </span>
         </button>
 
-        <!-- BACK -->
+        <!-- Back -->
         <a
           href="/forums"
-          class="block text-center text-[#999999] hover:text-white mt-4 text-sm"
+          class="block text-center text-gray-primary hover:text-white mt-4 text-sm"
         >
           Back to forums
         </a>
@@ -164,7 +152,7 @@
   </div>
 
   <script>
-    function createForum() {
+    function createForum(supervisor, forumsVisibility) {
       return {
         loading: false,
 
@@ -176,23 +164,23 @@
           type: 'error',
         },
 
+        supervisor,
+        visibilities: forumsVisibility, // Simpan array pilihan di sini
+
         form: {
           name: '',
           slug: '',
           description: '',
+          supervisorId: supervisor.supervisorId || null, // ini sesui yg server kirim
           image: '',
-          visibility: 'public',
+          visibility: '', //  array yang di terima dari server
           tags: [],
         },
 
         addTag() {
-          const tag =
-            this.tagInput.trim();
+          const tag = this.tagInput.trim();
 
-          if (
-            tag &&
-            !this.form.tags.includes(tag)
-          ) {
+          if (tag && !this.form.tags.includes(tag)) {
             this.form.tags.push(tag);
           }
 
@@ -213,51 +201,34 @@
           }, 3000);
         },
 
-
-
         async submitForum() {
           this.loading = true;
 
           try {
-            const res = await fetch(
-              '/forums/create-forum',
-              {
-                method: 'POST',
-                headers: {
-                  'Content-Type':
-                    'application/json',
-                },
-                body: JSON.stringify(
-                  this.form,
-                ),
+            const res = await fetch('/forums/create-forum', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
               },
-            );
+              body: JSON.stringify(this.form),
+            });
 
-            const data =
-              await res.json();
+            const data = await res.json();
 
             if (!res.ok) {
               return this.showAlert(
-                data.message ||
-                  'Failed create forum',
+                data.message || 'Failed create forum',
                 'error',
               );
             }
 
-            this.showAlert(
-              data.message,
-              'success',
-            );
+            this.showAlert(data.message, 'success');
 
             setTimeout(() => {
-              window.location.href =
-                '/forums';
+              window.location.href = '/forums';
             }, 1200);
           } catch (err) {
-            this.showAlert(
-              'Server error',
-              'error',
-            );
+            this.showAlert('Server error', 'error');
           } finally {
             this.loading = false;
           }
@@ -265,5 +236,4 @@
       };
     }
   </script>
-</body>
-
+</div>

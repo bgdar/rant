@@ -1,6 +1,6 @@
 import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import path from 'path';
-import { RantDatasetDTO } from 'src/dto/dataDTO';
+import { RantDatasetDTO } from 'src/dto/data.dto';
 
 import { promises as fs } from 'fs'; //  fs berbasis promise
 import { RantDatasetIndoService } from 'src/rant.module/rant-dataset.indo.service';

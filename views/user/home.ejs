@@ -1,215 +1,172 @@
 <div
-  class="bg-gray-100 min-h-screen"
+  class="bg-white-secondary min-h-screen font-sans selection:bg-main-muted selection:text-main-primary"
   x-data="{
     username: '<%= username %>',
-    mobileMenu: false
   }"
 >
-  <header class="bg-light shadow-md sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-4">
-      <div class="flex items-center justify-between h-16">
-        <!-- Logo -->
-        <a href="/" class="flex items-center gap-3">
-          <div
-            class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shadow-md"
-          >
-            <span class="text-light font-bold text-lg">R</span>
-          </div>
+  <%- include('../components/user-navbar') %>
 
-          <span class="text-xl font-bold text-dark">Rant</span>
-        </a>
+  <main
+    class="max-w-5xl mx-auto px-6 py-20 flex flex-col items-center justify-center text-center"
+  >
+    <section class="max-w-3xl flex flex-col items-center mb-24 animate-fade-in">
+      <span
+        class="inline-flex items-center gap-2 bg-main-muted text-main-secondary font-medium text-xs tracking-wider uppercase px-4 py-1.5 rounded-full border border-main-accent/20 mb-8"
+      >
+        <i class="fa-solid fa-circle-check text-[10px] animate-pulse"></i>
+        Welcome Back
+      </span>
 
-        <!-- Desktop -->
-        <nav class="hidden md:flex items-center gap-4">
-          <a
-            href="/"
-            class="px-4 py-2 rounded-xl text-dark hover:bg-gray-100 transition font-medium"
-          >
-            Home
-          </a>
+      <h1
+        class="text-4xl md:text-6xl font-black text-black-primary tracking-tight leading-none mb-6"
+      >
+        Hello, <span class="text-main-primary" x-text="username"></span>
+      </h1>
 
-          <a
-            href="/forums"
-            class="px-4 py-2 rounded-xl text-dark hover:bg-gray-100 transition font-medium"
-          >
-            Forums
-          </a>
+      <p
+        class="text-black-muted text-base md:text-xl max-w-xl font-normal leading-relaxed mb-10"
+      >
+        Share your thoughts, connect with people, and explore interesting
+        discussions from around the world.
+      </p>
 
-          <a
-            href="/user/profile"
-            class="px-4 py-2 rounded-xl bg-primary text-light hover:opacity-90 transition font-medium shadow-md"
-          >
-            <span x-text="username"></span>
-          </a>
-        </nav>
-
-        <!-- Mobile Button -->
-        <button
-          @click="mobileMenu = !mobileMenu"
-          class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition"
-        >
-          ☰
-        </button>
-      </div>
-
-      <!-- Mobile Menu -->
       <div
-        x-show="mobileMenu"
-        x-transition
-        x-cloak
-        class="md:hidden pb-4 space-y-2"
+        class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto justify-center"
       >
         <a
-          href="/"
-          class="block px-4 py-3 rounded-xl hover:bg-gray-100 transition font-medium"
-        >
-          Dashboard
-        </a>
-
-        <a
           href="/forums"
-          class="block px-4 py-3 rounded-xl hover:bg-gray-100 transition font-medium"
+          class="inline-flex items-center justify-center gap-2 bg-main-primary text-white-primary px-8 py-3.5 rounded-xl font-semibold shadow-md shadow-main-primary/20 hover:bg-main-secondary active:scale-[0.98] transition-all duration-200 group"
         >
-          Forums
+          <i
+            class="fa-solid fa-comments text-white-muted/80 group-hover:translate-x-0.5 transition-transform"
+          ></i>
+          Explore Forums
         </a>
 
         <a
           href="/user/profile"
-          class="block px-4 py-3 rounded-xl bg-primary text-light transition font-medium"
+          class="inline-flex items-center justify-center gap-2 bg-white-primary border border-white-muted text-black-secondary px-8 py-3.5 rounded-xl font-semibold hover:bg-white-accent hover:border-gray-primary/30 active:scale-[0.98] transition-all duration-200"
         >
-          <span x-text="username"></span>
+          <i class="fa-solid fa-user-gear text-gray-primary"></i>
+          <p x-text="username"></p>
         </a>
       </div>
-    </div>
-  </header>
+    </section>
 
-  <!-- Hero -->
-  <section class="max-w-7xl mx-auto px-4 py-16">
-    <div class="grid lg:grid-cols-2 gap-12 items-center">
-      <!-- Left -->
-      <div>
-        <span
-          class="inline-block bg-primary/10 text-primary font-semibold px-4 py-2 rounded-full mb-6"
+    <section class="w-full space-y-16">
+      <div
+        class="max-w-2xl mx-auto bg-white-primary rounded-2xl border border-white-accent p-6 md:p-8 shadow-sm"
+      >
+        <div
+          class="flex flex-col sm:flex-row items-center sm:text-left gap-4 pb-6 mb-6 border-b border-white-accent"
         >
-          Welcome Back
-        </span>
-
-        <h1 class="text-5xl font-bold text-dark leading-tight">
-          Hello,
-          <span class="text-primary" x-text="username"></span>
-        </h1>
-
-        <p class="text-graysoft text-lg mt-6 leading-relaxed">
-          Share your thoughts, connect with people, and explore interesting
-          discussions from around the world.
-        </p>
-
-        <div class="flex flex-wrap gap-4 mt-8">
-          <a
-            href="/forums"
-            class="bg-primary text-light px-6 py-3 rounded-2xl font-semibold shadow-lg hover:opacity-90 transition"
-          >
-            Explore Forums
-          </a>
-
-          <a
-            href="/user/profile"
-            class="border border-gray-300 px-6 py-3 rounded-2xl font-semibold hover:bg-gray-100 transition"
-          >
-            My Profile
-          </a>
-        </div>
-      </div>
-
-      <!-- Right -->
-      <div class="relative">
-        <div class="bg-light rounded-3xl shadow-2xl p-8 border border-gray-200">
-          <div class="flex items-center gap-4 mb-6">
-            <div
-              class="w-14 h-14 rounded-2xl bg-primary flex items-center justify-center"
+          <div
+            class="w-14 h-14 rounded-xl bg-black-primary text-white-primary flex items-center justify-center shadow-inner font-bold text-xl uppercase tracking-wider"
+            x-text="username.charAt(0)"
+          ></div>
+          <div class="flex-1">
+            <h3
+              class="font-bold text-black-secondary text-lg"
+              x-text="username"
+            ></h3>
+            <p
+              class="text-gray-secondary text-xs font-medium uppercase tracking-wide flex items-center justify-center sm:justify-start gap-1.5 mt-0.5"
             >
-              <span
-                class="text-light text-xl font-bold uppercase"
-                x-text="username.charAt(0)"
-              ></span>
-            </div>
+              <i class="fa-solid fa-shield-halved text-main-primary"></i>
+              Community Member
+            </p>
+          </div>
+        </div>
 
-            <div>
-              <h3 class="font-bold text-dark text-lg" x-text="username"></h3>
-
-              <p class="text-graysoft text-sm">Community Member</p>
-            </div>
+        <div class="grid sm:grid-cols-2 gap-4 text-left">
+          <div
+            class="bg-white-secondary rounded-xl p-4 border border-white-accent/60 group hover:border-main-accent/30 transition-all"
+          >
+            <span
+              class="text-xs font-bold text-main-secondary uppercase tracking-wider block mb-1"
+            >
+              <i class="fa-solid fa-fire-flame-curved mr-1"></i> Latest
+              Discussion
+            </span>
+            <p
+              class="text-black-accent text-sm font-medium leading-normal line-clamp-2"
+            >
+              "What is your favorite backend framework in 2026?"
+            </p>
           </div>
 
-          <div class="space-y-4">
-            <div class="bg-gray-100 rounded-2xl p-4">
-              <h4 class="font-semibold text-dark mb-2">Latest Discussion</h4>
-
-              <p class="text-graysoft text-sm">
-                "What is your favorite backend framework in 2026?"
-              </p>
-            </div>
-
-            <div class="bg-gray-100 rounded-2xl p-4">
-              <h4 class="font-semibold text-dark mb-2">Trending Topic</h4>
-
-              <p class="text-graysoft text-sm">
-                NestJS + Fastify performance discussion is trending now.
-              </p>
-            </div>
+          <div
+            class="bg-white-secondary rounded-xl p-4 border border-white-accent/60 group hover:border-main-accent/30 transition-all"
+          >
+            <span
+              class="text-xs font-bold text-black-muted uppercase tracking-wider block mb-1"
+            >
+              <i class="fa-solid fa-chart-line mr-1"></i> Trending Topic
+            </span>
+            <p
+              class="text-black-accent text-sm font-medium leading-normal line-clamp-2"
+            >
+              NestJS + Fastify performance discussion is trending now.
+            </p>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Feature Section -->
-    <section class="max-w-7xl mx-auto px-4 pb-20">
-      <div class="grid md:grid-cols-3 gap-6">
-        <!-- Card -->
-        <div class="bg-light p-6 rounded-3xl shadow-lg border border-gray-200">
-          <div
-            class="w-14 h-14 bg-primary rounded-2xl flex items-center justify-center text-light text-2xl mb-5"
-          >
-            💬
+      <div class="grid md:grid-cols-3 gap-6 text-left pt-6">
+        <div
+          class="bg-white-primary p-6 rounded-2xl border border-white-accent hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
+        >
+          <div>
+            <div
+              class="w-12 h-12 bg-main-muted text-main-primary rounded-xl flex items-center justify-center text-lg mb-5"
+            >
+              <i class="fa-solid fa-comments"></i>
+            </div>
+            <h3 class="text-lg font-bold text-black-secondary mb-2">
+              Active Discussions
+            </h3>
+            <p class="text-black-muted text-sm leading-relaxed">
+              Participate in thousands of community discussions every day.
+            </p>
           </div>
-
-          <h3 class="text-xl font-bold text-dark mb-3">Active Discussions</h3>
-
-          <p class="text-graysoft leading-relaxed">
-            Participate in thousands of community discussions every day.
-          </p>
         </div>
 
-        <!-- Card -->
-        <div class="bg-light p-6 rounded-3xl shadow-lg border border-gray-200">
-          <div
-            class="w-14 h-14 bg-primary rounded-2xl flex items-center justify-center text-light text-2xl mb-5"
-          >
-            👥
+        <div
+          class="bg-white-primary p-6 rounded-2xl border border-white-accent hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
+        >
+          <div>
+            <div
+              class="w-12 h-12 bg-black-primary text-white-primary rounded-xl flex items-center justify-center text-lg mb-5"
+            >
+              <i class="fa-solid fa-users"></i>
+            </div>
+            <h3 class="text-lg font-bold text-black-secondary mb-2">
+              Friendly Community
+            </h3>
+            <p class="text-black-muted text-sm leading-relaxed">
+              Meet developers, designers, and creators from around the world.
+            </p>
           </div>
-
-          <h3 class="text-xl font-bold text-dark mb-3">Friendly Community</h3>
-
-          <p class="text-graysoft leading-relaxed">
-            Meet developers, designers, and creators from around the world.
-          </p>
         </div>
 
-        <!-- Card -->
-        <div class="bg-light p-6 rounded-3xl shadow-lg border border-gray-200">
-          <div
-            class="w-14 h-14 bg-primary rounded-2xl flex items-center justify-center text-light text-2xl mb-5"
-          >
-            🚀
+        <div
+          class="bg-white-primary p-6 rounded-2xl border border-white-accent hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
+        >
+          <div>
+            <div
+              class="w-12 h-12 bg-white-secondary text-black-secondary border border-white-muted rounded-xl flex items-center justify-center text-lg mb-5"
+            >
+              <i class="fa-solid fa-rocket text-main-primary"></i>
+            </div>
+            <h3 class="text-lg font-bold text-black-secondary mb-2">
+              Share Your Ideas
+            </h3>
+            <p class="text-black-muted text-sm leading-relaxed">
+              Create posts, ask questions, and build your audience easily.
+            </p>
           </div>
-
-          <h3 class="text-xl font-bold text-dark mb-3">Share Your Ideas</h3>
-
-          <p class="text-graysoft leading-relaxed">
-            Create posts, ask questions, and build your audience easily.
-          </p>
         </div>
       </div>
     </section>
-  </section>
+  </main>
 </div>

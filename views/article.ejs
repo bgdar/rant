@@ -1,53 +1,71 @@
 <div class="flex justify-center p-6 md:p-10 bg-white-secondary min-h-screen">
   <div class="flex flex-col md:flex-row w-full lg:w-[80%] gap-8">
-    
     <!-- CARD PENULIS (SIDEBAR ARTIKEL) -->
-    <div class="w-full md:w-1/4 bg-white-primary shadow-sm border border-white-accent rounded-xl border-t-4 border-t-main-primary p-6 h-fit transition-transform hover:-translate-y-1">
+    <div
+      class="w-full md:w-1/4 bg-white-primary shadow-sm border border-white-accent rounded-xl border-t-4 border-t-main-primary p-6 h-fit transition-transform hover:-translate-y-1"
+    >
       <div class="text-center">
         <!-- Avatar Area menggunakan Font Awesome -->
-        <div class="w-20 h-20 mx-auto rounded-full bg-gray-muted text-gray-secondary flex items-center justify-center mb-4 border border-white-accent">
+        <div
+          class="w-20 h-20 mx-auto rounded-full bg-gray-muted text-gray-secondary flex items-center justify-center mb-4 border border-white-accent"
+        >
           <i class="fas fa-user-tie text-3xl"></i>
         </div>
 
         <h2 class="font-bold text-black-primary text-lg tracking-tight">
           <%= author %>
         </h2>
-        <p class="text-gray-secondary text-[11px] font-bold uppercase tracking-widest mt-1">
+        <p
+          class="text-gray-secondary text-[11px] font-bold uppercase tracking-widest mt-1"
+        >
           Penulis Artikel
         </p>
 
         <!-- Bagian Signature yang Diperhalus -->
         <div class="mt-6 border-t border-white-accent pt-4">
-          <p class="text-gray-primary text-[10px] font-bold tracking-wider mb-2 uppercase">Signature Verified</p>
-          <div class="text-2xl font-serif italic text-main-primary opacity-80 flex justify-center items-center gap-1">
-            <i class="fas fa-pen-nib text-xs"></i> <span class="text-sm font-sans tracking-wide"><%= author %></span>
+          <p
+            class="text-gray-primary text-[10px] font-bold tracking-wider mb-2 uppercase"
+          >
+            Signature Verified
+          </p>
+          <div
+            class="text-2xl font-serif italic text-main-primary opacity-80 flex justify-center items-center gap-1"
+          >
+            <i class="fas fa-pen-nib text-xs"></i>
+            <span class="text-sm font-sans tracking-wide"><%= author %></span>
           </div>
         </div>
       </div>
     </div>
 
     <!-- MAIN KONTEN ARTIKEL -->
-    <div class="flex-1 bg-white-primary shadow-sm rounded-xl p-6 md:p-10 border border-white-accent">
-      
-      <!-- Judul Artikel -->
-      <h1 class="text-3xl md:text-4xl font-extrabold text-black-primary mb-4 leading-tight">
+    <div
+      class="flex-1 bg-white-primary shadow-sm rounded-xl p-6 md:p-10 border border-white-accent"
+    >
+      <h1
+        class="text-3xl md:text-4xl font-extrabold text-black-primary mb-4 leading-tight"
+      >
         <%= title %>
       </h1>
 
-      <!-- Metadata Tanggal -->
       <div class="flex items-center gap-3 mb-8">
-        <span class="h-[2px] w-6 bg-main-primary rounded-full"></span>
-        <p class="text-gray-secondary font-medium text-xs flex items-center gap-1.5">
-          <i class="far fa-calendar-alt text-gray-primary"></i> 
-          Diterbitkan pada: <span class="text-black-secondary font-semibold"><%= date %></span>
+        <span class="h-0.5 w-6 bg-main-primary rounded-full"></span>
+        <p
+          class="text-gray-secondary font-medium text-xs flex items-center gap-1.5"
+        >
+          <i class="far fa-calendar-alt text-gray-primary"></i>
+          Diterbitkan pada:
+          <span class="text-black-secondary font-semibold"><%= date %></span>
         </p>
       </div>
 
-      <!-- Isi / Body Artikel -->
-      <div class="space-y-6 text-base md:text-lg text-black-secondary leading-relaxed font-normal">
-        
+      <div
+        class="space-y-6 text-base md:text-lg text-black-secondary leading-relaxed font-normal"
+      >
         <!-- Dropcap (Huruf pertama besar) yang disesuaikan warnanya -->
-        <p class="first-letter:text-5xl first-letter:font-extrabold first-letter:text-main-primary first-letter:mr-3 first-letter:float-left first-letter:leading-none">
+        <p
+          class="first-letter:text-5xl first-letter:font-extrabold first-letter:text-main-primary first-letter:mr-3 first-letter:float-left first-letter:leading-none"
+        >
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua.
         </p>
@@ -58,7 +76,9 @@
         </p>
 
         <!-- Blockquote Bertema Kustom -->
-        <blockquote class="border-l-4 border-main-primary pl-5 py-2 my-6 italic text-black-accent bg-main-muted/40 rounded-r-lg">
+        <blockquote
+          class="border-l-4 border-main-primary pl-5 py-2 my-6 italic text-black-accent bg-main-muted/40 rounded-r-lg"
+        >
           "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
           dolore eu fugiat nulla pariatur."
         </blockquote>
@@ -71,15 +91,17 @@
 
       <!-- Tags / Kategori Artikel -->
       <div class="mt-10 pt-6 border-t border-white-accent flex flex-wrap gap-2">
-        <span class="px-3 py-1 bg-black-primary text-white-primary text-xs font-medium rounded-md shadow-sm flex items-center gap-1">
+        <span
+          class="px-3 py-1 bg-black-primary text-white-primary text-xs font-medium rounded-md shadow-sm flex items-center gap-1"
+        >
           <i class="fas fa-tag text-[10px]"></i> Teknologi
         </span>
-        <span class="px-3 py-1 bg-gray-muted text-black-accent text-xs font-medium rounded-md shadow-sm flex items-center gap-1 border border-white-accent">
+        <span
+          class="px-3 py-1 bg-gray-muted text-black-accent text-xs font-medium rounded-md shadow-sm flex items-center gap-1 border border-white-accent"
+        >
           <i class="fas fa-tag text-[10px]"></i> Desain
         </span>
       </div>
-
     </div>
-
   </div>
 </div>

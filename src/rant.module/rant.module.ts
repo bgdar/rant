@@ -5,12 +5,8 @@ import {
   RantKeywordIndo,
   RantKeywordIndoSchema,
 } from 'src/schemas/rant-keyword-indo.schema';
-import {
-  RantKeywordAceh,
-  RantKeywordAcehSchema,
-} from 'src/schemas/rant-keyword-aceh.schema';
+
 import { RantKeywordIndoDbService } from './rant-keyword-indo.db.service';
-import { RantAcehDbService } from './rant-keyword-aceh.db.service';
 import {
   RantDatasetIndo,
   RantDatasetIndoSchema,
@@ -19,6 +15,8 @@ import { RantDatasetIndoService } from './rant-dataset.indo.service';
 
 import { RabbitMqDashboardClientProvider } from './rabbitMq.dashboard.client.provider';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { RabbitMqUserClientProvider } from './rabbitMq.user.client.provider';
+import { SosmedController } from './sosmed.controller';
 
 @Module({
   imports: [
@@ -42,6 +40,16 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
           },
         },
       },
+
+      {
+        // queu untuk kirim data user login dan sejenis nya ke queue untuk bot nantik mengaksesnya
+        name: 'USER_CLIENT',
+        transport: Transport.RMQ,
+        options: {
+          urls: ['amqp://localhost:5672'],
+          queue: process.env.RABBITUSER || 'queue-user', // queue mengiri reques
+        },
+      },
     ]),
   ],
   providers: [
@@ -49,9 +57,11 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
     // RantAcehDbService
     RantDatasetIndoService,
 
+    //------------------- Daftar Rabbit queue provider
     RabbitMqDashboardClientProvider,
+    RabbitMqUserClientProvider,
   ],
-  controllers: [RantController],
+  controllers: [RantController, SosmedController],
 
   // jika di panggil module ini maka provider atau lainya bisa di akses juga
   exports: [

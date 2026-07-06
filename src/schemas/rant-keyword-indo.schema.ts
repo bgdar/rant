@@ -3,7 +3,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 
-import { RantKeywordDTO } from 'src/dto/dataDTO';
+import { RantKeywordDTO } from 'src/dto/data.dto';
 export type RantKeywordIndoDocument = HydratedDocument<RantKeywordIndo>;
 
 @Schema()
@@ -19,3 +19,4 @@ export class RantKeywordIndo implements RantKeywordDTO {
 
 export const RantKeywordIndoSchema =
   SchemaFactory.createForClass(RantKeywordIndo);
+

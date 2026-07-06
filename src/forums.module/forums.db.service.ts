@@ -16,7 +16,7 @@ import {
   ForumVisibility,
   UpdateChatDTO,
   UpdateForumDTO,
-} from 'src/dto/forumDTO';
+} from 'src/dto/forum.dto';
 import { Chat, ChatDocument } from 'src/schemas/chat.schema';
 import { Forum, ForumDocument } from 'src/schemas/forum.schema';
 
@@ -63,6 +63,17 @@ export class ForumsDbService {
 
     const forum = await this.forumModel.create({
       ...data,
+
+      // 1. Paksa supervisorId menjadi Mongoose ObjectId yang asli
+      supervisorId: new Types.ObjectId(data.supervisorId),
+
+      // 2. Jika ada members yang diinput saat create, paksa userId-nya menjadi ObjectId juga
+      members:
+        data.members?.map((member) => ({
+          ...member,
+          userId: new Types.ObjectId(member.userId),
+        })) || [],
+
       // id : data.
       // members : data.members?.map(member => {
       //   ...member,
@@ -88,6 +99,16 @@ export class ForumsDbService {
   async findAllUserForums(userId: Types.ObjectId) {
     return this.forumModel.find({
       'members.userId': userId,
+    });
+  }
+
+  /**
+   * Dapatkan seamuForum yang supervisor buat
+   * - pakek di home
+   **/
+  async findAllSupervisorForums(supervisorId: Types.ObjectId) {
+    return this.forumModel.find({
+      supervisorId: supervisorId,
     });
   }
 
@@ -356,179 +377,11 @@ export class ForumsDbService {
   }
 
   /**
-   * Send message/chat.
-   */
-  async createChat(data: CreateChatDTO) {
-    /*
-     | Check forum
-     */
-
-    const forum = await this.findForumById(data.forumId);
-
-    if (forum.isLocked) {
-      throw new BadRequestException('Forum locked');
-    }
-
-    /*
-     | Create message
-     */
-
-    const chat = await this.chatModel.create({
-      ...data,
-
-      type: data.type || 'text',
-
-      isEdited: false,
-
-      isDeleted: false,
-
-      readBy: [],
-    });
-
-    /*
-     | Update forum stats
-     */
-
-    forum.totalMessages += 1;
-
-    forum.lastMessageAt = new Date();
-
-    await forum.save();
-
-    return chat;
-  }
-
-  /**
-   * Get forum chats.
-   */
-  async getForumChats(forumId: string) {
-    return this.chatModel
-      .find({
-        forumId,
-
-        isDeleted: false,
-      })
-      .sort({
-        createdAt: 1,
-      });
-  }
-
-  /**
-   * Get latest chats.
-   */
-  async getLatestChats(
-    forumId: string,
-
-    limit = 30,
-  ) {
-    return this.chatModel
-      .find({
-        forumId,
-      })
-      .sort({
-        createdAt: -1,
-      })
-      .limit(limit);
-  }
-
-  /**
-   * Find chat by ID.
-   */
-  async findChatById(id: string) {
-    const chat = await this.chatModel.findById(id);
-
-    if (!chat) {
-      throw new NotFoundException('Chat not found');
-    }
-
-    return chat;
-  }
-
-  /**
-   * Update/edit chat.
-   */
-  async updateChat(
-    id: string,
-
-    data: UpdateChatDTO,
-  ) {
-    const chat = await this.chatModel.findByIdAndUpdate(
-      id,
-      {
-        ...data,
-
-        isEdited: true,
-      },
-      {
-        new: true,
-      },
-    );
-
-    if (!chat) {
-      throw new NotFoundException('Chat not found');
-    }
-
-    return chat;
-  }
-
-  /**
-   * Soft delete chat.
-   */
-  async deleteChat(id: string) {
-    const chat = await this.chatModel.findByIdAndUpdate(
-      id,
-      {
-        isDeleted: true,
-      },
-      {
-        new: true,
-      },
-    );
-
-    if (!chat) {
-      throw new NotFoundException('Chat not found');
-    }
-
-    return {
-      message: 'Chat deleted successfully',
-    };
-  }
-
-  /**
-   * Mark chat as read.
-   */
-  async markAsRead(
-    chatId: string,
-
-    userId: string,
-  ) {
-    return this.chatModel.findByIdAndUpdate(
-      chatId,
-      {
-        $addToSet: {
-          readBy: userId,
-        },
-      },
-      {
-        new: true,
-      },
-    );
-  }
-
-  /**
    * Count forums.
    */
   async countForums() {
     return this.forumModel.countDocuments();
   }
-
-  /**
-   * Count chats.
-   */
-  async countChats() {
-    return this.chatModel.countDocuments();
-  }
-
   /**
    * Count active forums.
    */

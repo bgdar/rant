@@ -1,0 +1,11 @@
+
+
+
+commit 3 'success forums' #1
+
+- perbaiki cara user login ke supervisor 
+- memisahkan cara user dan supervisor mendapatkan data di forums
+- menambah token pada Icon fontawesome yang di gunakan
+-  perbaiki structure pemilihan user dan supervisor di forum
+- update file chat
+- pisah logic controller dan forums ke file terpisah

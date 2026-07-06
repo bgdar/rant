@@ -1,5 +1,5 @@
 <!--  include("layouts")  ini tidak perlu lagi , karen otomatis dari fastify + ejs -->
-<div class="bg-[#FFFFFF] text-[#000000] font-sans">
+<div class="bg-[#FFFFFF] text-black-primary font-sans">
   <section
     class="relative h-screen flex items-center justify-center bg-fixed-custom"
   >
@@ -35,14 +35,14 @@
       >
         <a
           href="/rant"
-          class="bg-main hover:bg-red-700 text-[#FFFFFF] font-bold py-4 px-10 rounded-full transition duration-300 shadow-lg inline-block"
+          class="bg-main-primary hover:bg-red-700 text-[#FFFFFF] font-bold py-4 px-10 rounded-full transition duration-300 shadow-lg inline-block"
         >
           Rant
         </a>
 
         <a
           href="/user"
-          class="bg-blackmain hover:bg-red-700 text-[#FFFFFF] font-bold py-4 px-10 rounded-full transition duration-300 shadow-lg inline-block"
+          class="bg-white-secondary hover:bg-red-700 text-black-primary hover:text-white-primary font-bold py-4 px-10 rounded-full transition duration-300 shadow-lg inline-block"
         >
           Your
         </a>
@@ -52,8 +52,10 @@
 
   <section id="info" class="py-20 px-6 max-w-7xl mx-auto">
     <div class="text-center mb-16">
-      <h2 class="text-3xl font-bold text-[#000000] mb-4">Informasi Layanan</h2>
-      <div class="w-20 h-1 bg-[#FF0000] mx-auto"></div>
+      <h2 class="text-3xl font-bold text-black-primary mb-4">
+        Informasi Layanan
+      </h2>
+      <div class="w-20 h-1 bg-color-main-primary mx-auto"></div>
     </div>
 
     <div
@@ -63,7 +65,7 @@
       <div
         @mouseenter="selected = 1"
         @mouseleave="selected = null"
-        class="p-8 border border-[#999999]/20 rounded-xl transition-all duration-300 hover:shadow-2xl bg-[#FFFFFF]"
+        class="p-8 border border-gray-pritext-gray-primary /20 rounded-xl transition-all duration-300 hover:shadow-2xl bg-[#FFFFFF]"
         :class="selected === 1 ? 'border-[#FF0000] -translate-y-2' : ''"
       >
         <div
@@ -83,8 +85,10 @@
             ></path>
           </svg>
         </div>
-        <h3 class="text-xl font-bold mb-3 text-[#000000]">Performa Cepat</h3>
-        <p class="text-[#999999]">
+        <h3 class="text-xl font-bold mb-3 text-black-primary">
+          Performa Cepat
+        </h3>
+        <p class="text-gray-primary">
           Dibangun dengan teknologi terbaru untuk memastikan akses tanpa
           hambatan di semua perangkat.
         </p>
@@ -93,11 +97,11 @@
       <div
         @mouseenter="selected = 2"
         @mouseleave="selected = null"
-        class="p-8 border border-[#999999]/20 rounded-xl transition-all duration-300 hover:shadow-2xl bg-[#FFFFFF]"
+        class="p-8 border border-gray-pritext-gray-primary /20 rounded-xl transition-all duration-300 hover:shadow-2xl bg-[#FFFFFF]"
         :class="selected === 2 ? 'border-[#FF0000] -translate-y-2' : ''"
       >
         <div
-          class="w-12 h-12 bg-[#000000] flex items-center justify-center rounded-lg mb-6"
+          class="w-12 h-12 bg-black-primary flex items-center justify-center rounded-lg mb-6"
         >
           <svg
             class="w-6 h-6 text-[#FFFFFF]"
@@ -113,8 +117,8 @@
             ></path>
           </svg>
         </div>
-        <h3 class="text-xl font-bold mb-3 text-[#000000]">Keamanan Data</h3>
-        <p class="text-[#999999]">
+        <h3 class="text-xl font-bold mb-3 text-black-primary">Keamanan Data</h3>
+        <p class="text-gray-primary">
           Privasi Anda adalah prioritas kami. Enkripsi tingkat tinggi di setiap
           lapisan data.
         </p>
@@ -123,11 +127,11 @@
       <div
         @mouseenter="selected = 3"
         @mouseleave="selected = null"
-        class="p-8 border border-[#999999]/20 rounded-xl transition-all duration-300 hover:shadow-2xl bg-[#FFFFFF]"
+        class="p-8 border border-gray-pritext-gray-primary /20 rounded-xl transition-all duration-300 hover:shadow-2xl bg-[#FFFFFF]"
         :class="selected === 3 ? 'border-[#FF0000] -translate-y-2' : ''"
       >
         <div
-          class="w-12 h-12 bg-[#999999] flex items-center justify-center rounded-lg mb-6"
+          class="w-12 h-12 bg-gray-pritext-gray-primary flex items-center justify-center rounded-lg mb-6"
         >
           <svg
             class="w-6 h-6 text-[#FFFFFF]"
@@ -143,8 +147,10 @@
             ></path>
           </svg>
         </div>
-        <h3 class="text-xl font-bold mb-3 text-[#000000]">Desain Adaptif</h3>
-        <p class="text-[#999999]">
+        <h3 class="text-xl font-bold mb-3 text-black-primary">
+          Desain Adaptif
+        </h3>
+        <p class="text-gray-primary">
           Antarmuka yang menyesuaikan dengan kebutuhan visual Anda, bersih dan
           fungsional.
         </p>
@@ -152,8 +158,8 @@
     </div>
   </section>
 
-  <footer class="bg-[#000000] py-10 text-center">
-    <p class="text-[#999999] text-sm">
+  <footer class="bg-black-primary py-10 text-center">
+    <p class="text-gray-primary text-sm">
       &copy; 2026 Brand Anda. All rights reserved.
     </p>
   </footer>

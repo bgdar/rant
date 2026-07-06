@@ -1,12 +1,20 @@
 import {
-  IsArray,
   IsBoolean,
   IsEmail,
   IsOptional,
-  isString,
   IsString,
   MinLength,
 } from 'class-validator';
+import { ObjectId } from 'mongoose';
+
+
+// status bagaimaan perilaku user , nantik akan supervisor lihat
+export enum UserRole {
+  Normal = 'normal',
+  Suspicious = 'suspicious',
+  Dangerous = 'Dangerous',
+  Extreme = 'Extreme',
+}
 
 export class UserDTO {
   @IsString()
@@ -17,8 +25,16 @@ export class UserDTO {
   password: string;
   @IsString()
   role: string;
+
+  // id yang di gunakan user , untuk login dan terhubung ke sosmed
+  @IsOptional()
+  discordId : number;
+  @IsOptional()
+  telegramId : number;
 }
 
+
+// sama dengan UserDTO cuman penambahan ID
 export class UserSessionDTO {
   @IsString()
   id: string;

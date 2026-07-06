@@ -1,0 +1,117 @@
+<header
+  class="shadow-md sticky top-0 z-100 bg-white-secondary"
+  :class="navbarColor[currentPath] || 'bg-white-primary'"
+>
+  <div
+    class="max-w-7xl mx-auto px-4"
+    x-data="{ 
+        currentPath: window.location.pathname,
+        mobileMenu: false,
+        navbarColor: {
+          '/user/profile': 'bg-white-primary',
+          '/forums': 'bg-main-primary',
+          '/user/user': 'bg-main-white-primary'
+        }
+      }"
+  >
+    <div class="flex items-center justify-between h-16">
+      <!-- Logo -->
+      <a href="/" class="flex items-center gap-3">
+        <div
+          class="w-10 h-10 rounded-xl flex items-center justify-center shadow-md"
+          :class="navbarColor[currentPath] || 'bg-white-primary'"
+        >
+          <span class="text-light font-bold text-lg">
+            <i class="fa-sharp fa-solid fa-r"></i>
+          </span>
+        </div>
+        <span class="text-xl font-bold text-dark">Rant</span>
+      </a>
+
+      <!-- Desktop -->
+      <nav class="hidden md:flex items-center gap-4">
+        <a
+          href="/"
+          x-show="currentPath !== '/'"
+          class="px-4 py-2 rounded-xl text-dark hover:bg-gray-100 transition font-medium"
+        >
+          Dashboard
+        </a>
+
+        <a
+          href="/forums"
+          x-show="currentPath !== '/forums'"
+          class="px-4 py-2 rounded-xl text-dark hover:bg-gray-100 transition font-medium"
+        >
+          Forums
+        </a>
+
+        <!-- href diubah/disamakan dengan pengecekan x-show -->
+        <a
+          href="/user"
+          x-show="currentPath !== '/user'"
+          class="px-4 py-2 rounded-xl bg-primary text-light hover:opacity-90 transition font-medium shadow-md"
+        >
+          user
+        </a>
+
+        <!-- href diubah/disamakan dengan pengecekan x-show -->
+        <a
+          href="/user/profile"
+          x-show="currentPath !== '/user/profile'"
+          class="px-4 py-2 rounded-xl bg-primary text-light hover:opacity-90 transition font-medium shadow-md"
+        >
+          profile
+        </a>
+      </nav>
+
+      <!-- Mobile Button -->
+      <button
+        @click="mobileMenu = !mobileMenu"
+        class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition"
+      >
+        ☰
+      </button>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div
+      x-show="mobileMenu"
+      x-transition
+      x-cloak
+      class="md:hidden pb-4 space-y-2"
+    >
+      <a
+        href="/"
+        x-show="currentPath !== '/'"
+        class="block px-4 py-3 rounded-xl hover:bg-gray-100 transition font-medium"
+      >
+        Dashboard
+      </a>
+
+      <a
+        href="/forums"
+        x-show="currentPath !== '/forums'"
+        class="block px-4 py-2 rounded-xl text-dark hover:bg-gray-100 transition font-medium"
+      >
+        Forums
+      </a>
+
+      <a
+        href="/user"
+        x-show="currentPath !== '/user'  "
+        class="block px-4 py-2 rounded-xl bg-primary text-light hover:opacity-90 transition font-medium shadow-md"
+      >
+        user
+      </a>
+
+      <a
+        href="/user/profile"
+        x-show="currentPath !== '/user/profile'"
+        class="block px-4 py-2 rounded-xl bg-primary text-light hover:opacity-90 transition font-medium shadow-md"
+      >
+        <span x-text="username"></span>
+      </a>
+    </div>
+  </div>
+</header>

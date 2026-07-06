@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { RantDatasetDTO } from 'src/dto/dataDTO';
+import { RantDatasetDTO } from 'src/dto/data.dto';
 
 import { RantDatasetIndo } from 'src/schemas/rant-dataset-indo.schema';
 

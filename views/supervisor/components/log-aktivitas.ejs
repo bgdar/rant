@@ -1,0 +1,485 @@
+<div
+  class="bg-white-secondary text-black-primary font-sans antialiased min-h-screen flex flex-col justify-between"
+  x-data="activityLogHandler()"
+>
+  <header
+    class="bg-black-primary text-white-primary shadow-md px-6 py-4 flex justify-between items-center"
+  >
+    <div class="flex items-center space-x-3">
+      <div class="bg-main-primary text-white-primary p-2 rounded-lg">
+        <i class="fas fa-clipboard-list text-xl"></i>
+      </div>
+      <div>
+        <h1 class="text-lg font-bold tracking-wide">Supervisor Panel</h1>
+        <p class="text-xs text-gray-accent">System Audit Trail</p>
+      </div>
+    </div>
+    <div class="flex items-center space-x-4">
+      <span class="text-sm text-white-secondary hidden md:inline"
+        >Logged as: <strong>Admin Supervisor</strong></span
+      >
+      <div
+        class="w-10 h-10 rounded-full bg-main-secondary flex items-center justify-center text-white-primary font-bold border-2 border-main-accent"
+      >
+        AS
+      </div>
+    </div>
+  </header>
+
+  <main class="grow p-4 md:p-8 max-w-7xl w-full mx-auto">
+    <div
+      class="bg-white-primary rounded-xl shadow-lg border border-white-accent overflow-hidden"
+    >
+      <div
+        class="bg-gradient-to-r from-black-secondary to-black-accent p-6 text-white-primary flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+      >
+        <div>
+          <h2 class="text-xl font-bold flex items-center gap-2">
+            <i class="fas fa-history text-main-accent"></i> Log Aktivitas Sistem
+          </h2>
+          <p class="text-xs text-gray-muted mt-1">
+            Memantau riwayat manipulasi data, perubahan hak akses, dan log
+            otentikasi user.
+          </p>
+        </div>
+        <div>
+          <button
+            @click="refreshLogs()"
+            class="text-xs bg-black-muted hover:bg-main-primary text-white-primary px-4 py-2 rounded-lg font-medium transition duration-200 flex items-center gap-1.5"
+          >
+            <i
+              class="fas fa-sync-alt"
+              :class="loading ? 'animate-spin' : ''"
+            ></i>
+            Refresh Data
+          </button>
+        </div>
+      </div>
+
+      <div
+        class="p-6 border-b border-white-accent bg-white-secondary/50 grid grid-cols-1 md:grid-cols-3 gap-4"
+      >
+        <div class="relative">
+          <span
+            class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-secondary"
+          >
+            <i class="fas fa-search text-xs"></i>
+          </span>
+          <input
+            type="text"
+            x-model="searchQuery"
+            placeholder="Cari pelaku, aksi, atau target..."
+            class="w-full pl-9 pr-4 py-2 bg-white-primary border border-white-muted rounded-lg focus:outline-none focus:border-main-primary text-xs transition"
+          />
+        </div>
+        <div class="relative">
+          <span
+            class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-secondary"
+          >
+            <i class="fas fa-filter text-xs"></i>
+          </span>
+          <select
+            x-model="filterSeverity"
+            class="w-full pl-9 pr-4 py-2 bg-white-primary border border-white-muted rounded-lg focus:outline-none focus:border-main-primary text-xs cursor-pointer appearance-none"
+          >
+            <option value="all">Semua Tingkat (Severity)</option>
+            <option value="high">High (Bahaya/Kritis)</option>
+            <option value="medium">Medium (Modifikasi)</option>
+            <option value="low">Low (Info/Sesi)</option>
+          </select>
+        </div>
+        <div
+          class="flex items-center justify-end text-xs text-black-muted font-medium gap-3"
+        >
+          <span class="px-2.5 py-1 bg-main-muted text-main-secondary rounded-md"
+            >High: <strong x-text="countSeverity('high')">0</strong></span
+          >
+          <span class="px-2.5 py-1 bg-white-accent text-black-accent rounded-md"
+            >Total Terfilter:
+            <strong x-text="filteredLogs.length">0</strong></span
+          >
+        </div>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr
+              class="bg-black-secondary text-white-primary text-[11px] uppercase tracking-wider font-bold"
+            >
+              <th class="p-4 w-20">Status</th>
+              <th class="p-4">Timestamp</th>
+              <th class="p-4">Pelaku (Actor)</th>
+              <th class="p-4">Aksi Eksekusi</th>
+              <th class="p-4">Target Object</th>
+              <th class="p-4">IP Address</th>
+              <th class="p-4 text-center">Detail</th>
+            </tr>
+          </thead>
+          <tbody class="text-xs divide-y divide-white-accent">
+            <template x-for="log in paginatedLogs" :key="log.id">
+              <tr class="hover:bg-white-secondary transition">
+                <td class="p-4">
+                  <span
+                    class="px-2 py-0.5 rounded-md font-bold text-[10px] uppercase block text-center"
+                    :class="{
+                          'bg-main-muted text-main-primary border border-main-accent/20': log.severity === 'high',
+                          'bg-white-accent text-black-accent border border-white-muted': log.severity === 'medium',
+                          'bg-white-secondary text-gray-secondary border border-white-muted': log.severity === 'low'
+                        }"
+                    x-text="log.severity"
+                  >
+                  </span>
+                </td>
+                <td
+                  class="p-4 font-medium text-black-secondary"
+                  x-text="log.timestamp"
+                ></td>
+                <td class="p-4">
+                  <div class="flex items-center space-x-2">
+                    <div
+                      class="w-6 h-6 rounded-full bg-black-accent text-white-primary flex items-center justify-center font-bold text-[10px]"
+                      x-text="log.actorInitials"
+                    ></div>
+                    <div>
+                      <span
+                        class="font-bold text-black-primary block"
+                        x-text="log.actorName"
+                      ></span>
+                      <span
+                        class="text-[10px] text-gray-secondary block"
+                        x-text="log.actorRole"
+                      ></span>
+                    </div>
+                  </div>
+                </td>
+                <td
+                  class="p-4 font-mono font-semibold text-black-primary"
+                  x-text="log.action"
+                ></td>
+                <td class="p-4 text-gray-secondary" x-text="log.target"></td>
+                <td
+                  class="p-4 font-mono text-gray-secondary"
+                  x-text="log.ip"
+                ></td>
+                <td class="p-4 text-center">
+                  <button
+                    @click="openDetail(log)"
+                    class="text-black-accent hover:text-main-primary p-1 transition"
+                  >
+                    <i class="fas fa-eye text-sm"></i>
+                  </button>
+                </td>
+              </tr>
+            </template>
+            <template x-if="filteredLogs.length === 0">
+              <tr>
+                <td
+                  colspan="7"
+                  class="p-8 text-center text-gray-secondary font-medium"
+                >
+                  <i
+                    class="fas fa-folder-open text-3xl block mb-2 text-gray-accent"
+                  ></i>
+                  Tidak ada log aktivitas yang cocok dengan kriteria pencarian.
+                </td>
+              </tr>
+            </template>
+          </tbody>
+        </table>
+      </div>
+
+      <div
+        class="p-4 bg-white-secondary border-t border-white-accent flex flex-col sm:flex-row items-center justify-between gap-4 text-xs"
+      >
+        <div class="text-gray-secondary">
+          Menampilkan
+          <span
+            class="font-bold text-black-primary"
+            x-text="startRecord"
+          ></span>
+          -
+          <span class="font-bold text-black-primary" x-text="endRecord"></span>
+          dari
+          <span
+            class="font-bold text-black-primary"
+            x-text="filteredLogs.length"
+          ></span>
+          Baris Log.
+        </div>
+        <div class="flex items-center space-x-2">
+          <button
+            @click="prevPage()"
+            :disabled="currentPage === 1"
+            class="px-3 py-1.5 bg-white-primary border border-white-muted rounded-lg hover:bg-white-accent disabled:opacity-50 transition font-medium"
+          >
+            <i class="fas fa-chevron-left mr-1"></i> Prev
+          </button>
+          <span class="font-semibold text-black-accent"
+            >Halaman <span x-text="currentPage"></span> /
+            <span x-text="totalPages"></span
+          ></span>
+          <button
+            @click="nextPage()"
+            :disabled="currentPage === totalPages || totalPages === 0"
+            class="px-3 py-1.5 bg-white-primary border border-white-muted rounded-lg hover:bg-white-accent disabled:opacity-50 transition font-medium"
+          >
+            Next <i class="fas fa-chevron-right ml-1"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div
+    x-show="modalOpen"
+    class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black-primary/60 backdrop-blur-sm"
+    x-transition
+  >
+    <div
+      class="bg-white-primary w-full max-w-lg rounded-xl shadow-2xl border border-white-accent overflow-hidden"
+      @click.away="modalOpen = false"
+    >
+      <div
+        class="bg-black-secondary text-white-primary p-4 flex justify-between items-center border-b border-white-accent"
+      >
+        <h3 class="font-bold text-sm flex items-center gap-2">
+          <i class="fas fa-info-circle text-main-accent"></i> Detail Payload
+          Enkripsi Log
+        </h3>
+        <button
+          @click="modalOpen = false"
+          class="text-gray-accent hover:text-white-primary transition"
+        >
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="p-6 space-y-4 text-xs">
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <span
+              class="block text-gray-secondary font-semibold uppercase tracking-wider text-[10px]"
+              >Log ID Ref:</span
+            >
+            <span
+              class="font-mono text-black-primary font-bold"
+              x-text="'#LOG-' + selectedLog.id"
+            ></span>
+          </div>
+          <div>
+            <span
+              class="block text-gray-secondary font-semibold uppercase tracking-wider text-[10px]"
+              >Tingkat Risiko:</span
+            >
+            <span
+              class="font-bold uppercase"
+              :class="selectedLog.severity === 'high' ? 'text-main-primary' : 'text-black-accent'"
+              x-text="selectedLog.severity"
+            ></span>
+          </div>
+        </div>
+        <hr class="border-white-accent" />
+        <div>
+          <span
+            class="block text-gray-secondary font-semibold uppercase tracking-wider text-[10px] mb-1"
+            >Objek JSON / Payload Perubahan:</span
+          >
+          <pre
+            class="bg-black-primary text-white-muted p-4 rounded-lg font-mono text-[11px] overflow-x-auto max-h-40 leading-relaxed"
+            x-text="selectedLog.payload"
+          ></pre>
+        </div>
+        <div
+          class="bg-main-muted border-l-4 border-main-primary p-3 rounded-r-lg text-black-secondary"
+        >
+          <p class="text-[11px]">
+            Metadata di atas sah dan direkam otomatis oleh server global. Log
+            audit ini bersifat <em>Read-Only</em>.
+          </p>
+        </div>
+      </div>
+      <div
+        class="p-4 bg-white-secondary border-t border-white-accent flex justify-end"
+      >
+        <button
+          @click="modalOpen = false"
+          class="px-4 py-2 bg-black-accent text-white-primary hover:bg-black-primary text-xs font-bold rounded-lg transition"
+        >
+          Tutup Detail
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <footer
+    class="bg-black-secondary text-gray-primary text-center py-3 text-xs border-t border-black-accent"
+  >
+    &copy; 2026 Admin Panel — Crafted for Supervisor. All rights reserved.
+  </footer>
+</div>
+
+<script>
+  function activityLogHandler() {
+    return {
+      searchQuery: '',
+      filterSeverity: 'all',
+      currentPage: 1,
+      itemsPerPage: 5,
+      loading: false,
+      modalOpen: false,
+      selectedLog: {},
+
+      // Mock Data Log Aktivitas terintegrasi dengan variabel warna anda
+      logs: [
+        {
+          id: 4012,
+          timestamp: '2026-06-09 00:12:04',
+          actorInitials: 'SP',
+          actorName: 'Supriyadi',
+          actorRole: 'Supervisor',
+          action: 'BAN_USER',
+          target: 'operator_danu',
+          ip: '192.168.1.45',
+          severity: 'high',
+          payload:
+            '{\n  "target_id": "usr_992",\n  "status": "banned",\n  "reason": "Indikasi fraud manipulasi report"\n}',
+        },
+        {
+          id: 4011,
+          timestamp: '2026-06-08 23:45:12',
+          actorInitials: 'AN',
+          actorName: 'Anisa K.',
+          actorRole: 'Analyst',
+          action: 'EXPORT_REPORT',
+          target: 'financial_q2.xlsx',
+          ip: '192.168.1.12',
+          severity: 'medium',
+          payload:
+            '{\n  "file_type": "EXCEL",\n  "records_exported": 1420,\n  "scope": "Q2_Finance"\n}',
+        },
+        {
+          id: 4010,
+          timestamp: '2026-06-08 22:10:55',
+          actorInitials: 'OP',
+          actorName: 'Deni Setiawan',
+          actorRole: 'Operator',
+          action: 'UPDATE_PROFILE',
+          target: 'customer_id_88',
+          ip: '103.22.14.8',
+          severity: 'low',
+          payload:
+            '{\n  "changed_fields": ["phone", "address"],\n  "old_phone": "0812345"\n}',
+        },
+        {
+          id: 4009,
+          timestamp: '2026-06-08 19:04:31',
+          actorInitials: 'SP',
+          actorName: 'Supriyadi',
+          actorRole: 'Supervisor',
+          action: 'FORCE_LOGOUT',
+          target: 'analyst_bagus',
+          ip: '192.168.1.45',
+          severity: 'high',
+          payload:
+            '{\n  "session_token": "token_expired_xyz",\n  "reason": "Idle more than 2 hours"\n}',
+        },
+        {
+          id: 4008,
+          timestamp: '2026-06-08 14:22:19',
+          actorInitials: 'AU',
+          actorName: 'Bambang Tri',
+          actorRole: 'Auditor',
+          action: 'READ_AUDIT_LOG',
+          target: 'all_system_logs',
+          ip: '172.16.4.11',
+          severity: 'low',
+          payload:
+            '{\n  "filter_applied": "none",\n  "read_duration_sec": 45\n}',
+        },
+        {
+          id: 4007,
+          timestamp: '2026-06-08 11:15:02',
+          actorInitials: 'OP',
+          actorName: 'Deni Setiawan',
+          actorRole: 'Operator',
+          action: 'CREATE_TICKET',
+          target: 'ticket_no_551',
+          ip: '103.22.14.8',
+          severity: 'medium',
+          payload: '{\n  "priority": "URGENT",\n  "category": "SERVER_DOWN"\n}',
+        },
+      ],
+
+      // Filter Data Real-time (Mendukung Pencarian Multi-kolom & Dropdown)
+      get filteredLogs() {
+        return this.logs.filter((log) => {
+          const matchQuery =
+            log.actorName
+              .toLowerCase()
+              .includes(this.searchQuery.toLowerCase()) ||
+            log.action.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+            log.target.toLowerCase().includes(this.searchQuery.toLowerCase());
+
+          const matchSeverity =
+            this.filterSeverity === 'all' ||
+            log.severity === this.filterSeverity;
+
+          return matchQuery && matchSeverity;
+        });
+      },
+
+      // Logika Pemotongan Halaman (Pagination)
+      get paginatedLogs() {
+        const start = (this.currentPage - 1) * this.itemsPerPage;
+        const end = start + this.itemsPerPage;
+        return this.filteredLogs.slice(start, end);
+      },
+
+      get totalPages() {
+        return Math.ceil(this.filteredLogs.length / this.itemsPerPage);
+      },
+
+      get startRecord() {
+        return this.filteredLogs.length === 0
+          ? 0
+          : (this.currentPage - 1) * this.itemsPerPage + 1;
+      },
+
+      get endRecord() {
+        const calculatedEnd = this.currentPage * this.itemsPerPage;
+        return calculatedEnd > this.filteredLogs.length
+          ? this.filteredLogs.length
+          : calculatedEnd;
+      },
+
+      // Perhitungan Statistik Cepat Berdasarkan Tingkat Keparahan
+      countSeverity(type) {
+        return this.logs.filter((log) => log.severity === type).length;
+      },
+
+      // Kontrol Halaman Navigasi
+      prevPage() {
+        if (this.currentPage > 1) this.currentPage--;
+      },
+
+      nextPage() {
+        if (this.currentPage < this.totalPages) this.currentPage++;
+      },
+
+      // Aksi Trigger Modal detail
+      openDetail(log) {
+        this.selectedLog = log;
+        this.modalOpen = true;
+      },
+
+      // Efek Simulasi Reload Data
+      refreshLogs() {
+        this.loading = true;
+        setTimeout(() => {
+          this.loading = false;
+          this.currentPage = 1;
+        }, 800);
+      },
+    };
+  }
+</script>

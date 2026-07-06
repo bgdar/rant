@@ -16,12 +16,17 @@ import { UserDbService } from './user.db.service';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import { UserSessionDTO, UserSignUpDTO } from 'src/dto/user.dto';
 import { AuthUserGuard } from 'src/guards/auth.user';
+import { SupervisorDbService } from 'src/supervisor.module/supervisor.db.service';
+import { SupervisorSessionDTO } from 'src/dto/supervisor.dto';
 // import { FastifySessionObject } from '@fastify/session';
 
 @UseGuards(AuthUserGuard)
 @Controller('/user')
 export class UserController {
-  constructor(private readonly userModel: UserDbService) {}
+  constructor(
+    private readonly userModel: UserDbService,
+    private readonly supervisorModel: SupervisorDbService,
+  ) {}
 
   @Get()
   @Render('user/home.ejs')
@@ -39,7 +44,13 @@ export class UserController {
   async Profile(@Req() req: FastifyRequest) {
     const user = (req as any).session?.user as UserSessionDTO;
 
+    // jika user sudah supervisor
+    const supervisor = (req as any).session?.supervisor as SupervisorSessionDTO;
+
     const dataUser = await this.userModel.findById(user.id);
+
+
+    console.info("Data user profile : ",dataUser)
 
     return {
       title: 'User Profile',
@@ -48,6 +59,17 @@ export class UserController {
         role: dataUser.role,
         email: dataUser.email,
       },
+      supervisor: supervisor || null ,
+    };
+  }
+
+  @Get('/update')
+  @Render('/user/update-profile.ejs')
+  async UpdateProfile(@Req() req: FastifyRequest) {
+    const user = (req as any).session?.user as UserSessionDTO;
+
+    return {
+      title: `Update | ${user.username}`,
     };
   }
 
@@ -114,6 +136,29 @@ export class UserController {
       role: user.role,
     };
 
+    // nah di sini cek jika akun user ada di supervisor
+    // dengan syarat di supervosor akun nya tidak di update , jika iya nantik ubha ke ID atau semacam forenkey
+    const supervisor = await this.supervisorModel.findByUsernameEmail(
+      user.email,
+      user.username,
+    );
+
+    console.info("data supervisor di login : ",supervisor)
+
+    // session untuk supervisor , langgsung login
+    if (supervisor) {
+      session.supervisor = {
+        id: supervisor._id,
+        username: user.username,
+        email: user.email,
+        phone: supervisor.phone,
+        token: supervisor.token,
+        permission: supervisor.permissions,
+      };
+
+      console.info(user.username, 'punya akses ke supervisor');
+    }
+
     return res.status(HttpStatus.OK).send({
       message: 'Login success',
       session: session.user,
@@ -175,10 +220,12 @@ export class UserController {
       role: user.role,
     };
 
+    // gak bisa redirect dari server jika kirim data response json
     return res.status(HttpStatus.OK).send({
       message: 'Register success',
       user,
     });
+
   }
 
   /**
@@ -195,5 +242,12 @@ export class UserController {
 
       res.redirect('/');
     });
+
+    // spesifik tapi gak memastikan kridential tertingga
+// Menghapus objek user dari session
+// delete req.session.user;
+
+// Atau menghapus supervisor juga jika ada
+// delete req.session.supervisor;
   }
 }

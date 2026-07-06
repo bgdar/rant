@@ -1,6 +1,6 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { UserSessionDTO } from 'src/dto/user.dto';
+// import { UserSessionDTO } from 'src/dto/user.dto';
 
 @Injectable()
 export class AuthUserGuard implements CanActivate {
@@ -11,7 +11,6 @@ export class AuthUserGuard implements CanActivate {
 
     // Cek URL yang sedang diakses saat ini
     const currentUrl = request.url;
-    console.info('url : ', currentUrl);
 
     // Jika user sedang menuju halaman signIn atau signUp, bypass Guard!
     if (
@@ -20,12 +19,10 @@ export class AuthUserGuard implements CanActivate {
     ) {
       return true;
     }
-    console.info('lewat');
 
     const sessionUser = (request as any).session?.user;
 
     if (!sessionUser) {
-      console.info('gak ada login');
       response.redirect('/user/signIn');
       return false;
     }

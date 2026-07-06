@@ -1,0 +1,406 @@
+<div
+  class="bg-white-secondary text-black-primary font-sans antialiased min-h-screen flex flex-col justify-between"
+  x-data="profileUpdateHandler()"
+>
+  <header
+    class="bg-black-primary text-white-primary shadow-md px-6 py-4 flex justify-between items-center"
+  >
+    <div class="flex items-center space-x-3">
+      <div class="bg-main-primary text-white-primary p-2 rounded-lg">
+        <i class="fas fa-user-cog text-xl"></i>
+      </div>
+      <div>
+        <h1 class="text-lg font-bold tracking-wide">User Settings</h1>
+        <p class="text-xs text-gray-accent">Personal Profile & Security</p>
+      </div>
+    </div>
+    <div class="flex items-center space-x-4">
+      <a
+        href="/user/profile"
+        class="text-xs text-gray-accent hover:text-white-primary transition"
+      >
+        <i class="fas fa-arrow-left mr-1"></i> Back
+      </a>
+    </div>
+  </header>
+
+  <main class="flex-grow p-4 md:p-8 max-w-4xl w-full mx-auto">
+    <div
+      class="bg-white-primary rounded-xl shadow-lg border border-white-accent overflow-hidden grid grid-cols-1 md:grid-cols-4"
+    >
+      <div
+        class="p-6 bg-white-secondary/50 border-r border-white-accent flex flex-col items-center md:items-start gap-6"
+      >
+        <div
+          class="text-center md:text-left flex flex-col items-center md:items-start w-full border-b border-white-accent pb-5"
+        >
+          <div
+            class="w-20 h-20 rounded-full bg-black-secondary border-2 border-main-primary flex items-center justify-center text-white-primary text-2xl font-black shadow-md overflow-hidden mb-3"
+          >
+            <template x-if="form.avatar">
+              <img
+                :src="form.avatar"
+                alt="Avatar"
+                class="w-full h-full object-cover"
+                @error="form.avatar = ''"
+              />
+            </template>
+            <template x-if="!form.avatar">
+              <span x-text="getInitials(form.fullName)"></span>
+            </template>
+          </div>
+          <h2
+            class="text-sm font-bold text-black-primary truncate max-w-full"
+            x-text="form.fullName || 'User Name'"
+          ></h2>
+          <p
+            class="text-[11px] text-gray-secondary uppercase font-bold tracking-wider"
+            x-text="form.role"
+          ></p>
+        </div>
+
+        <nav class="w-full space-y-1">
+          <button
+            @click="currentSubTab = 'general'"
+            :class="currentSubTab === 'general' ? 'bg-black-primary text-white-primary' : 'text-gray-secondary hover:bg-white-accent hover:text-black-primary'"
+            class="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-xs font-semibold transition"
+          >
+            <i class="fas fa-id-card w-4"></i> <span>Profil Umum</span>
+          </button>
+          <button
+            @click="currentSubTab = 'security'"
+            :class="currentSubTab === 'security' ? 'bg-black-primary text-white-primary' : 'text-gray-secondary hover:bg-white-accent hover:text-black-primary'"
+            class="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-xs font-semibold transition"
+          >
+            <i class="fas fa-shield-alt w-4"></i> <span>Keamanan Pasword</span>
+          </button>
+        </nav>
+      </div>
+
+      <div class="md:col-span-3 p-6 md:p-8">
+        <div
+          x-show="alert.show"
+          x-transition
+          x-text="alert.message"
+          :class="alert.type === 'success' ? 'bg-green-100 text-green-700 border-green-300' : 'bg-main-muted text-main-primary border-main-accent/20'"
+          class="mb-6 p-4 rounded-xl text-xs font-medium border"
+        ></div>
+
+        <div x-show="currentSubTab === 'general'" x-transition>
+          <div class="mb-6">
+            <h3 class="text-base font-bold text-black-primary">
+              Informasi Personal
+            </h3>
+            <p class="text-xs text-gray-secondary">
+              Perbarui data kontak publik dan detail profil dasar Anda.
+            </p>
+          </div>
+
+          <form @submit.prevent="submitGeneralInfo" class="space-y-4 text-xs">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block font-semibold text-black-accent mb-2"
+                  >Nama Lengkap</label
+                >
+                <input
+                  type="text"
+                  x-model="form.fullName"
+                  required
+                  class="w-full px-3 py-2 bg-white-secondary border border-white-muted rounded-lg focus:outline-none focus:border-main-primary transition"
+                />
+              </div>
+              <div>
+                <label class="block font-semibold text-black-accent mb-2"
+                  >Username (Read-Only)</label
+                >
+                <input
+                  type="text"
+                  x-model="form.username"
+                  disabled
+                  class="w-full px-3 py-2 bg-white-accent border border-white-muted text-gray-secondary rounded-lg cursor-not-allowed"
+                />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block font-semibold text-black-accent mb-2"
+                  >Alamat Email</label
+                >
+                <input
+                  type="email"
+                  x-model="form.email"
+                  required
+                  class="w-full px-3 py-2 bg-white-secondary border border-white-muted rounded-lg focus:outline-none focus:border-main-primary transition"
+                />
+              </div>
+              <div>
+                <label class="block font-semibold text-black-accent mb-2"
+                  >Nomor Telepon</label
+                >
+                <input
+                  type="text"
+                  x-model="form.phone"
+                  placeholder="08xxxxxxxxxx"
+                  class="w-full px-3 py-2 bg-white-secondary border border-white-muted rounded-lg focus:outline-none focus:border-main-primary transition"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label class="block font-semibold text-black-accent mb-2"
+                >URL Foto Profil / Avatar</label
+              >
+              <input
+                type="url"
+                x-model="form.avatar"
+                placeholder="https://example.com/foto-anda.jpg"
+                class="w-full px-3 py-2 bg-white-secondary border border-white-muted rounded-lg focus:outline-none focus:border-main-primary transition"
+              />
+            </div>
+
+            <div>
+              <label class="block font-semibold text-black-accent mb-2"
+                >Alamat Lengkap</label
+              >
+              <textarea
+                x-model="form.address"
+                rows="3"
+                placeholder="Jl. Ketapang No. 12..."
+                class="w-full px-3 py-2 bg-white-secondary border border-white-muted rounded-lg focus:outline-none focus:border-main-primary transition"
+              ></textarea>
+            </div>
+
+            <div class="flex justify-end pt-4 border-t border-white-accent">
+              <button
+                type="submit"
+                :disabled="loading"
+                class="px-5 py-2 bg-black-primary hover:bg-main-primary text-white-primary font-bold rounded-lg shadow transition flex items-center gap-1.5"
+              >
+                <i class="fas fa-save" x-show="!loading"></i>
+                <i class="fas fa-spinner animate-spin" x-show="loading"></i>
+                Simpan Profil
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div x-show="currentSubTab === 'security'" x-transition>
+          <div class="mb-6">
+            <h3 class="text-base font-bold text-black-primary">
+              Ubah Kata Sandi
+            </h3>
+            <p class="text-xs text-gray-secondary">
+              Pastikan Anda menggunakan kata sandi yang kuat demi keamanan
+              kredensial akun.
+            </p>
+          </div>
+
+          <form @submit.prevent="submitSecurityInfo" class="space-y-4 text-xs">
+            <div>
+              <label class="block font-semibold text-black-accent mb-2"
+                >Password Saat Ini (Current Password)</label
+              >
+              <div class="relative">
+                <input
+                  :type="showPass.old ? 'text' : 'password'"
+                  x-model="security.oldPassword"
+                  required
+                  class="w-full pl-3 pr-10 py-2 bg-white-secondary border border-white-muted rounded-lg focus:outline-none focus:border-main-primary transition"
+                />
+                <button
+                  type="button"
+                  @click="showPass.old = !showPass.old"
+                  class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-secondary hover:text-black-primary"
+                >
+                  <i
+                    class="fas"
+                    :class="showPass.old ? 'fa-eye-slash' : 'fa-eye'"
+                  ></i>
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <label class="block font-semibold text-black-accent mb-2"
+                >Password Baru (Minimal 8 Karakter)</label
+              >
+              <div class="relative">
+                <input
+                  :type="showPass.new ? 'text' : 'password'"
+                  x-model="security.newPassword"
+                  required
+                  minlength="8"
+                  class="w-full pl-3 pr-10 py-2 bg-white-secondary border border-white-muted rounded-lg focus:outline-none focus:border-main-primary transition"
+                />
+                <button
+                  type="button"
+                  @click="showPass.new = !showPass.new"
+                  class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-secondary hover:text-black-primary"
+                >
+                  <i
+                    class="fas"
+                    :class="showPass.new ? 'fa-eye-slash' : 'fa-eye'"
+                  ></i>
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <label class="block font-semibold text-black-accent mb-2"
+                >Konfirmasi Password Baru</label
+              >
+              <div class="relative">
+                <input
+                  :type="showPass.confirm ? 'text' : 'password'"
+                  x-model="security.confirmPassword"
+                  required
+                  minlength="8"
+                  class="w-full pl-3 pr-10 py-2 bg-white-secondary border border-white-muted rounded-lg focus:outline-none focus:border-main-primary transition"
+                />
+                <button
+                  type="button"
+                  @click="showPass.confirm = !showPass.confirm"
+                  class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-secondary hover:text-black-primary"
+                >
+                  <i
+                    class="fas"
+                    :class="showPass.confirm ? 'fa-eye-slash' : 'fa-eye'"
+                  ></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="flex justify-end pt-4 border-t border-white-accent">
+              <button
+                type="submit"
+                :disabled="loading"
+                class="px-5 py-2 bg-main-primary hover:bg-main-secondary text-white-primary font-bold rounded-lg shadow transition flex items-center gap-1.5"
+              >
+                <i class="fas fa-key" x-show="!loading"></i>
+                <i class="fas fa-spinner animate-spin" x-show="loading"></i>
+                Update Password
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer
+    class="bg-black-secondary text-gray-primary text-center py-3 text-xs border-t border-black-accent"
+  >
+    &copy; 2026 Admin Panel — Account Self Care Settings. All rights reserved.
+  </footer>
+</div>
+
+<script>
+  function profileUpdateHandler() {
+    return {
+      currentSubTab: 'general',
+      loading: false,
+
+      // State visibility password intip
+      showPass: {
+        old: false,
+        new: false,
+        confirm: false,
+      },
+
+      // Representasi data profile user yang didapat saat login session
+      form: {
+        fullName: 'Supriyadi Putra',
+        username: 'supriyadi_99',
+        email: 'supriyadi@company.com',
+        phone: '08129481223',
+        avatar: '', // Isi link url string jika ingin test gambar default
+        address: 'Jl. Jenderal Sudirman No. 42, Jakarta Pusat',
+        role: 'Supervisor Staf',
+      },
+
+      // Input penampung khusus perubahan password
+      security: {
+        oldPassword: '',
+        newPassword: '',
+        confirmPassword: '',
+      },
+
+      alert: {
+        show: false,
+        type: 'error',
+        message: '',
+      },
+
+      setAlert(message, status = 'error') {
+        this.alert.show = true;
+        this.alert.message = message;
+        this.alert.type = status;
+
+        // Auto dismiss alert setelah 3 detik
+        setTimeout(() => (this.alert.show = false), 3000);
+      },
+
+      // Membuat inisial nama jika avatar kosong (Contoh: "Supriyadi Putra" -> "SP")
+      getInitials(name) {
+        if (!name) return 'U';
+        const parts = name.split(' ');
+        return parts
+          .map((p) => p[0])
+          .join('')
+          .toUpperCase()
+          .slice(0, 2);
+      },
+
+      // Submit 1: Handler Update Informasi Umum Profile
+      async submitGeneralInfo() {
+        this.loading = true;
+        try {
+          console.log('Mengirim payload update info umum ke API:', this.form);
+
+          // Simulasi delay response HTTP fetch ke server
+          await new Promise((resolve) => setTimeout(resolve, 800));
+
+          this.setAlert('Profil Anda berhasil diperbarui!', 'success');
+        } catch (err) {
+          this.setAlert('Gagal memperbarui data profil.');
+        } finally {
+          this.loading = false;
+        }
+      },
+
+      // Submit 2: Handler Perubahan Password Akun
+      async submitSecurityInfo() {
+        // Cek kecocokan password baru & konfirmasi
+        if (this.security.newPassword !== this.security.confirmPassword) {
+          return this.setAlert(
+            'Konfirmasi password baru tidak cocok, silakan periksa kembali.',
+          );
+        }
+
+        this.loading = true;
+        try {
+          console.log(
+            'Mengirim payload update password ke API:',
+            this.security,
+          );
+
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+
+          this.setAlert('Password berhasil diubah!', 'success');
+
+          // Kosongkan kembali form password setelah sukses
+          this.security.oldPassword = '';
+          this.security.newPassword = '';
+          this.security.confirmPassword = '';
+        } catch (err) {
+          this.setAlert(
+            'Gagal mengubah kata sandi, periksa password lama Anda.',
+          );
+        } finally {
+          this.loading = false;
+        }
+      },
+    };
+  }
+</script>

@@ -1,0 +1,259 @@
+<!-- Welcome Banner -->
+<div
+  class="bg-white-primary p-6 rounded-xl shadow-sm border border-white-accent flex flex-col md:flex-row justify-between items-start md:items-center gap-4"
+>
+  <div>
+    <h2 class="text-xl md:text-2xl font-bold text-black-primary">
+      Selamat Datang Kembali, Supervisor 👋
+    </h2>
+    <p class="text-sm text-black-muted mt-1">
+      Berikut adalah ringkasan performa sistem dan manajemen tim Anda hari ini.
+    </p>
+  </div>
+  <!-- Quick Action Button -->
+  <a
+    href="create-user.html"
+    class="bg-main-primary hover:bg-main-secondary text-white-primary font-semibold text-sm px-4 py-2.5 rounded-lg shadow transition duration-200 flex items-center gap-2"
+  >
+    <i class="fas fa-plus"></i> Tambah User Baru
+  </a>
+</div>
+
+<!-- STATS CARDS GRID -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+  <!-- Card 1 -->
+  <div
+    class="bg-white-primary p-5 rounded-xl shadow-sm border border-white-accent flex items-center justify-between"
+  >
+    <div class="space-y-1">
+      <p
+        class="text-xs font-semibold uppercase text-gray-secondary tracking-wider"
+      >
+        Total Operator
+      </p>
+      <h3 class="text-2xl font-bold text-black-primary">24</h3>
+      <p class="text-[11px] text-green-6xl font-medium">
+        <i class="fas fa-caret-up mr-1"></i> +3 baru minggu ini
+      </p>
+    </div>
+    <div
+      class="w-12 h-12 rounded-lg bg-main-muted text-main-primary flex items-center justify-center text-xl"
+    >
+      <i class="fas fa-users-cog"></i>
+    </div>
+  </div>
+
+  <!-- Card 2 -->
+  <div
+    class="bg-white-primary p-5 rounded-xl shadow-sm border border-white-accent flex items-center justify-between"
+  >
+    <div class="space-y-1">
+      <p
+        class="text-xs font-semibold uppercase text-gray-secondary tracking-wider"
+      >
+        User Aktif
+      </p>
+      <h3 class="text-2xl font-bold text-black-primary">18</h3>
+      <p class="text-[11px] text-gray-secondary">
+        <span
+          class="inline-block w-2 h-2 rounded-full bg-green-500 mr-1 animate-pulse"
+        ></span>
+        Sedang online
+      </p>
+    </div>
+    <div
+      class="w-12 h-12 rounded-lg bg-gray-muted text-black-secondary flex items-center justify-center text-xl"
+    >
+      <i class="fas fa-user-check"></i>
+    </div>
+  </div>
+
+  <!-- Card 3 -->
+  <div
+    class="bg-white-primary p-5 rounded-xl shadow-sm border border-white-accent flex items-center justify-between"
+  >
+    <div class="space-y-1">
+      <p
+        class="text-xs font-semibold uppercase text-gray-secondary tracking-wider"
+      >
+        Total Laporan
+      </p>
+      <h3 class="text-2xl font-bold text-black-primary">142</h3>
+      <p class="text-[11px] text-main-secondary font-medium">
+        <i class="fas fa-exclamation-circle mr-1"></i> 5 Butuh Review
+      </p>
+    </div>
+    <div
+      class="w-12 h-12 rounded-lg bg-white-accent text-black-accent flex items-center justify-center text-xl"
+    >
+      <i class="fas fa-file-alt"></i>
+    </div>
+  </div>
+
+  <!-- Card 4 -->
+  <div
+    class="bg-white-primary p-5 rounded-xl shadow-sm border border-white-accent flex items-center justify-between"
+  >
+    <div class="space-y-1">
+      <p
+        class="text-xs font-semibold uppercase text-gray-secondary tracking-wider"
+      >
+        Sistem Status
+      </p>
+      <h3 class="text-lg font-bold text-green-6xl text-black-primary">
+        Normal / Aman
+      </h3>
+      <p class="text-[11px] text-gray-secondary">Uptime 99.9%</p>
+    </div>
+    <div
+      class="w-12 h-12 rounded-lg bg-black-muted text-white-primary flex items-center justify-center text-xl"
+    >
+      <i class="fas fa-server"></i>
+    </div>
+  </div>
+</div>
+
+<!-- DATA SECTION GRID -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+  <!-- Table: Aktivitas Pengguna Terbaru (2/3 width) -->
+  <div
+    class="lg:col-span-2 bg-white-primary rounded-xl shadow-sm border border-white-accent overflow-hidden"
+  >
+    <div
+      class="p-5 border-b border-white-accent flex justify-between items-center bg-white-primary"
+    >
+      <h4 class="font-bold text-black-secondary">
+        <i class="fas fa-bolt text-main-primary mr-2"></i> Aktivitas Pengguna
+        Terbaru
+      </h4>
+      <button
+        class="text-xs font-semibold text-main-primary hover:text-main-secondary transition"
+      >
+        Lihat Semua <i class="fas fa-arrow-right ml-0.5"></i>
+      </button>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr
+            class="bg-white-secondary border-b border-white-accent text-xs font-semibold text-gray-secondary uppercase"
+          >
+            <th class="p-4">User</th>
+            <th class="p-4">Role</th>
+            <th class="p-4">Aktivitas</th>
+            <th class="p-4 text-right">Waktu</th>
+          </tr>
+        </thead>
+        <tbody class="text-sm divide-y divide-white-accent">
+          <tr class="hover:bg-white-secondary/50">
+            <td class="p-4 font-medium text-black-primary">Ahmad Fauzi</td>
+            <td class="p-4">
+              <span
+                class="px-2 py-0.5 text-xs rounded bg-white-accent text-black-accent"
+                >Operator</span
+              >
+            </td>
+            <td class="p-4 text-black-muted">Input data inventaris baru</td>
+            <td class="p-4 text-right text-xs text-gray-secondary">
+              2 menit yang lalu
+            </td>
+          </tr>
+          <tr class="hover:bg-white-secondary/50">
+            <td class="p-4 font-medium text-black-primary">Siti Aminah</td>
+            <td class="p-4">
+              <span
+                class="px-2 py-0.5 text-xs rounded bg-main-muted text-main-secondary font-medium"
+                >Analyst</span
+              >
+            </td>
+            <td class="p-4 text-black-muted">Mengekspor laporan bulanan</td>
+            <td class="p-4 text-right text-xs text-gray-secondary">
+              15 menit yang lalu
+            </td>
+          </tr>
+          <tr class="hover:bg-white-secondary/50">
+            <td class="p-4 font-medium text-black-primary">Rian Hidayat</td>
+            <td class="p-4">
+              <span
+                class="px-2 py-0.5 text-xs rounded bg-white-accent text-black-accent"
+                >Operator</span
+              >
+            </td>
+            <td class="p-4 text-black-muted">Mengubah password akun</td>
+            <td class="p-4 text-right text-xs text-gray-secondary">
+              1 jam yang lalu
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Info Card / Shortcut Panel (1/3 width) -->
+  <div
+    class="bg-white-primary rounded-xl shadow-sm border border-white-accent p-5 space-y-4"
+  >
+    <h4
+      class="font-bold text-black-secondary border-b border-white-accent pb-3"
+    >
+      <i class="fas fa-sliders-h text-black-accent mr-2"></i> Kontrol Cepat
+    </h4>
+
+    <div class="space-y-2">
+      <a
+        href="create-user.html"
+        class="w-full flex items-center justify-between p-3 rounded-lg border border-white-accent hover:border-main-accent bg-white-secondary hover:bg-white-primary transition group"
+      >
+        <div class="flex items-center space-x-3">
+          <div
+            class="w-8 h-8 rounded bg-main-muted text-main-primary flex items-center justify-center"
+          >
+            <i class="fas fa-user-plus text-xs"></i>
+          </div>
+          <span
+            class="text-sm font-medium text-black-accent group-hover:text-black-primary"
+            >Registrasi User</span
+          >
+        </div>
+        <i class="fas fa-chevron-right text-xs text-gray-secondary"></i>
+      </a>
+
+      <a
+        href="#"
+        class="w-full flex items-center justify-between p-3 rounded-lg border border-white-accent hover:border-black-primary bg-white-secondary hover:bg-white-primary transition group"
+      >
+        <div class="flex items-center space-x-3">
+          <div
+            class="w-8 h-8 rounded bg-white-accent text-black-secondary flex items-center justify-center"
+          >
+            <i class="fas fa-file-download text-xs"></i>
+          </div>
+          <span
+            class="text-sm font-medium text-black-accent group-hover:text-black-primary"
+            >Unduh Log Sistem</span
+          >
+        </div>
+        <i class="fas fa-chevron-right text-xs text-gray-secondary"></i>
+      </a>
+    </div>
+    <div
+      class="bg-black-secondary text-white-secondary p-4 rounded-lg space-y-2"
+    >
+      <div
+        class="flex items-center space-x-2 text-main-accent text-xs font-bold uppercase tracking-wider"
+      >
+        <i class="fas fa-exclamation-triangle"></i>
+        <span>Tugas Supervisor</span>
+      </div>
+      <p class="text-xs text-gray-muted leading-relaxed">
+        Terdapat <strong>5 laporan operator</strong> yang belum Anda verifikasi
+        untuk penutupan buku kerja minggu ini.
+      </p>
+      <a
+        href="#"
+        class="inline-block text-[11px] font-bold text-white-primary underline hover:text-main-accent"
+        >Selesaikan Sekarang &rarr;</a
+      >
+    </div>
+  </div>
+</div>

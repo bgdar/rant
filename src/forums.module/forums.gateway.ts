@@ -10,7 +10,7 @@ import {
   ConnectedSocket,
 } from '@nestjs/websockets';
 import { Logger } from '@nestjs/common';
-
+import { ConfigService } from '@nestjs/config';
 import { Server, Socket } from 'socket.io';
 
 @WebSocketGateway({
@@ -21,23 +21,22 @@ import { Server, Socket } from 'socket.io';
 export class ForumsGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
-  /*
-   | SERVER
-   */
-
+  // SERVER
   @WebSocketServer()
   server: Server;
 
   private logger = new Logger('ForumsGateway');
 
+  constructor(private configService: ConfigService) {}
+
   afterInit() {
     this.logger.log('WebSocket Gateway Ready');
+    const port = this.configService.get<number>('WEBSOCKETPORT') || 3051;
+
+    this.server.attach(port);
   }
 
-  /*
-   | CONNECT
-   */
-
+  // CONNECT
   handleConnection(client: Socket) {
     this.logger.log(`Client connected: ${client.id}`);
 
@@ -46,17 +45,12 @@ export class ForumsGateway
     });
   }
 
-  /*
-   | DISCONNECT
-   */
-
+  // DISCONNECT
   handleDisconnect(client: Socket) {
     this.logger.log(`Client disconnected: ${client.id}`);
   }
 
-  /*
-   | JOIN FORUM ROOM
-   */
+  // JOIN FORUM ROOM
 
   @SubscribeMessage('joinRoom')
   handleJoinRoom(
@@ -78,10 +72,7 @@ export class ForumsGateway
     });
   }
 
-  /*
-   | CHAT MESSAGE
-   */
-
+  // CHAT MESSAGE
   @SubscribeMessage('message')
   async handleMessage(
     @MessageBody()
@@ -98,9 +89,7 @@ export class ForumsGateway
   ) {
     const { forumId, message } = payload;
 
-    /*
-     | BROADCAST TO ROOM
-     */
+    // BROADCAST TO ROOM
 
     this.server.to(forumId).emit('message', {
       forumId,
@@ -112,17 +101,12 @@ export class ForumsGateway
       time: new Date().toISOString(),
     });
 
-    /*
-     | LOG
-     */
+    // LOG
 
     this.logger.log(`Message in ${forumId}: ${message}`);
   }
 
-  /*
-   | TYPING EVENT (OPTIONAL)
-   */
-
+  // TYPING EVENT
   @SubscribeMessage('typing')
   handleTyping(
     @MessageBody()
@@ -141,10 +125,7 @@ export class ForumsGateway
     });
   }
 
-  /*
-   | LEAVE ROOM (OPTIONAL)
-   */
-
+  // LEAVE ROOM
   @SubscribeMessage('leaveRoom')
   handleLeaveRoom(
     @MessageBody()

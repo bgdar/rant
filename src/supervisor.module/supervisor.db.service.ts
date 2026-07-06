@@ -30,6 +30,8 @@ export class SupervisorDbService {
   ) {}
 
   /**
+   *   * Info :
+   * jangan gunakan type tapi langsung kembalikna aja document ynag di dapat sekarang ,
    * Membuat supervisor baru.
    */
   async create(data: Partial<Supervisor>) {
@@ -63,6 +65,8 @@ export class SupervisorDbService {
 
   /**
    * Get supervisor by ID.
+   *   * Info :
+   * jangan gunakan type tapi langsung kembalikna aja document ynag di dapat sekarang ,
    */
   async findById(id: string) {
     const supervisor = await this.supervisorModel
@@ -74,6 +78,18 @@ export class SupervisorDbService {
     }
 
     return supervisor;
+  }
+
+  /**
+   * find by username adn password
+   * Info :
+   * jangan gunakan type tapi langsung kembalikna aja document ynag di dapat sekarang ,
+   */
+  async findByUsernameEmail(email: string, username: string) {
+    return this.supervisorModel.findOne({
+      email,
+      username,
+    });
   }
 
   /**

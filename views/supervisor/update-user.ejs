@@ -1,0 +1,407 @@
+<div
+  class="bg-white-secondary text-black-primary font-sans antialiased min-h-screen flex items-center justify-center p-4 md:p-8"
+>
+  <div
+    class="bg-white-primary w-full max-w-3xl rounded-2xl shadow-xl border border-white-accent overflow-hidden"
+    x-data="signUpHandler('<%= username %>', '<%= email %>', <%= permissions || '[]' %>)"
+  >
+    <div
+      class="bg-black-primary text-white-primary p-6 md:p-8 border-b-4 border-main-primary relative"
+    >
+      <div
+        class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+      >
+        <div>
+          <span
+            class="text-xs font-bold text-main-accent uppercase tracking-widest bg-black-secondary px-2.5 py-1 rounded"
+          >
+            Account Modification
+          </span>
+          <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight mt-2">
+            Update Supervisor Account
+          </h1>
+          <p class="text-xs text-gray-accent mt-1">
+            Perbarui kredensial data, status otoritas, dan informasi profil
+            supervisor.
+          </p>
+        </div>
+        <div class="text-right hidden sm:block">
+          <i
+            class="fas fa-user-gear text-5xl text-white-accent/10 absolute right-8 top-8"
+          ></i>
+        </div>
+      </div>
+    </div>
+
+    <form
+      method="post"
+      action="/supervisor/"
+      @submit.prevent="submitUpdate"
+      class="p-6 md:p-8 space-y-8"
+    >
+      <div class="space-y-4">
+
+      <!-- Gak perlu di update password -->
+      <!--   <h3
+          class="text-xs font-bold uppercase tracking-wider text-main-primary flex items-center gap-2"
+        >
+          <i class="fas fa-key"></i> Kredensial Utama & Otentikasi
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        
+
+          <div>
+            <label class="block text-xs font-semibold text-black-accent mb-2"
+              >Password (Isi jika ingin diubah)</label
+            >
+            <div class="relative">
+              <span
+                class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-secondary text-xs"
+              >
+                <i class="fas fa-lock"></i>
+              </span>
+              <input
+                :type="form.showPassword ? 'text' : 'password'"
+                x-model="form.password"
+                class="w-full pl-9 pr-9 py-2 bg-white-secondary border border-white-muted rounded-lg text-xs focus:outline-none focus:border-main-primary transition"
+              />
+
+              <button
+                type="button"
+                @click="form.showPassword = !form.showPassword"
+                class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-secondary hover:text-black-primary text-xs"
+              >
+                <i
+                  class="fas"
+                  :class="form.showPassword ? 'fa-eye-slash' : 'fa-eye'"
+                ></i>
+              </button>
+            </div>
+
+          </div>
+          -->
+        </div>
+        <div
+        x-show="alert.show"
+        x-transition
+        x-text="alert.message"
+        :class="alert.type === 'success' ? 'bg-green-100 text-green-700 border-green-300' : 'bg-red-100 text-red-700 border-red-300'"
+        class="mt-3 px-4 py-3 rounded-xl text-sm font-medium border"
+        ></div>
+      </div>
+
+      <div class="space-y-4">
+        <h3
+          class="text-xs font-bold uppercase tracking-wider text-black-primary flex items-center gap-2 border-t border-white-accent pt-6"
+        >
+          <i class="fas fa-address-book"></i> Informasi Kontak & Profil
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-black-accent mb-2"
+              >Fulname</label
+            >
+            <div class="relative">
+              <span
+                class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-secondary text-xs"
+              >
+                <i class="fas fa-phone"></i>
+              </span>
+              <input
+                type="text"
+                x-model="form.fullname"
+                class="w-full pl-9 pr-4 py-2 bg-white-secondary border border-white-muted rounded-lg text-xs focus:outline-none focus:border-main-primary transition"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-black-accent mb-2"
+              >Nomor Telepon</label
+            >
+            <div class="relative">
+              <span
+                class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-secondary text-xs"
+              >
+                <i class="fas fa-phone"></i>
+              </span>
+              <input
+                type="text"
+                x-model="form.phone"
+                class="w-full pl-9 pr-4 py-2 bg-white-secondary border border-white-muted rounded-lg text-xs focus:outline-none focus:border-main-primary transition"
+              />
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-black-accent mb-2"
+              >URL Gambar Avatar</label
+            >
+            <div class="relative">
+              <span
+                class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-secondary text-xs"
+              >
+                <i class="fas fa-image"></i>
+              </span>
+              <input
+                type="text"
+                x-model="form.avatar"
+                placeholder="https://example.com/avatar.jpg"
+                class="w-full pl-9 pr-4 py-2 bg-white-secondary border border-white-muted rounded-lg text-xs focus:outline-none focus:border-main-primary transition"
+              />
+            </div>
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-black-accent mb-2"
+            >Alamat Rumah/Kantor</label
+          >
+          <div class="relative">
+            <span
+              class="absolute inset-y-0 left-0 flex items-center pl-3 pt-2 text-gray-secondary text-xs align-top"
+            >
+              <i class="fas fa-map-marker-alt"></i>
+            </span>
+            <textarea
+              x-model="form.address"
+              rows="2"
+              class="w-full pl-9 pr-4 py-2 bg-white-secondary border border-white-muted rounded-lg text-xs focus:outline-none focus:border-main-primary transition"
+            ></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="space-y-4 border-t border-white-accent pt-6">
+        <h3
+          class="text-xs font-bold uppercase tracking-wider text-gray-secondary flex items-center gap-2"
+        >
+          <i class="fas fa-sliders-h"></i> Status Otoritas Sistem
+        </h3>
+
+        <div
+          class="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-white-secondary p-4 rounded-xl border border-white-accent"
+        >
+          <div class="flex items-center justify-between sm:justify-start gap-4">
+            <span class="text-xs font-semibold text-black-accent"
+              >Status Akun:</span
+            >
+            <button
+              type="button"
+              @click="form.isActive = !form.isActive"
+              :class="form.isActive ? 'bg-black-primary' : 'bg-gray-primary'"
+              class="relative inline-flex h-5 w-10 shrink-0 cursor-pointer rounded-full transition-colors duration-200 ease-in-out focus:outline-none"
+            >
+              <span
+                :class="form.isActive ? 'translate-x-5' : 'translate-x-1'"
+                class="pointer-events-none inline-block h-3 w-3 transform rounded-full bg-white-primary shadow mt-1 transition duration-200 ease-in-out"
+              ></span>
+            </button>
+            <span
+              x-text="form.isActive ? 'Active' : 'Inactive'"
+              class="text-[11px] font-bold"
+              :class="form.isActive ? 'text-black-primary' : 'text-gray-secondary'"
+            ></span>
+          </div>
+
+          <div class="flex items-center justify-between sm:justify-start gap-4">
+            <span class="text-xs font-semibold text-black-accent"
+              >Verified Email:</span
+            >
+            <button
+              type="button"
+              @click="form.isVerified = !form.isVerified"
+              :class="form.isVerified ? 'bg-black-accent' : 'bg-gray-primary'"
+              class="relative inline-flex h-5 w-10 shrink-0 cursor-pointer rounded-full transition-colors duration-200 ease-in-out focus:outline-none"
+            >
+              <span
+                :class="form.isVerified ? 'translate-x-5' : 'translate-x-1'"
+                class="pointer-events-none inline-block h-3 w-3 transform rounded-full bg-white-primary shadow mt-1 transition duration-200 ease-in-out"
+              ></span>
+            </button>
+            <span
+              x-text="form.isVerified ? 'Verified' : 'Unverified'"
+              class="text-[11px] font-bold"
+              :class="form.isVerified ? 'text-black-primary' : 'text-gray-secondary'"
+            ></span>
+          </div>
+
+          <div class="flex items-center justify-between sm:justify-start gap-4">
+            <span class="text-xs font-semibold text-black-accent"
+              >Banned State:</span
+            >
+            <button
+              type="button"
+              @click="form.isBanned = !form.isBanned"
+              :class="form.isBanned ? 'bg-main-primary' : 'bg-gray-primary'"
+              class="relative inline-flex h-5 w-10 shrink-0 cursor-pointer rounded-full transition-colors duration-200 ease-in-out focus:outline-none"
+            >
+              <span
+                :class="form.isBanned ? 'translate-x-5' : 'translate-x-1'"
+                class="pointer-events-none inline-block h-3 w-3 transform rounded-full bg-white-primary shadow mt-1 transition duration-200 ease-in-out"
+              ></span>
+            </button>
+            <span
+              x-text="form.isBanned ? 'BANNED' : 'Safe'"
+              class="text-[11px] font-bold"
+              :class="form.isBanned ? 'text-main-primary' : 'text-gray-secondary'"
+            ></span>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-black-accent mb-2"
+            >Hak Akses Terdaftar (Permissions)</label
+          >
+          <div class="flex flex-wrap gap-1.5">
+            <template x-for="perm in form.permissions">
+              <span
+                class="px-2.5 py-1 bg-white-accent border border-white-muted text-black-accent text-[10px] font-bold rounded-md uppercase tracking-wider"
+              >
+                <i class="fas fa-check-circle text-main-secondary mr-1"></i>
+                <span x-text="perm"></span>
+              </span>
+            </template>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="bg-main-muted/30 p-4 rounded-xl border border-white-accent grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-black-accent"
+      >
+        <div>
+          <span
+            class="block font-semibold text-gray-secondary text-[11px] uppercase tracking-wide"
+            >Role Sistem</span
+          >
+          <span
+            class="font-bold text-black-primary flex items-center gap-1 mt-0.5"
+          >
+            <i class="fas fa-user-shield text-main-primary text-[10px]"></i>
+            <span x-text="form.role"></span>
+          </span>
+        </div>
+        <div>
+          <span
+            class="block font-semibold text-gray-secondary text-[11px] uppercase tracking-wide"
+            >Last Login Activity</span
+          >
+          <span
+            class="font-medium text-black-secondary block mt-0.5"
+            x-text="form.lastLogin || 'No activity logged'"
+          ></span>
+        </div>
+        <div class="overflow-hidden">
+          <span
+            class="block font-semibold text-gray-secondary text-[11px] uppercase tracking-wide"
+            >Active Session Token</span
+          >
+          <span
+            class="font-mono text-[10px] text-gray-secondary truncate block mt-0.5"
+            x-text="form.token"
+            :title="form.token"
+          ></span>
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-3 border-t border-white-accent pt-6">
+        <a href="/user/profile">
+          <button
+            type="reset"
+            class="px-4 py-2 bg-gray-primary hover:bg-gray-secondary text-black-accent font-semibold text-xs rounded-xl transition"
+          >
+            <i class="fas fa-undo mr-1"></i> Back
+          </button>
+        </a>
+
+        <button
+          type="reset"
+          class="px-4 py-2 bg-white-accent hover:bg-gray-muted text-black-accent font-semibold text-xs rounded-xl transition"
+        >
+          <i class="fas fa-undo mr-1"></i> Reset Form
+        </button>
+        <button
+          type="submit"
+          class="px-5 py-2 bg-main-primary hover:bg-main-secondary text-white-primary font-bold text-xs rounded-xl shadow transition"
+        >
+          <i class="fas fa-save mr-1"></i> Simpan Perubahan
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    function signUpHandler(username, email, permissions) {
+      console.info('permisioan : ', permissions);
+      return {
+        loading: false,
+        form: {
+         // showPassword: false,
+          fullName: '',
+          username: username,
+          email: email,
+       //   password: '',
+          permissions: permissions,
+          role: 'Supervisor',
+          isActive: true,
+          isVerified: true,
+          isBanned: false,
+          token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+          phone: '',
+          address: '',
+          avatar: '',
+          lastLogin: 'Monday, 23:40 PM', // dummy placeholder agar x-text tidak kosong
+        },
+
+        alert: {
+          show: false,
+          type: 'error',
+          message: '',
+        },
+
+        setAlert(message, status = 'error') {
+          this.alert.show = true;
+          this.alert.message = message;
+          this.alert.type = status;
+        },
+
+        // Handler validasi minimal (karena password opsional saat update data)
+        validateForm() {
+          return true;
+        },
+
+        async submitUpdate() {
+          if (!this.validateForm()) return;
+
+          try {
+            this.loading = true;
+
+            const req = await fetch('/supervisor/update-user', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(this.form),
+            });
+
+            const res = await req.json();
+
+            if (!req.ok) {
+              return this.setAlert(res.message || 'Update failed');
+            }
+
+            this.setAlert(res.message || 'Update success', 'success');
+
+            // Timeout redirect setelah sukses
+            setTimeout(() => {
+              window.location.href = '/user';
+            }, 1200);
+          } catch (error) {
+            console.error(error);
+            this.setAlert('Server error, please try again');
+          } finally {
+            this.loading = false;
+          }
+        },
+      };
+    }
+  </script>
+</div>

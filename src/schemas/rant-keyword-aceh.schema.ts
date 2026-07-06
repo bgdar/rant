@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
-import { RantKeywordDTO } from 'src/dto/dataDTO';
+import { RantKeywordDTO } from 'src/dto/data.dto';
 
 @Schema()
 export class RantKeywordAceh implements RantKeywordDTO {

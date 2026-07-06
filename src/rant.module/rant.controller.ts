@@ -38,4 +38,7 @@ export class RantController {
       console.info('hasil prediction : ', prediction);
     }
   }
+
+
+  // --- EXPORT MODEL Api data agar bisa di gunakan di   aplikasi lain---------- 
 }

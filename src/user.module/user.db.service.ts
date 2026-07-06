@@ -23,16 +23,8 @@ export class UserDbService {
   /**
    * Membuat user baru.
    * @throws BadRequestException
-   * Akan dilempar jika email sudah digunakan
-   *
-   * Example:
-   * ```ts
-   * await userDbService.create({
-   *   username: 'zero',
-   *   email: 'zero@gmail.com',
-   *   password: '123456',
-   * });
-   * ```
+   * Info :
+   * jangan gunakan type tapi langsung kembalikna aja document ynag di dapat sekarang ,
    */
   async create(data: CreateUserDTO) {
     const exist = await this.userModel.findOne({
@@ -110,12 +102,10 @@ export class UserDbService {
 
   /**
    * Mengambil semua user yang aktif.
-   *
    * Filter:
    * ```ts
    * isActive: true
    * ```
-   *
    * @returns Array active users
    */
   async findActiveUsers() {
@@ -126,7 +116,6 @@ export class UserDbService {
 
   /**
    * Search user berdasarkan username.
-   *
    * Menggunakan MongoDB regex search.
    *
    * Options:
@@ -152,12 +141,6 @@ export class UserDbService {
 
   /**
    * Update data user.
-   *
-   * Menggunakan:
-   * ```ts
-   * findByIdAndUpdate()
-   * ```
-   *
    * Options:
    * - new: true
    *   -> mengembalikan data terbaru
@@ -169,12 +152,6 @@ export class UserDbService {
    *
    * @throws NotFoundException
    *
-   * Example:
-   * ```ts
-   * await userDbService.update(id, {
-   *   username: 'new-name',
-   * });
-   * ```
    */
   async update(id: string, data: UpdateUserDTO): Promise<UserDTO> {
     const user = await this.userModel.findByIdAndUpdate(id, data, {
@@ -322,11 +299,6 @@ export class UserDbService {
    * @returns Message delete success
    *
    * @throws NotFoundException
-   *
-   * Example:
-   * ```ts
-   * await userDbService.delete(id);
-   * ```
    */
   async delete(id: string) {
     const user = await this.userModel.findByIdAndDelete(id);
@@ -349,10 +321,6 @@ export class UserDbService {
    * ```
    *
    * @returns MongoDB delete result
-   *
-   * Example:
-   * ```ts
-   * await userDbService.deleteAllInactiveUsers();
    * ```
    */
   // async deleteAllInactiveUsers() : Promise< {

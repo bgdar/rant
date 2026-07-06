@@ -5,7 +5,7 @@ services:
     container_name: mongodb-rant
     restart: always
     ports:
-      - "27017:27017"
+      - '27017:27017'
     environment:
       MONGO_INITDB_ROOT_USERNAME: dar
       MONGO_INITDB_ROOT_PASSWORD: dar-rant
@@ -14,7 +14,7 @@ services:
     networks:
       - rant-network
     healthcheck:
-      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      test: ['CMD', 'mongosh', '--eval', "db.adminCommand('ping')"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -24,47 +24,49 @@ services:
     container_name: mongo-express-rant
     restart: always
     ports:
-      - "8081:8081"
+      - '8081:8081'
     environment:
       # Koneksi ke MongoDB
       ME_CONFIG_MONGODB_SERVER: mongodb-rant
       ME_CONFIG_MONGODB_PORT: 27017
-      
+
       # Kredensial Admin untuk akses ke DB
       ME_CONFIG_MONGODB_ADMINUSERNAME: dar
       ME_CONFIG_MONGODB_ADMINPASSWORD: dar-rant
       ME_CONFIG_MONGODB_AUTH_DATABASE: admin
-      
+
       # Login untuk masuk ke Dashboard Mongo Express (Web UI)
       # Ganti sesuai keinginan agar tidak sembarang orang bisa buka port 8081
       ME_CONFIG_BASICAUTH_USERNAME: admin
       ME_CONFIG_BASICAUTH_PASSWORD: dar-rant
-      
-      ME_CONFIG_MONGODB_ENABLE_ADMIN: "true"
+
+      ME_CONFIG_MONGODB_ENABLE_ADMIN: 'true'
     depends_on:
       mongodb-rant:
         condition: service_healthy
     networks:
       - rant-network
 
+  # RabitMQ yang akan di gunakan di project ini, untuk komunikasi ( message broken) antar aplikais , alasannya cek READMe.md
+  rabbitmq:
+    image: rabbitmq:4.3.0-management-alpine
+    container_name: rabbitmq-rant
+    restart: always
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    ports:
+      - '5672:5672' # AMQP protocol port
+      - '15672:15672' # Management UI port
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - rant-network
 
-  # RabitMQ yang akan di gunakan di project ini, untuk komunikasi ( message broken) antar aplikais , alasannya cek READMe.md 
-  # services:
-  # rabbitmq:
-  #   image: rabbitmq:4.3.0-management-alpine
-  #   container_name: rabbitmq-rant
-  #   restart: always
-  #   environment:
-  #     RABBITMQ_DEFAULT_USER: guest
-  #     RABBITMQ_DEFAULT_PASS: guest
-  #   ports:
-  #     - "5672:5672"   # AMQP protocol port
-  #     - "15672:15672" # Management UI port
-  #   volumes:
-  #     - rabbitmq_data:./data/var/lib/rabbitmq
-  #   networks:
-  #     - rant-network
-  #
 networks:
   rant-network:
     driver: bridge
+
+# f=volume yang di daftarkan
+volumes:
+  rabbitmq_data:

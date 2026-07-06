@@ -5,7 +5,6 @@
   <div class="w-full max-w-md">
     <!-- Card -->
     <div class="bg-light border border-gray-200 rounded-3xl shadow-2xl p-8">
-      <!-- Logo -->
       <div class="flex justify-center mb-8">
         <div
           class="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center shadow-lg"
@@ -20,6 +19,7 @@
         <p class="text-graysoft mt-2">Sign in to continue your account</p>
       </div>
 
+      <!-- ini dia car nampilin message nya ya bgdar -->
       <div
         x-show="alert.show"
         x-transition
@@ -64,9 +64,12 @@
               @click="showPassword = !showPassword"
               class="absolute right-4 top-1/2 -translate-y-1/2 text-graysoft hover:text-dark transition"
             >
-              <span x-show="!showPassword"> 👁️ </span>
-
-              <span x-show="showPassword"> 🙈 </span>
+              <span x-show="!showPassword">
+                <i class="fa-solid fa-eye"></i>
+              </span>
+              <span x-show="showPassword">
+                <i class="fa-solid fa-eye-slash"></i>
+              </span>
             </button>
           </div>
         </div>
@@ -111,6 +114,12 @@
           class="border border-gray-300 py-3 rounded-xl font-medium hover:bg-gray-100 transition"
         >
           Google
+        </button>
+
+        <button
+          class="border border-gray-300 py-3 rounded-xl font-medium hover:bg-gray-100 transition"
+        >
+          GitHub
         </button>
       </div>
 

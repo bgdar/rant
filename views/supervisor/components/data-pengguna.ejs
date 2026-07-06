@@ -1,0 +1,403 @@
+<div
+  class="bg-white-secondary text-black-primary font-sans antialiased min-h-screen flex flex-col justify-between"
+  x-data="userManagementHandler()"
+>
+  <header
+    class="bg-black-primary text-white-primary shadow-md px-6 py-4 flex justify-between items-center"
+  >
+    <div class="flex items-center space-x-3">
+      <div class="bg-main-primary text-white-primary p-2 rounded-lg">
+        <i class="fas fa-users-cog text-xl"></i>
+      </div>
+      <div>
+        <h1 class="text-lg font-bold tracking-wide">Supervisor Panel</h1>
+        <p class="text-xs text-gray-accent">User Account Directory</p>
+      </div>
+    </div>
+    <div class="flex items-center space-x-4">
+      <span class="text-sm text-white-secondary hidden md:inline"
+        >Logged as: <strong>Admin Supervisor</strong></span
+      >
+      <div
+        class="w-10 h-10 rounded-full bg-main-secondary flex items-center justify-center text-white-primary font-bold border-2 border-main-accent"
+      >
+        AS
+      </div>
+    </div>
+  </header>
+
+  <main
+    class="flex-grow p-4 md:p-8 max-w-7xl w-full mx-auto relative overflow-hidden"
+  >
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+      <div
+        class="lg:col-span-2 bg-white-primary rounded-xl shadow-lg border border-white-accent overflow-hidden"
+      >
+        <div
+          class="bg-gradient-to-r from-black-secondary to-black-accent p-6 text-white-primary flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+        >
+          <div>
+            <h2 class="text-xl font-bold flex items-center gap-2">
+              <i class="fas fa-folder text-main-accent"></i> Direktori Pengguna
+            </h2>
+            <p class="text-xs text-gray-muted mt-1">
+              Daftar akun aktif dan otorisasi role di bawah pengawasan Anda.
+            </p>
+          </div>
+          <div class="relative">
+            <span
+              class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-secondary"
+            >
+              <i class="fas fa-search text-xs"></i>
+            </span>
+            <input
+              type="text"
+              x-model="searchQuery"
+              placeholder="Cari username atau email..."
+              class="pl-9 pr-4 py-1.5 bg-black-accent border border-black-muted text-white-primary rounded-lg focus:outline-none focus:border-main-primary text-xs transition w-full sm:w-48"
+            />
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr
+                class="bg-black-secondary text-white-primary text-[11px] uppercase tracking-wider font-bold"
+              >
+                <th class="p-4">Username</th>
+                <th class="p-4">Email</th>
+                <th class="p-4">Role</th>
+                <th class="p-4">Status</th>
+                <th class="p-4 text-center">Aksi</th>
+              </tr>
+            </thead>
+            <tbody class="text-xs divide-y divide-white-accent">
+              <template x-for="user in filteredUsers" :key="user.id">
+                <tr
+                  class="hover:bg-white-secondary transition"
+                  :class="selectedUser.id === user.id ? 'bg-main-muted/20' : ''"
+                >
+                  <td
+                    class="p-4 font-bold text-black-primary"
+                    x-text="user.username"
+                  ></td>
+                  <td
+                    class="p-4 text-gray-secondary font-medium"
+                    x-text="user.email"
+                  ></td>
+                  <td class="p-4">
+                    <span
+                      class="px-2 py-0.5 bg-white-accent text-black-accent rounded text-[10px] uppercase font-bold border border-white-muted"
+                      x-text="user.role"
+                    ></span>
+                  </td>
+                  <td class="p-4">
+                    <span
+                      class="inline-flex items-center gap-1 font-semibold"
+                      :class="user.isActive ? 'text-black-primary' : 'text-gray-secondary'"
+                    >
+                      <span
+                        class="w-2 h-2 rounded-full"
+                        :class="user.isActive ? 'bg-main-primary' : 'bg-gray-primary'"
+                      ></span>
+                      <span
+                        x-text="user.isActive ? 'Active' : 'Suspended'"
+                      ></span>
+                    </span>
+                  </td>
+                  <td class="p-4 text-center">
+                    <button
+                      @click="selectUser(user)"
+                      class="px-3 py-1 bg-black-accent text-white-primary hover:bg-main-primary text-[11px] rounded transition font-medium"
+                    >
+                      <i class="fas fa-edit mr-1"></i> Edit
+                    </button>
+                  </td>
+                </tr>
+              </template>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div
+        class="bg-white-primary rounded-xl shadow-lg border border-white-accent overflow-hidden sticky top-8"
+      >
+        <div
+          class="bg-black-secondary p-4 text-white-primary border-b border-white-accent flex items-center justify-between"
+        >
+          <h3 class="font-bold text-sm flex items-center gap-2">
+            <i class="fas fa-user-edit text-main-accent"></i> UpdateUserDTO Form
+          </h3>
+          <template x-if="isEditing">
+            <span
+              class="text-[10px] bg-main-primary text-white-primary px-2 py-0.5 rounded font-bold uppercase tracking-widest animate-pulse"
+              >Selected</span
+            >
+          </template>
+        </div>
+
+        <div class="p-6">
+          <template x-if="!isEditing">
+            <div class="text-center py-12 text-gray-secondary">
+              <i
+                class="fas fa-mouse-pointer text-3xl block mb-3 text-gray-accent"
+              ></i>
+              <p class="text-xs font-medium">
+                Silakan pilih salah satu pengguna di tabel untuk mulai melakukan
+                perubahan data.
+              </p>
+            </div>
+          </template>
+
+          <template x-if="isEditing">
+            <form @submit.prevent="submitDTO" class="space-y-5 text-xs">
+              <div
+                x-show="alert.show"
+                x-transition
+                x-text="alert.message"
+                :class="alert.type === 'success' ? 'bg-green-100 text-green-700 border-green-300' : 'bg-main-muted text-main-primary border-main-accent/30'"
+                class="p-3 rounded-lg font-medium border mb-2"
+              ></div>
+
+              <div>
+                <label class="block font-semibold text-black-accent mb-2"
+                  >Username (@IsString)</label
+                >
+                <div class="relative">
+                  <span
+                    class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-secondary"
+                    ><i class="fas fa-user"></i
+                  ></span>
+                  <input
+                    type="text"
+                    x-model="form.username"
+                    class="w-full pl-9 pr-4 py-2 bg-white-secondary border border-white-muted rounded-lg focus:outline-none focus:border-main-primary transition"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label class="block font-semibold text-black-accent mb-2"
+                  >Alamat Email (@IsEmail)</label
+                >
+                <div class="relative">
+                  <span
+                    class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-secondary"
+                    ><i class="fas fa-envelope"></i
+                  ></span>
+                  <input
+                    type="email"
+                    x-model="form.email"
+                    class="w-full pl-9 pr-4 py-2 bg-white-secondary border border-white-muted rounded-lg focus:outline-none focus:border-main-primary transition"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label class="block font-semibold text-black-accent mb-2"
+                  >Role / Tingkat Akses (@IsString)</label
+                >
+                <div class="relative">
+                  <span
+                    class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-secondary"
+                    ><i class="fas fa-user-tag"></i
+                  ></span>
+                  <select
+                    x-model="form.role"
+                    class="w-full pl-9 pr-4 py-2 bg-white-secondary border border-white-muted rounded-lg focus:outline-none focus:border-main-primary cursor-pointer appearance-none"
+                  >
+                    <option value="supervisor">Supervisor</option>
+                    <option value="analyst">Analyst</option>
+                    <option value="operator">Operator</option>
+                  </select>
+                </div>
+              </div>
+
+              <div
+                class="bg-white-secondary p-3 rounded-lg border border-white-accent flex items-center justify-between"
+              >
+                <div>
+                  <span class="block font-semibold text-black-primary"
+                    >Status Akun (@IsBoolean)</span
+                  >
+                  <span
+                    class="text-[10px] text-gray-secondary block mt-0.5"
+                    x-text="form.isActive ? 'User diizinkan login ke sistem' : 'Akses user ditangguhkan sementara'"
+                  ></span>
+                </div>
+                <button
+                  type="button"
+                  @click="form.isActive = !form.isActive"
+                  :class="form.isActive ? 'bg-main-primary' : 'bg-gray-primary'"
+                  class="relative inline-flex h-5 w-10 shrink-0 cursor-pointer rounded-full transition-colors duration-200 ease-in-out focus:outline-none"
+                >
+                  <span
+                    :class="form.isActive ? 'translate-x-5' : 'translate-x-1'"
+                    class="pointer-events-none inline-block h-3 w-3 transform rounded-full bg-white-primary shadow mt-1 transition duration-200 ease-in-out"
+                  ></span>
+                </button>
+              </div>
+
+              <div
+                class="bg-white-accent p-3 rounded-lg border border-white-muted text-[11px] text-black-muted"
+              >
+                <i class="fas fa-shield-alt text-black-accent mr-1"></i>
+                Perubahan ini langsung divalidasi oleh sistem backend sesuai
+                dengan struktur objek data transfer <code>UpdateUserDTO</code>.
+              </div>
+
+              <div class="flex justify-end gap-2 pt-2">
+                <button
+                  type="button"
+                  @click="cancelEdit()"
+                  class="px-3 py-2 bg-white-accent hover:bg-gray-muted text-black-accent font-semibold rounded-lg transition"
+                >
+                  Batal
+                </button>
+                <button
+                  type="submit"
+                  class="px-4 py-2 bg-main-primary hover:bg-main-secondary text-white-primary font-bold rounded-lg shadow transition"
+                >
+                  <i class="fas fa-save mr-1"></i> Simpan DTO
+                </button>
+              </div>
+            </form>
+          </template>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer
+    class="bg-black-secondary text-gray-primary text-center py-3 text-xs border-t border-black-accent"
+  >
+    &copy; 2026 Admin Panel — Crafted for Supervisor. All rights reserved.
+  </footer>
+</div>
+
+<script>
+  function userManagementHandler() {
+    return {
+      searchQuery: '',
+      isEditing: false,
+      selectedUser: {},
+
+      // Objek form yang memetakan properti dari UpdateUserDTO (Tanpa Password)
+      form: {
+        username: '',
+        email: '',
+        role: '',
+        isActive: true,
+      },
+
+      alert: {
+        show: false,
+        type: 'error',
+        message: '',
+      },
+
+      // Mock Data Pengguna awal
+      users: [
+        {
+          id: 1,
+          username: 'megan_analyst',
+          email: 'megan@company.com',
+          role: 'analyst',
+          isActive: true,
+        },
+        {
+          id: 2,
+          username: 'alex_operator',
+          email: 'alex.ops@company.com',
+          role: 'operator',
+          isActive: true,
+        },
+        {
+          id: 3,
+          username: 'fauzan_sup',
+          email: 'fauzan@company.com',
+          role: 'supervisor',
+          isActive: true,
+        },
+        {
+          id: 4,
+          username: 'danu_staf',
+          email: 'danu.s@company.com',
+          role: 'operator',
+          isActive: false,
+        },
+      ],
+
+      // Computed Filter untuk Live Search di Tabel
+      get filteredUsers() {
+        return this.users.filter((user) => {
+          return (
+            user.username
+              .toLowerCase()
+              .includes(this.searchQuery.toLowerCase()) ||
+            user.email.toLowerCase().includes(this.searchQuery.toLowerCase())
+          );
+        });
+      },
+
+      // Memilih user dari tabel dan memetakan datanya ke Form DTO
+      selectUser(user) {
+        this.alert.show = false;
+        this.isEditing = true;
+        this.selectedUser = user;
+
+        // Kloning data agar perubahan input tidak merusak data tabel asli sebelum disimpan
+        this.form.username = user.username;
+        this.form.email = user.email;
+        this.form.role = user.role;
+        this.form.isActive = user.isActive;
+      },
+
+      cancelEdit() {
+        this.isEditing = false;
+        this.selectedUser = {};
+      },
+
+      // Simulasi submit data payload UpdateUserDTO menuju Backend API
+      async submitDTO() {
+        try {
+          // Payload murni mencerminkan UpdateUserDTO di server (Tanpa Password)
+          const payloadDTO = {
+            username: this.form.username,
+            email: this.form.email,
+            role: this.form.role,
+            isActive: this.form.isActive,
+          };
+
+          console.log('Sending UpdateUserDTO Payload to Server:', payloadDTO);
+
+          // Cari index user dan perbarui data di tabel lokal (Simulasi Server Success)
+          const index = this.users.findIndex(
+            (u) => u.id === this.selectedUser.id,
+          );
+          if (index !== -1) {
+            this.users[index].username = payloadDTO.username;
+            this.users[index].email = payloadDTO.email;
+            this.users[index].role = payloadDTO.role;
+            this.users[index].isActive = payloadDTO.isActive;
+          }
+
+          this.alert.show = true;
+          this.alert.type = 'success';
+          this.alert.message = 'UpdateUserDTO berhasil dikirim dan divalidasi!';
+
+          setTimeout(() => {
+            this.isEditing = false;
+            this.selectedUser = {};
+          }, 1000);
+        } catch (error) {
+          this.alert.show = true;
+          this.alert.type = 'error';
+          this.alert.message = 'Gagal memproses DTO ke server.';
+        }
+      },
+    };
+  }
+</script>

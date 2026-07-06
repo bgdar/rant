@@ -16,5 +16,11 @@ import { Supervisor, SupervisorSchema } from 'src/schemas/supervisor.schema';
 
   controllers: [SupervisorController],
   providers: [SupervisorDbService],
+
+  // mau di pakai di : 
+  // - UserController
+  exports: [
+    SupervisorDbService,
+  ]
 })
 export class SupervisorModule {}

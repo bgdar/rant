@@ -11,6 +11,7 @@ import fastifyCookie from '@fastify/cookie';
 // import fastifyFlash from '@fastify/flash'; // gak stabil di fastify
 import session from '@fastify/session';
 import fastifyView from '@fastify/view';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { join } from 'path';
 // import expressLayout from 'express-ejs-layouts'; // untuk express , dengan ejs sudha ada fastify/view
 import ejs from 'ejs';

@@ -1,12 +1,16 @@
+<!-- panggil Navbar dari component -->
+<%- include('../components/user-navbar') %>
+
 <div
-  class="bg-white-secondary min-h-screen flex items-center justify-center p-0 sm:p-4 antialiased font-sans"
+  class="bg-white-secondary min-h-[calc(100vh-3rem)] flex flex-col justify-start items-center pt-8 pb-12 p-0 sm:p-4 antialiased font-sans"
 >
   <div
-    class="bg-white-primary w-full max-w-md h-screen sm:h-[650px] sm:rounded-2xl shadow-xl border border-white-accent flex flex-col overflow-hidden"
+    class="bg-white-primary w-full max-w-md h-screen sm:h-168 sm:rounded-2xl shadow-xl border border-white-accent flex flex-col overflow-hidden"
     x-data='{
     user: <%- JSON.stringify(user) %>,
     editing: { username: false, email: false },
     tempData: { username: "", email: "" },
+    supervisor : <%- JSON.stringify(supervisor || null) %>,
 
     startEdit(field) {
         this.editing[field] = true;
@@ -31,34 +35,33 @@
 }'
   >
     <div
-      class="bg-black-primary p-5 text-white-primary flex items-end h-28 border-b-4 border-main-primary shrink-0"
+      class="bg-black-primary p-5 text-white-primary flex items-end h-24 border-b-4 border-main-primary shrink-0"
     >
-      <div class="flex items-center space-x-6 w-full">
+      <div class="flex items-center space-x-4 w-full">
         <button
           class="text-white-primary hover:text-main-accent transition-colors"
         >
-          <i class="fas fa-arrow-left text-lg"></i>
+          <i class="fas fa-arrow-left text-base"></i>
         </button>
-        <h1 class="text-xl font-bold tracking-wide">Profil</h1>
+        <h1 class="text-lg font-bold tracking-wide">Profil</h1>
       </div>
     </div>
 
-    <div class="flex-1 overflow-y-auto bg-white-secondary">
+    <div class="flex-1 overflow-y-auto bg-white-secondary space-y-3">
       <div
         class="flex flex-col items-center justify-center py-7 bg-white-primary border-b border-white-accent"
       >
         <div class="relative group cursor-pointer">
           <div
-            class="w-40 h-40 rounded-full bg-gray-muted border-4 border-white-secondary overflow-hidden flex items-center justify-center transition-all group-hover:opacity-80"
+            class="w-32 h-32 rounded-full bg-gray-muted border-4 border-white-secondary overflow-hidden flex items-center justify-center transition-all group-hover:opacity-80"
           >
-            <i class="fas fa-user text-6xl text-gray-secondary"></i>
+            <i class="fas fa-user text-5xl text-gray-secondary"></i>
           </div>
-          <!-- Overlay Hover Ubah Foto -->
           <div
             class="absolute inset-0 bg-black-primary/40 rounded-full flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-white-primary text-center p-2"
           >
-            <i class="fas fa-camera text-xl mb-1"></i>
-            <span class="text-[10px] font-bold uppercase tracking-wider"
+            <i class="fas fa-camera text-base mb-1"></i>
+            <span class="text-[9px] font-bold uppercase tracking-wider"
               >Ubah Foto<br />Profil</span
             >
           </div>
@@ -67,10 +70,9 @@
 
       <div class="bg-white-primary px-6 py-4 border-b border-white-accent">
         <label
-          class="block text-xs font-semibold text-main-primary mb-2 tracking-wide uppercase"
+          class="block text-xs font-semibold text-main-primary mb-1.5 tracking-wide uppercase"
           >Nama Anda</label
         >
-
         <div
           x-show="!editing.username"
           class="flex items-center justify-between group"
@@ -83,10 +85,9 @@
             @click="startEdit('username')"
             class="text-gray-secondary hover:text-black-primary p-1"
           >
-            <i class="fas fa-pen text-sm"></i>
+            <i class="fas fa-pen text-xs"></i>
           </button>
         </div>
-
         <div
           x-show="editing.username"
           x-cloak
@@ -116,28 +117,22 @@
             </button>
           </div>
         </div>
-
-        <!-- <p class="text-[11px] text-gray-secondary mt-2 leading-relaxed">
-                    Ini bukan nama pengguna atau PIN Anda. Nama ini akan terlihat oleh rekan kerja dan supervisor di panel.
-                </p> -->
       </div>
 
-      <div class="bg-white-primary px-6 py-4 mt-3 border-y border-white-accent">
+      <div class="bg-white-primary px-6 py-4 border-y border-white-accent">
         <label
-          class="block text-xs font-semibold text-main-primary mb-2 tracking-wide uppercase"
-          >Info</label
+          class="block text-xs font-semibold text-main-primary mb-1.5 tracking-wide uppercase"
+          >Email</label
         >
-
         <div x-show="!editing.email" class="flex items-center justify-between">
           <span class="text-black-primary text-base" x-text="user.email"></span>
           <button
             @click="startEdit('email')"
             class="text-gray-secondary hover:text-black-primary p-1"
           >
-            <i class="fas fa-pen text-sm"></i>
+            <i class="fas fa-pen text-xs"></i>
           </button>
         </div>
-
         <div
           x-show="editing.email"
           x-cloak
@@ -169,7 +164,7 @@
       </div>
 
       <div
-        class="bg-white-primary px-6 py-4 mt-3 border-y border-white-accent space-y-4"
+        class="bg-white-primary px-6 py-4 border-y border-white-accent space-y-4"
       >
         <div>
           <label
@@ -178,29 +173,91 @@
           >
           <span
             class="text-black-accent text-base block"
-            x-text="user.phone"
+            x-text="user.phone ? user.phone : 'Belum ada Nomor'"
           ></span>
         </div>
         <hr class="border-white-accent" />
         <div>
           <label
             class="block text-xs font-semibold text-gray-secondary mb-1 tracking-wide uppercase"
-            >Level Jabatan</label
+            >Role anda</label
           >
           <div class="flex items-center space-x-2 mt-1">
             <span
               class="bg-black-secondary text-white-primary text-xs font-bold px-2.5 py-1 rounded border border-black-accent"
             >
-              <i
-                class="fas fa-user-shield text-[10px] mr-1 text-main-accent"
-              ></i>
+              <i class="fas fa-user-shield text-2xl mr-1 text-main-accent"></i>
               <span x-text="user.role"></span>
             </span>
           </div>
         </div>
       </div>
+
+      <div class="bg-white-primary px-6 py-5 border-y border-white-accent">
+        <label
+          class="block text-xs font-semibold text-gray-secondary mb-3 tracking-wide uppercase"
+          >Action</label
+        >
+
+
+      <div class="flex align-center gap-1.5">
+  <a
+    type="button"
+    href="/user/update"
+    class="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-main-primary hover:bg-main-secondary text-white-primary text-sm font-semibold rounded-xl shadow-md transition duration-200 cursor-pointer"
+  >
+    <i class="fas fa-arrow-up-from-bracket text-xs"></i>
+    Update Profile
+  </a>
+
+  <!-- Cek apakah supervisor tidak ada, atau tidak punya properti username -->
+  <% if (typeof supervisor === 'undefined' || !supervisor || !supervisor.username || supervisor.username.length === 0) { %>
+    <a
+      type="button"
+      href="/supervisor/update-user"
+      class="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-main-primary hover:bg-main-secondary text-white-primary text-sm font-semibold rounded-xl shadow-md transition duration-200 cursor-pointer"
+    >
+      <i class="fas fa-arrow-up-from-bracket text-xs"></i> Update to Supervisor
+    </a>
+  <% } else { %>
+    <!-- Jika supervisor ada dan punya username, tampilkan tombol ini -->
+    <a
+      href="/supervisor"
+      class="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-main-primary hover:bg-main-secondary text-white-primary text-sm font-semibold rounded-xl shadow-md transition duration-200 cursor-pointer"
+    >
+      <i class="fas fa-arrow-up-from-bracket text-xs"></i> <%= supervisor.username %>
+    </a>
+  <% } %>
+</div>
+        <!-- login ke Sosmed sosmed yang ada -->
+        <div class="flex align-center gap-1.5">
+          <a
+            href="/auth/discord"
+            class="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-[#5865F2] hover:bg-[#4752C4]  text-sm font-semibold rounded-xl shadow-md transition duration-200 cursor-pointer"
+          >
+            <i class="fab fa-discord text-base"></i> Connect to Discord
+          </a>
+
+          <!-- href diarahkan ke endpoint backend untuk inisialisasi login Telegram -->
+          <a
+            href="/auth/telegram"
+            class="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-[#26A5E4] hover:bg-[#1E87C4] text-sm font-semibold rounded-xl shadow-md transition duration-200 cursor-pointer"
+          >
+            <i class="fab fa-telegram text-base"></i> Connect to Telegram
+          </a>
+        </div>
+
+
+      </div>
+      <div class="px-6 py-4 mt-4">
+      <a
+      href="/user/logout"
+      class="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-red-600 hover:bg-red-700  text-sm font-semibold rounded-xl shadow-md transition duration-200 cursor-pointer"
+      >
+      <i class="fas fa-sign-out-alt text-xs"></i>
+      Logout
+      </a>
+      </div>
     </div>
   </div>
-
-  <script></script>
 </div>

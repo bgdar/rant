@@ -1,228 +1,158 @@
-<div class="bg-white-secondary text-black-primary font-sans antialiased min-h-screen flex flex-col justify-between"
-      x-data="{ sidebarOpen: false, activeTab: 'overview' }">
-
-    <header class="bg-black-primary text-white-primary shadow-md px-6 py-4 flex justify-between items-center sticky top-0 z-50">
-        <div class="flex items-center space-x-4">
-            <!-- Mobile Menu Button -->
-            <button @click="sidebarOpen = !sidebarOpen" class="text-white-primary hover:text-main-accent focus:outline-none md:hidden">
-                <i class="fas fa-bars text-xl"></i>
-            </button>
-            <div class="flex items-center space-x-3">
-                <div class="bg-main-primary text-white-primary p-2 rounded-lg">
-                    <i class="fas fa-chart-pie text-xl"></i>
-                </div>
-                <div>
-                    <h1 class="text-lg font-bold tracking-wide">Supervisor Panel</h1>
-                    <p class="text-xs text-gray-accent hidden sm:block">Sistem Monitoring & Manajemen</p>
-                </div>
-            </div>
+<div
+  class="bg-white-secondary text-black-primary font-sans antialiased min-h-screen flex flex-col justify-between"
+  x-data="{ sidebarOpen: false, activeTab: 'overview' }"
+>
+  <header
+    class="bg-black-primary text-white-primary shadow-md px-6 py-4 flex justify-between items-center sticky top-0 z-50"
+  >
+    <div class="flex items-center space-x-4">
+      <!-- Mobile Menu Button -->
+      <button
+        @click="sidebarOpen = !sidebarOpen"
+        class="text-white-primary hover:text-main-accent focus:outline-none md:hidden"
+      >
+        <i class="fas fa-bars text-xl"></i>
+      </button>
+      <div class="flex items-center space-x-3">
+        <div class="bg-main-primary text-white-primary p-2 rounded-lg">
+          <i class="fas fa-chart-pie text-xl"></i>
         </div>
-        
-        <div class="flex items-center space-x-4">
-            <div class="relative" x-data="{ openNotification: false }">
-                <button @click="openNotification = !openNotification" class="text-gray-accent hover:text-white-primary relative p-2 focus:outline-none">
-                    <i class="fas fa-bell text-lg"></i>
-                    <span class="absolute top-1 right-1 w-2 h-2 bg-main-primary rounded-full"></span>
-                </button>
-                <!-- Dropdown Notifikasi -->
-                <div x-show="openNotification" @click.away="openNotification = false" class="absolute right-0 mt-2 w-64 bg-white-primary border border-white-accent rounded-lg shadow-xl overflow-hidden z-50" style="display: none;">
-                    <div class="bg-black-secondary text-white-primary p-3 text-xs font-bold">Notifikasi Terbaru</div>
-                    <div class="p-2 divide-y divide-white-accent text-xs">
-                        <a href="#" class="block p-2 hover:bg-white-secondary text-black-secondary">User <strong>johndoe123</strong> berhasil dibuat.</a>
-                        <a href="#" class="block p-2 hover:bg-white-secondary text-black-secondary">Laporan mingguan siap diunduh.</a>
-                    </div>
-                </div>
-            </div>
-            
-            <span class="text-sm text-white-secondary hidden md:inline">Halo, <strong>Supervisor</strong></span>
-            <div class="w-10 h-10 rounded-full bg-main-secondary flex items-center justify-center text-white-primary font-bold border-2 border-main-accent">
-                SP
-            </div>
+        <div>
+          <h1 class="text-lg font-bold tracking-wide">Supervisor Panel</h1>
+          <p class="text-xs text-gray-accent hidden sm:block">
+            Sistem Monitoring & Manajemen
+          </p>
         </div>
-    </header>
-
-    <div class="flex flex-grow">
-        
-        <!-- SIDEBAR NAVIGATION -->
-        <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'" 
-               class="fixed md:static inset-y-0 left-0 w-64 bg-black-secondary text-white-secondary p-4 space-y-6 transform md:translate-x-0 transition-transform duration-200 ease-in-out z-40 flex flex-col justify-between border-r border-black-accent">
-            
-            <div class="space-y-4">
-                <div class="text-xs font-bold tracking-wider text-gray-primary uppercase px-3">Menu Utama</div>
-                <nav class="space-y-1">
-                    <a href="#" @click="activeTab = 'overview'; sidebarOpen = false" :class="activeTab === 'overview' ? 'bg-main-primary text-white-primary' : 'hover:bg-black-accent text-gray-accent hover:text-white-primary'" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg transition duration-200">
-                        <i class="fas fa-home w-5"></i> <span>Overview</span>
-                    </a>
-                    <a href="create-user.html" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-black-accent text-gray-accent hover:text-white-primary transition duration-200">
-                        <i class="fas fa-user-plus w-5"></i> <span>Create New User</span>
-                    </a>
-                    <a href="#" @click="activeTab = 'users'; sidebarOpen = false" :class="activeTab === 'users' ? 'bg-main-primary text-white-primary' : 'hover:bg-black-accent text-gray-accent hover:text-white-primary'" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg transition duration-200">
-                        <i class="fas fa-users w-5"></i> <span>Data Pengguna</span>
-                    </a>
-                    <a href="#" @click="activeTab = 'logs'; sidebarOpen = false" :class="activeTab === 'logs' ? 'bg-main-primary text-white-primary' : 'hover:bg-black-accent text-gray-accent hover:text-white-primary'" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg transition duration-200">
-                        <i class="fas fa-history w-5"></i> <span>Log Aktivitas</span>
-                    </a>
-                </nav>
-            </div>
-
-            <div>
-                <button class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg bg-black-accent hover:bg-main-secondary text-white-primary text-sm font-semibold transition duration-200">
-                    <i class="fas fa-sign-out-alt w-5"></i> <span>Keluar / Logout</span>
-                </button>
-            </div>
-        </aside>
-
-        <!-- MAIN CONTENT -->
-        <main class="flex-grow p-4 md:p-8 space-y-6">
-            
-            <!-- Welcome Banner -->
-            <div class="bg-white-primary p-6 rounded-xl shadow-sm border border-white-accent flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                <div>
-                    <h2 class="text-xl md:text-2xl font-bold text-black-primary">Selamat Datang Kembali, Supervisor 👋</h2>
-                    <p class="text-sm text-black-muted mt-1">Berikut adalah ringkasan performa sistem dan manajemen tim Anda hari ini.</p>
-                </div>
-                <!-- Quick Action Button -->
-                <a href="create-user.html" class="bg-main-primary hover:bg-main-secondary text-white-primary font-semibold text-sm px-4 py-2.5 rounded-lg shadow transition duration-200 flex items-center gap-2">
-                    <i class="fas fa-plus"></i> Tambah User Baru
-                </a>
-            </div>
-
-            <!-- STATS CARDS GRID -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <!-- Card 1 -->
-                <div class="bg-white-primary p-5 rounded-xl shadow-sm border border-white-accent flex items-center justify-between">
-                    <div class="space-y-1">
-                        <p class="text-xs font-semibold uppercase text-gray-secondary tracking-wider">Total Operator</p>
-                        <h3 class="text-2xl font-bold text-black-primary">24</h3>
-                        <p class="text-[11px] text-green-6xl font-medium"><i class="fas fa-caret-up mr-1"></i> +3 baru minggu ini</p>
-                    </div>
-                    <div class="w-12 h-12 rounded-lg bg-main-muted text-main-primary flex items-center justify-center text-xl">
-                        <i class="fas fa-users-cog"></i>
-                    </div>
-                </div>
-
-                <!-- Card 2 -->
-                <div class="bg-white-primary p-5 rounded-xl shadow-sm border border-white-accent flex items-center justify-between">
-                    <div class="space-y-1">
-                        <p class="text-xs font-semibold uppercase text-gray-secondary tracking-wider">User Aktif</p>
-                        <h3 class="text-2xl font-bold text-black-primary">18</h3>
-                        <p class="text-[11px] text-gray-secondary"><span class="inline-block w-2 h-2 rounded-full bg-green-500 mr-1 animate-pulse"></span> Sedang online</p>
-                    </div>
-                    <div class="w-12 h-12 rounded-lg bg-gray-muted text-black-secondary flex items-center justify-center text-xl">
-                        <i class="fas fa-user-check"></i>
-                    </div>
-                </div>
-
-                <!-- Card 3 -->
-                <div class="bg-white-primary p-5 rounded-xl shadow-sm border border-white-accent flex items-center justify-between">
-                    <div class="space-y-1">
-                        <p class="text-xs font-semibold uppercase text-gray-secondary tracking-wider">Total Laporan</p>
-                        <h3 class="text-2xl font-bold text-black-primary">142</h3>
-                        <p class="text-[11px] text-main-secondary font-medium"><i class="fas fa-exclamation-circle mr-1"></i> 5 Butuh Review</p>
-                    </div>
-                    <div class="w-12 h-12 rounded-lg bg-white-accent text-black-accent flex items-center justify-center text-xl">
-                        <i class="fas fa-file-alt"></i>
-                    </div>
-                </div>
-
-                <!-- Card 4 -->
-                <div class="bg-white-primary p-5 rounded-xl shadow-sm border border-white-accent flex items-center justify-between">
-                    <div class="space-y-1">
-                        <p class="text-xs font-semibold uppercase text-gray-secondary tracking-wider">Sistem Status</p>
-                        <h3 class="text-lg font-bold text-green-6xl text-black-primary">Normal / Aman</h3>
-                        <p class="text-[11px] text-gray-secondary">Uptime 99.9%</p>
-                    </div>
-                    <div class="w-12 h-12 rounded-lg bg-black-muted text-white-primary flex items-center justify-center text-xl">
-                        <i class="fas fa-server"></i>
-                    </div>
-                </div>
-            </div>
-
-            <!-- DATA SECTION GRID -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                
-                <!-- Table: Aktivitas Pengguna Terbaru (2/3 width) -->
-                <div class="lg:col-span-2 bg-white-primary rounded-xl shadow-sm border border-white-accent overflow-hidden">
-                    <div class="p-5 border-b border-white-accent flex justify-between items-center bg-white-primary">
-                        <h4 class="font-bold text-black-secondary"><i class="fas fa-bolt text-main-primary mr-2"></i> Aktivitas Pengguna Terbaru</h4>
-                        <button class="text-xs font-semibold text-main-primary hover:text-main-secondary transition">Lihat Semua <i class="fas fa-arrow-right ml-0.5"></i></button>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse">
-                            <thead>
-                                <tr class="bg-white-secondary border-b border-white-accent text-xs font-semibold text-gray-secondary uppercase">
-                                    <th class="p-4">User</th>
-                                    <th class="p-4">Role</th>
-                                    <th class="p-4">Aktivitas</th>
-                                    <th class="p-4 text-right">Waktu</th>
-                                </tr>
-                            </thead>
-                            <tbody class="text-sm divide-y divide-white-accent">
-                                <tr class="hover:bg-white-secondary/50">
-                                    <td class="p-4 font-medium text-black-primary">Ahmad Fauzi</td>
-                                    <td class="p-4"><span class="px-2 py-0.5 text-xs rounded bg-white-accent text-black-accent">Operator</span></td>
-                                    <td class="p-4 text-black-muted">Input data inventaris baru</td>
-                                    <td class="p-4 text-right text-xs text-gray-secondary">2 menit yang lalu</td>
-                                </tr>
-                                <tr class="hover:bg-white-secondary/50">
-                                    <td class="p-4 font-medium text-black-primary">Siti Aminah</td>
-                                    <td class="p-4"><span class="px-2 py-0.5 text-xs rounded bg-main-muted text-main-secondary font-medium">Analyst</span></td>
-                                    <td class="p-4 text-black-muted">Mengekspor laporan bulanan</td>
-                                    <td class="p-4 text-right text-xs text-gray-secondary">15 menit yang lalu</td>
-                                </tr>
-                                <tr class="hover:bg-white-secondary/50">
-                                    <td class="p-4 font-medium text-black-primary">Rian Hidayat</td>
-                                    <td class="p-4"><span class="px-2 py-0.5 text-xs rounded bg-white-accent text-black-accent">Operator</span></td>
-                                    <td class="p-4 text-black-muted">Mengubah password akun</td>
-                                    <td class="p-4 text-right text-xs text-gray-secondary">1 jam yang lalu</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Info Card / Shortcut Panel (1/3 width) -->
-                <div class="bg-white-primary rounded-xl shadow-sm border border-white-accent p-5 space-y-4">
-                    <h4 class="font-bold text-black-secondary border-b border-white-accent pb-3"><i class="fas fa-sliders-h text-black-accent mr-2"></i> Kontrol Cepat</h4>
-                    
-                    <div class="space-y-2">
-                        <a href="create-user.html" class="w-full flex items-center justify-between p-3 rounded-lg border border-white-accent hover:border-main-accent bg-white-secondary hover:bg-white-primary transition group">
-                            <div class="flex items-center space-x-3">
-                                <div class="w-8 h-8 rounded bg-main-muted text-main-primary flex items-center justify-center"><i class="fas fa-user-plus text-xs"></i></div>
-                                <span class="text-sm font-medium text-black-accent group-hover:text-black-primary">Registrasi User</span>
-                            </div>
-                            <i class="fas fa-chevron-right text-xs text-gray-secondary"></i>
-                        </a>
-
-                        <a href="#" class="w-full flex items-center justify-between p-3 rounded-lg border border-white-accent hover:border-black-primary bg-white-secondary hover:bg-white-primary transition group">
-                            <div class="flex items-center space-x-3">
-                                <div class="w-8 h-8 rounded bg-white-accent text-black-secondary flex items-center justify-center"><i class="fas fa-file-download text-xs"></i></div>
-                                <span class="text-sm font-medium text-black-accent group-hover:text-black-primary">Unduh Log Sistem</span>
-                            </div>
-                            <i class="fas fa-chevron-right text-xs text-gray-secondary"></i>
-                        </a>
-                    </div>
-
-                    <!-- Alert Box Pengingat Tugas -->
-                    <div class="bg-black-secondary text-white-secondary p-4 rounded-lg space-y-2">
-                        <div class="flex items-center space-x-2 text-main-accent text-xs font-bold uppercase tracking-wider">
-                            <i class="fas fa-exclamation-triangle"></i> <span>Tugas Supervisor</span>
-                        </div>
-                        <p class="text-xs text-gray-muted leading-relaxed">
-                            Terdapat <strong>5 laporan operator</strong> yang belum Anda verifikasi untuk penutupan buku kerja minggu ini.
-                        </p>
-                        <a href="#" class="inline-block text-[11px] font-bold text-white-primary underline hover:text-main-accent">Selesaikan Sekarang &rarr;</a>
-                    </div>
-                </div>
-
-            </div>
-
-        </main>
+      </div>
     </div>
 
-    <!-- FOOTER -->
-    <footer class="bg-black-secondary text-gray-primary text-center py-3 text-xs border-t border-black-accent">
-        &copy; 2026 Admin Panel — Crafted for Supervisor. All rights reserved.
-    </footer>
+    <div class="flex items-center space-x-4">
+      <div class="relative" x-data="{ openNotification: false }">
+        <button
+          @click="openNotification = !openNotification"
+          class="text-gray-accent hover:text-white-primary relative p-2 focus:outline-none"
+        >
+          <i class="fas fa-bell text-lg"></i>
+          <span
+            class="absolute top-1 right-1 w-2 h-2 bg-main-primary rounded-full"
+          ></span>
+        </button>
+        <!-- Dropdown Notifikasi -->
+        <div
+          x-show="openNotification"
+          @click.away="openNotification = false"
+          class="absolute right-0 mt-2 w-64 bg-white-primary border border-white-accent rounded-lg shadow-xl overflow-hidden z-50"
+          style="display: none"
+        >
+          <div
+            class="bg-black-secondary text-white-primary p-3 text-xs font-bold"
+          >
+            Notifikasi Terbaru
+          </div>
+          <div class="p-2 divide-y divide-white-accent text-xs">
+            <a
+              href="#"
+              class="block p-2 hover:bg-white-secondary text-black-secondary"
+              >User <strong>johndoe123</strong> berhasil dibuat.</a
+            >
+            <a
+              href="#"
+              class="block p-2 hover:bg-white-secondary text-black-secondary"
+              >Laporan mingguan siap diunduh.</a
+            >
+          </div>
+        </div>
+      </div>
 
+      <span class="text-sm text-white-secondary hidden md:inline"
+        >Halo, <strong>Supervisor</strong></span
+      >
+      <div
+        class="w-10 h-10 rounded-full bg-main-secondary flex items-center justify-center text-white-primary font-bold border-2 border-main-accent"
+      >
+        SP
+      </div>
+    </div>
+  </header>
+
+  <div class="flex grow">
+    <!-- SIDEBAR NAVIGATION -->
+    <aside
+      :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
+      class="fixed md:static inset-y-0 left-0 w-64 bg-black-secondary text-white-secondary p-4 space-y-6 transform md:translate-x-0 transition-transform duration-200 ease-in-out z-40 flex flex-col justify-between border-r border-black-accent"
+    >
+      <div class="space-y-4">
+        <div
+          class="text-xs font-bold tracking-wider text-gray-primary uppercase px-3"
+        >
+          Menu Utama
+        </div>
+        <nav class="space-y-1">
+          <button
+            @click.prevent="activeTab = 'overview'; sidebarOpen = false"
+            :class="activeTab === 'overview' ? 'bg-main-primary text-white-primary' : 'hover:bg-black-accent text-gray-accent hover:text-white-primary'"
+            class="flex items-center space-x-3 px-3 py-2.5 rounded-lg transition duration-200"
+          >
+            <i class="fas fa-home w-5"></i> <span>Overview</span>
+          </button>
+
+          <a
+            href="/supervisor/user/create"
+            @click.prevent="activeTab = 'create-user'; sidebarOpen = false"
+            :class="activeTab === 'create-user' ? 'bg-main-primary text-white-primary' : 'hover:bg-black-accent text-gray-accent hover:text-white-primary'"
+            class="flex items-center space-x-3 px-3 py-2.5 rounded-lg transition duration-200"
+          >
+            <i class="fas fa-user-plus w-5"></i> <span>Create New User</span>
+          </a>
+
+          <button
+            @click.prevent="activeTab = 'users'; sidebarOpen = false"
+            :class="activeTab === 'users' ? 'bg-main-primary text-white-primary' : 'hover:bg-black-accent text-gray-accent hover:text-white-primary'"
+            class="flex items-center space-x-3 px-3 py-2.5 rounded-lg transition duration-200"
+          >
+            <i class="fas fa-users w-5"></i> <span>Data Pengguna</span>
+          </button>
+
+          <button
+            @click.prevent="activeTab = 'logs'; sidebarOpen = false"
+            :class="activeTab === 'logs' ? 'bg-main-primary text-white-primary' : 'hover:bg-black-accent text-gray-accent hover:text-white-primary'"
+            class="flex items-center space-x-3 px-3 py-2.5 rounded-lg transition duration-200"
+          >
+            <i class="fas fa-history w-5"></i> <span>Log Aktivitas</span>
+          </button>
+        </nav>
+      </div>
+
+      <div>
+        <button
+          class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg bg-black-accent hover:bg-main-secondary text-white-primary text-sm font-semibold transition duration-200"
+        >
+          <i class="fas fa-sign-out-alt w-5"></i> <span>Keluar / Logout</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex grow p-4 md:p-8 space-y-6">
+      <main class="grow p-4 md:p-8">
+        <div x-show="activeTab === 'overview'" x-transition>
+          <%- include("./components/overview") %>
+        </div>
+
+        <div x-show="activeTab === 'users'" x-transition>
+          <%- include("./components/data-pengguna") %>
+        </div>
+
+        <div x-show="activeTab === 'logs'" x-transition>
+          <%- include("./components/log-aktivitas") %>
+        </div>
+      </main>
+    </main>
+  </div>
+
+  <footer
+    class="bg-black-secondary text-gray-primary text-center py-3 text-xs border-t border-black-accent"
+  >
+    &copy; 2026 Admin Panel — Crafted for Supervisor. All rights reserved.
+  </footer>
 </div>

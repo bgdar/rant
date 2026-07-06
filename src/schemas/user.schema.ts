@@ -18,6 +18,12 @@ export class User implements UserDTO {
   @Prop()
   email: string;
 
+  @Prop()
+  discordId: number;
+
+  @Prop()
+  telegramId: number;
+
   @Prop({
     default: 'Normal',
     enum: ['Normal', 'Suspicious', 'Dangerous', 'Extreme'],

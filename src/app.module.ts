@@ -6,10 +6,10 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ForumsModule } from './forums.module/forums.module';
 
 // gak pake dulu
-// import { SupervisorModule } from './supervisor.module/supervisor.module';
 // import { RantModule } from './rant.module/rant.module';
 import { UserModule } from './user.module/user.module';
 import { MongoCongigService } from './mongo-congig.service';
+import { SupervisorModule } from './supervisor.module/supervisor.module.module';
 
 @Module({
   imports: [
@@ -18,12 +18,12 @@ import { MongoCongigService } from './mongo-congig.service';
       useClass: MongoCongigService,
     }),
     // MongooseModule.forFeature([{ name: Rant.name, schema: RantSchema }]),
-    // ForumsModule,
+    ForumsModule,
     UserModule,
 
     // ----matikan sementar - ----
     // RantModule,
-    // SupervisorModule,
+    SupervisorModule,
 
     // SeederModule,
   ],

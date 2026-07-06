@@ -1,10 +1,14 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Get,
   HttpStatus,
+  InternalServerErrorException,
   Param,
   Post,
+  Put,
+  Redirect,
   Render,
   Req,
   Res,
@@ -14,30 +18,41 @@ import {
 import argon from 'argon2';
 import { SupervisorDbService } from './supervisor.db.service';
 import type { FastifyReply, FastifyRequest } from 'fastify';
-import { CreateUserDTO, UpdateUserDTO } from 'src/dto/user.dto';
+import { CreateUserDTO, UpdateUserDTO, UserSessionDTO } from 'src/dto/user.dto';
 import { AuthSupervisorGuard } from 'src/guards/auth.supervisor';
+import {
+  SupervisorDTO,
+  SupervisorPermission,
+  UpdateToSupervisor,
+} from 'src/dto/supervisor.dto';
+import { AuthUserGuard } from 'src/guards/auth.user';
 
 @Controller('supervisor')
-@UseGuards(AuthSupervisorGuard)
+@UseGuards(AuthUserGuard, AuthSupervisorGuard)
 export class SupervisorController {
-  constructor(private readonly supervisorDbService: SupervisorDbService) {}
+  constructor(private readonly supervisorModel: SupervisorDbService) {}
 
   /**
    * supervisor dashboard.
    */
-  @Get('/')
+  @Get()
   @Render('supervisor/home.ejs')
-  dashboard(@Session() session: Record<string, any>) {
+  dashboard(@Req() req: FastifyRequest) {
     // const totalUsers =
-    //   await this.supervisorDbService.countAll();
+    //   await this.supervisorModel.countAll();
 
     // const totalActiveUsers =
-    //   await this.supervisorDbService.countActiveUsers();
+    //   await this.supervisorModel.countActiveUsers();
+    const sessionSupervisor = (req as any).session?.supervisor as SupervisorDTO;
 
     return {
       title: 'supervisor Dashboard',
 
-      user: session.user || 'none',
+      supervisor: {
+        username: sessionSupervisor.username,
+        email: sessionSupervisor.email,
+        address: sessionSupervisor.address,
+      },
 
       // stats: {
       //   totalUsers,
@@ -47,12 +62,169 @@ export class SupervisorController {
   }
 
   /**
+   * SignIN page supervisor
+   */
+  @Get('update-user')
+  @Render('supervisor/update-user.ejs')
+  updateUserView(@Req() req: FastifyRequest) {
+    const sessionUser = (req as any).session?.user as UserSessionDTO;
+
+    console.info('akses supervisor update');
+    return {
+      title: 'update user',
+      permissions: JSON.stringify(SupervisorPermission),
+      username: sessionUser.username,
+      email: sessionUser.email,
+    };
+  }
+
+  @Post('update-user')
+  async handleUpdateUser(
+    @Body() updateSupervisor: UpdateToSupervisor,
+    @Res() res: FastifyReply,
+    @Req() req: FastifyRequest,
+    @Session() session: Record<string, any>,
+  ) {
+    try {
+      const sessionUser = (req as any).session?.user as UserSessionDTO;
+
+      // Ambil ID supervisor, misal dari session atau dari objek DTO/hidden input form
+      // Contoh: const supervisorId = req.session.user.id;
+      // const supervisorId = sessionUser.i;
+
+      // Validasi & Proteksi Password seperti alur sebelumnya
+      // if (
+      //   !updateSupervisor.password ||
+      //   updateSupervisor.password.trim() === ''
+      // ) {
+      //   return res.status(HttpStatus.BAD_GATEWAY).send({
+      //     message: 'Isi dulu aswword nya',
+      //     status: 'warning',
+      //   });
+      // } else {
+      //   // Jika ada password baru, lakukan hashing
+      //   updateSupervisor.password = await argon.hash(updateSupervisor.password);
+      // }
+
+      // Konversi data string dari form HTML menjadi Boolean untuk tipe data target
+      updateSupervisor.isActive = String(updateSupervisor.isActive) === 'true';
+      updateSupervisor.isVerified =
+        String(updateSupervisor.isVerified) === 'true';
+      updateSupervisor.isBanned = String(updateSupervisor.isBanned) === 'true';
+
+      const result = await this.supervisorModel.create({
+        fullName: updateSupervisor.fullname || '',
+        username: sessionUser.username,
+        email: sessionUser.email,
+        // supervisorId :
+        // password: updateSupervisor.password, //  gak ada pakai password
+        phone: updateSupervisor.phone,
+        address: updateSupervisor.address,
+        avatar: updateSupervisor.avatar,
+        permissions: Object.values(updateSupervisor.permissions) || [],
+
+        isActive: updateSupervisor.isActive,
+        isVerified: updateSupervisor.isVerified,
+      });
+
+      if (!result) {
+        // Jika gagal, render balik ke halaman form dengan pesan error
+        return res.status(HttpStatus.EXPECTATION_FAILED).send({
+          status: 'error',
+          message: 'Gagal memperbarui data supervisor',
+        });
+      }
+
+      // session untuk supervisor
+      session.supervisor = {
+        id: result.id,
+        username: result.username,
+        email: result.email,
+      };
+      return res.redirect('/supervisor/profile?status=updated_success');
+    } catch (error) {
+      console.error('Error saat submit update user:', error);
+
+      // Jika internal error, tampilkan kembali halaman dengan log error
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
+        title: 'Update User',
+        error: 'Terjadi kesalahan sistem saat menyimpan data.',
+        user: updateSupervisor,
+      });
+    }
+  }
+
+  /**
+   * Endpoint untuk memperbarui profil data Supervisor
+   */
+  @Put('update/:id')
+  async updateSupervisor(
+    @Param('id') id: string,
+    @Body() updateData: SupervisorDTO,
+    @Res() res: FastifyReply,
+  ) {
+    try {
+      // 1. Validasi minimal: Pastikan ID supervisor dikirimkan
+      if (!id) {
+        throw new BadRequestException(
+          'ID Supervisor tidak valid atau tidak ditemukan.',
+        );
+      }
+
+      // Jika password diisi, lakukan proses hashing di tingkat Service sebelum disimpan.
+      if (updateData.password && updateData.password.trim() !== '') {
+        // Logika hashing (misal bcrypt) diserahkan ke internal service
+        // updateData.password = await this.supervisorService.hashPassword(updateData.password);
+      } else {
+        // Jika password dikirim kosong/tidak diubah, hapus dari objek agar tidak menimpa password lama
+        // delete updateData.password;
+      }
+
+      //Panggil service untuk mengeksekusi perubahan ke database
+      const updatedSupervisor = await this.supervisorModel.update(
+        id,
+        updateData,
+      );
+
+      if (!updatedSupervisor) {
+        return res.status(HttpStatus.NOT_FOUND).send({
+          status: 'success',
+          message: `Gagal memperbarui. Supervisor dengan ID ${id} tidak ditemukan.`,
+        });
+      }
+
+      return res.status(HttpStatus.OK).send({
+        success: true,
+        message: 'Data profil supervisor berhasil diperbarui.',
+        data: {
+          username: updatedSupervisor.username,
+          email: updatedSupervisor.email,
+          fullName: updatedSupervisor.fullName,
+          updatedAt: new Date(),
+        },
+      });
+    } catch (error) {
+      // Penanganan jika terjadi kendala server atau database crash
+      console.error('Error saat update supervisor:', error);
+      throw new InternalServerErrorException(
+        'Terjadi kesalahan internal server saat memperbarui data.',
+      );
+    }
+  }
+
+  @Get('profile')
+  profile() {
+    // pundah ke profile user ja
+    return Redirect('/user/profile', 200);
+  }
+
+  /**
    * Render all users.
    */
   @Get('/users')
   @Render('supervisor/users/home.ejs')
   async usersView() {
-    const users = await this.supervisorDbService.findAll();
+    const users = await this.supervisorModel.findAll();
 
     return {
       title: 'Manage Users',
@@ -70,7 +242,7 @@ export class SupervisorController {
     @Res() res: FastifyReply,
   ) {
     try {
-      const user = await this.supervisorDbService.findById(id);
+      const user = await this.supervisorModel.findById(id);
 
       return res.status(HttpStatus.OK).send({
         message: 'User found',
@@ -107,9 +279,8 @@ export class SupervisorController {
     try {
       const hashPassword = await argon.hash(data.password);
 
-      const supervisor = await this.supervisorDbService.create({
+      const supervisor = await this.supervisorModel.create({
         ...data,
-
         password: hashPassword,
       });
       session.supervisor = {
@@ -140,6 +311,7 @@ export class SupervisorController {
     } catch (error: any) {
       return res.status(HttpStatus.BAD_REQUEST).send({
         message: error.message || 'Failed create user',
+        status: 'error',
       });
     }
   }
@@ -160,7 +332,7 @@ export class SupervisorController {
         data.password = await argon.hash(data.password);
       }
 
-      const user = await this.supervisorDbService.update(id, data);
+      const user = await this.supervisorModel.update(id, data);
 
       return res.status(HttpStatus.OK).send({
         message: 'User updated successfully',
@@ -170,6 +342,7 @@ export class SupervisorController {
     } catch (error: any) {
       return res.status(HttpStatus.BAD_REQUEST).send({
         message: error.message || 'Failed update user',
+        status: 'error',
       });
     }
   }
@@ -184,7 +357,7 @@ export class SupervisorController {
     @Res() res: FastifyReply,
   ) {
     try {
-      await this.supervisorDbService.delete(id);
+      await this.supervisorModel.delete(id);
 
       return res.status(HttpStatus.OK).send({
         message: 'User deleted successfully',
@@ -192,6 +365,7 @@ export class SupervisorController {
     } catch (error: any) {
       return res.status(HttpStatus.BAD_REQUEST).send({
         message: error.message || 'Failed delete user',
+        status: 'error',
       });
     }
   }
@@ -206,7 +380,7 @@ export class SupervisorController {
     @Res() res: FastifyReply,
   ) {
     try {
-      const user = await this.supervisorDbService.toggleActive(id);
+      const user = await this.supervisorModel.toggleActive(id);
 
       return res.status(HttpStatus.OK).send({
         message: 'User status updated',
@@ -232,7 +406,7 @@ export class SupervisorController {
     @Res() res: FastifyReply,
   ) {
     try {
-      const user = await this.supervisorDbService.updateRole(id, role);
+      const user = await this.supervisorModel.updateRole(id, role);
 
       return res.status(HttpStatus.OK).send({
         message: 'Role updated successfully',
@@ -242,6 +416,7 @@ export class SupervisorController {
     } catch (error: any) {
       return res.status(HttpStatus.BAD_REQUEST).send({
         message: error.message || 'Failed update role',
+        status: 'error',
       });
     }
   }
@@ -258,7 +433,7 @@ export class SupervisorController {
   ) {
     try {
       // cari berdasarkan username aja
-      const users = await this.supervisorDbService.search(username);
+      const users = await this.supervisorModel.search(username);
 
       // kirim dalam bentuk Ajax
       return res.status(HttpStatus.OK).send({
@@ -268,6 +443,7 @@ export class SupervisorController {
     } catch (error: any) {
       return res.status(HttpStatus.BAD_REQUEST).send({
         message: error.message || 'Search failed',
+        status: 'error',
       });
     }
   }

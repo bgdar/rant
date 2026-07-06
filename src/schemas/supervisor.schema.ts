@@ -3,7 +3,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 import { HydratedDocument } from 'mongoose';
-import { SupervisorDTO } from 'src/dto/supervisorDTO';
+import {
+  SupervisorDTO,
+  SupervisorPermission,
+  SupervisorRole,
+} from 'src/dto/supervisor.dto';
+import { types } from 'util';
 
 export type SupervisorDocument = HydratedDocument<Supervisor>;
 
@@ -68,26 +73,21 @@ export class Supervisor implements SupervisorDTO {
    * - owner
    */
   @Prop({
-    default: 'supervisor',
-    enum: ['supervisor', 'admin', 'owner'],
+    type: [String],
+    default: SupervisorRole.TRAINEE,
+    enum: Object.values(SupervisorRole),
   })
   role: string;
 
   /**
    * Permission list.
-   *
-   * Example:
-   * [
-   *   "manage_users",
-   *   "manage_products",
-   *   "view_dashboard"
-   * ]
    */
   @Prop({
     type: [String],
+    enum: Object.values(SupervisorPermission),
     default: [],
   })
-  permissions: string[];
+  permissions: SupervisorPermission[];
 
   /**
    * Status active account.
@@ -130,7 +130,7 @@ export class Supervisor implements SupervisorDTO {
   token: string;
 
   /**
-   * Total login counter.
+   * Total login counter utnuk supervisor yang masok.
    */
   @Prop({
     default: 0,
@@ -169,6 +169,12 @@ export class Supervisor implements SupervisorDTO {
     default: [],
   })
   tags: string[];
+
+  @Prop({
+    type: [String],
+    default: [],
+  })
+  usersId?: string[] | undefined;
 }
 
 export const SupervisorSchema = SchemaFactory.createForClass(Supervisor);

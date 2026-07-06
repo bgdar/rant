@@ -3,7 +3,7 @@ import { promises as fs } from 'fs'; //  fs berbasis promise
 
 import path from 'path';
 import { RantKeywordIndoDbService } from 'src/rant.module/rant-keyword-indo.db.service';
-import { RantKeywordDTO } from 'src/dto/dataDTO';
+import { RantKeywordDTO } from 'src/dto/data.dto';
 
 @Injectable()
 export class DataKeywordDummyService implements OnApplicationBootstrap {

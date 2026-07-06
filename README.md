@@ -1,10 +1,8 @@
 <div align="center">
-  <img src="banner.png" />
+  <img src="./banner.png" />
 </div>
 
 <br>
-
-> rant bot to detect abusive words on several social media that use bots
 
 ### Tech Stack
 
@@ -54,22 +52,21 @@
 
 </p>
 
-**_Tech_** :
+> rant bot to detect abusive words on several social media that use bots
+
+**_Tech Info_** :
 
 - `RabbitMQ` : Messaging yang cocok untuk komunikasi ke **api model server** dan aplikasi **_Bot_** lain
-  > Default port and port now : `5672`
-  > default password : `guest` , username : `guest`
+
 - `argon` : algoritma hashing password
 - `class-validator` : validasi pada DTO
 - `@fastify/session` : untuk session , jadi project ini mengguankan session tampa perlu redis , kecuali nantik jika sudah gedek
   > di sini tidak menggunkana `@secure-session` karena tidak cocok dengan flash message
 - `@fastify/cookie` : karena ada session pastinya ada cookies
 
-  > "@fastify/flash" : tidak stabil di **fastify**
+  > `@fastify/flash` : tidak stabil di **fastify**
 
   > Walaupun mengguankan flash , tapi gunakan json return untuk informasi yang lebih interaktif , flash message cukup saat pertama di kirim aja
-
-  **_Tech Info_**
 
 - `Tailwindcss` : menggunakan Tailwincss CLI yang auto build
   running server + client ( tailwindcss)
@@ -82,6 +79,12 @@
   [font icon](https://fontawesome.com/kits/999cf0108d/icons)
 
 - `session` + `cokiess` +`guard` : 2agar keamana di setiap view nantik
+
+##### Coomin Soon
+
+- `Redis` : saat aplikais besar nantik dan karena mengguankan **Session** maka sesi login pengguna akan di simpan dan di tangani oleh **_Redis_**
+- `Speech-to-Text (STT) ` : ini untuk kasus `**Audio**`  jadi kita ubah ke text dahulu baru di handle oleh model nantinya
+> ini sulit dan lama , butuh trining model terpisah agar akurasi untuk bahasa daerah cocok 
 
 ### Bot
 
@@ -106,6 +109,15 @@ user akan punya **akun** yang terkoneksi ke bot
 **_Supervisor_**
 pendamping atau admin yang mengelola **grub**
 
+> Karena menggunakan session maka pilih
+> Id supervisor dengan id user itu 'BERBEDA'
+
+Forums Detail :
+
+- forums hanya bisa di buat oleh supervisor maka harus login ulang jika user login ,
+
+  > idenya saat login cek apakah sudah ada akun supervisor yang sama , jika ada maka supervisor juga login
+
 - `role` (status supervisor) :
   > untuk bebera role `coming soon`
 
@@ -114,6 +126,12 @@ pendamping atau admin yang mengelola **grub**
 3. **Manager (Manajer / Pengawas)** : Pengawas senior yang memiliki wewenang untuk membekukan akun sementara dan mengedit konten yang melanggar.
 4. **Director (Direktur / Kepala)**: Pengawas tingkat tinggi yang mengambil keputusan strategis dan menangani kasus pelanggaran berat.
 5. **CEO (Bos Besar / Pemilik)**: Pengawas tertinggi dengan kendali penuh atas sistem, kebijakan, serta otoritas mutlak untuk blokir permanen.
+
+### Sosmed
+
+> handle Sosmed
+
+- `sosmed.controller` : handle untuk **Api** sosmed di sini , baik login , berpindah halaman dan lainya
 
 ### Dataset
 
@@ -140,6 +158,73 @@ pendamping atau admin yang mengelola **grub**
 
 - di sini model **AI** untuk prediksi di jalakna dan juga handle response untuk menghasilkan response text untuk **Bots** gunakan
 - di sini iniasialisais pertama _RabbitMQ_ untuk membuat daftar **queue - queue** yang di perlukna untuk komunikasi aplikasi
+
+### RabbitMQ
+
+> RabbitMQ file ada fi module `rant`
+
+untuk masuk ke web RabbitMQ
+
+- Default port and port now : `5672`
+- masuk ke url : <http://localhost:15672>
+- default password : `guest` , username : `guest`
+
+**queue** :
+
+- **queue-telegram** : untuk mengirim data metah ke queue dan masuk ke **Model Server Api**
+- **queue-telegram-response** : hasil yang di kembalikan oleh **Model Server Api** dengan response text
+- **queue-discord**
+- **queue-discord-response**
+- **queue-dashboard**
+- **queue-dashboard-response**
+
+- **_queue-user_** : berisi data user yang akan di gunakan di setiap apliakasi , ada ID untuk memastikan user login ke setiap aplikasi
+
+#### Format data untuk Receiver && Production
+
+##### User accest
+
+data user
+
+```json
+{
+    username : "bisa saja berubah di setiap aplikasi sosmed ( cari tahu cara menghadle nya)",
+    discord_id : "121212121",
+    telegram_id : "1212121212",
+    akun : "user || supervisor"
+    role : "user role atau supervisor role"
+}
+
+```
+
+##### Model Api accest
+
+data ( payload ) yang masuk ke server yang menjalakan model dan response nya
+
+- data di queue dengan nama `queue-<media social>` :
+  data yang media sosial kirim ke rabbitmq
+
+```json
+ {
+     "chat_id": ,
+    "text": ,
+    "plafrom": "telegra, || discord || dashboard"
+}
+```
+
+- data di queue dengan nama `queue-<media social>-response` :
+  data yang di kriim dari rabbitmq
+
+```json
+ {
+     "chat_id": ,
+    "response": string,
+    is_toxic  : boolean
+    "plafrom": string
+}
+```
+
+> ini data memang harus selau di kirim sih untuk di cek di server model nya
 
 ### Docker
 
@@ -174,6 +259,24 @@ Biarkan WEb app ini menjadi pusat uatamanay , jadi semua data aakn di simpan di 
 
 1. Data Dummmy untuk semua bot
 2. Table database rant menentukan spesifikasi bahasa untuk rant nya ( indo , aceh , english) itu berdasarkan table nya
+
+##### hunggiFace
+
+dataset juga di simpan di sini
+
+- **dataset indo** : <https://huggingface.co/datasets/bgdar/dataset-rant-indo>
+- **dataset aceh** : <https://huggingface.co/datasets/bgdar/dataset-rant-aceh>
+
+### Response
+
+**_Json response_** :
+
+- `message` : informasi yang di kirim dari server baik atau buruk
+- `status` : status message :
+  1. success : message berhasil
+  2. info :
+  3. warning :
+  4. error :
 
 ### App Color
 

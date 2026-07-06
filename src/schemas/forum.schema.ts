@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 import { HydratedDocument, Types } from 'mongoose';
-import { ForumDTO, ForumVisibility } from 'src/dto/forumDTO';
+import { ForumDTO, ForumMemberRole, ForumVisibility } from 'src/dto/forum.dto';
 
 /**
  * Forum member schema.
@@ -35,7 +35,7 @@ export class ForumMember {
   @Prop({
     type: String,
 
-    enum: ['member', 'moderator', 'supervisor', 'owner'],
+    enum: Object.values(ForumMemberRole),
 
     default: 'member',
   })

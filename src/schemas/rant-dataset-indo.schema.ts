@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 
-import { RantDatasetDTO } from 'src/dto/dataDTO';
+import { RantDatasetDTO } from 'src/dto/data.dto';
 export type CatDocument = HydratedDocument<RantDatasetIndo>;
 
 @Schema()

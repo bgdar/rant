@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { RantKeywordDTO } from 'src/dto/dataDTO';
+import { RantKeywordDTO } from 'src/dto/data.dto';
 import { RantKeywordIndo } from 'src/schemas/rant-keyword-indo.schema';
 
 @Injectable()

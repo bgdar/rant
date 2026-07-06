@@ -12,20 +12,29 @@ export class AuthSupervisorGuard implements CanActivate {
     const currentUrl = request.url;
 
     // Jika user sedang menuju halaman signIn atau signUp, bypass Guard!
-    if (
-      currentUrl.includes('supervosor/signIn') ||
-      currentUrl.includes('supervisor/signUp')
-    ) {
+    if (currentUrl.includes('/supervisor/update-user')) {
       return true;
     }
 
-    const sessionSupervisor = (request as any).session?.user;
+    const sessionSupervisor = (request as any).session?.supervisor;
+
+    console.info('supervisor update user to /supervisor/update-user');
 
     if (!sessionSupervisor) {
-      response.redirect('/');
+      response.redirect('/supervisor/update-user');
       return false;
     }
 
     return true;
   }
 }
+
+
+
+
+
+
+
+
+
+
