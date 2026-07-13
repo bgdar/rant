@@ -259,7 +259,7 @@ export class UpdateForumDTO {
  */
 export class AddForumMemberDTO {
   @IsMongoId()
-  userId: string;
+  userId: Types.ObjectId;
 
   @IsOptional()
   @IsEnum(ForumMemberRole)
@@ -271,7 +271,7 @@ export class AddForumMemberDTO {
  */
 export class RemoveForumMemberDTO {
   @IsMongoId()
-  userId: string;
+  userId: Types.ObjectId;
 }
 
 /**
@@ -285,10 +285,194 @@ export class UpdateForumMemberRoleDTO {
   role: ForumMemberRole;
 }
 
+//
+// DTO UTUK CHAT --------------------------------
+//
+
+/**
+ * Main chat DTO.
+ * Untuk Chatting antar user
+ */
+export class ChatDTO {
+  /**
+   * Unique Chat Room ID for 1-on-1 (Opsional tapi sangat bagus)
+   * Gabungan enkripsi ID kedua user (misal: "userA_userB")
+   * agar query riwayat chat mereka berdua sangat instan.
+   */
+  roomId?: string;
+
+  /**
+   * Sender user ID.
+   * Siapa yang mengirim pesan.
+   */
+  senderId: Types.ObjectId;
+
+  /**
+   * Receiver user ID.
+   * KEJUTAN UTAMA: Siapa yang menerima pesan ini.
+   */
+  receiverId: Types.ObjectId;
+
+  /**
+   * Message content.
+   */
+  message: string;
+
+  /**
+   * Message type (text, image, file, dll).
+   */
+  type: ChatType;
+
+  /**
+   * File/image url.
+   */
+  fileUrl?: string;
+
+  /**
+   * Reply message ID.
+   * Untuk fitur "Balas Pesan" tertentu.
+   */
+  replyTo?: Types.ObjectId;
+
+  /**
+   * Read status.
+   * Cukup boolean karena hanya ada 1 penerima (bukan grup).
+   * True jika si receiverId sudah membuka chat room.
+   */
+  isRead: boolean;
+
+  /**
+   * Message edited state.
+   */
+  isEdited: boolean;
+
+  /**
+   * Message deleted state.
+   */
+  isDeleted: boolean;
+
+  /**
+   * Created at.
+   */
+  createdAt: Date;
+
+  /**
+   * Updated at.
+   */
+  updatedAt: Date;
+}
+
+/**
+ * DTO Create/Send Chat (Pribadi)
+ */
+export class CreateChatDTO {
+  /**
+   * Sender ID.
+   * ID pengguna yang mengirim chat.
+   */
+  @IsMongoId()
+  senderId: string;
+
+  /**
+   * Receiver ID.
+   * WAJIB DIISI: ID pengguna tujuan agar server tahu ke mana pesan dikirim.
+   */
+  @IsMongoId()
+  receiverId: string;
+
+  /**
+   * Room ID.
+   * Opsional diisi oleh client, atau bisa di-generate otomatis
+   * di sisi backend gabungan dari senderId_receiverId.
+   */
+  @IsOptional()
+  @IsString()
+  roomId?: string;
+
+  /**
+   * Message.
+   */
+  @IsString()
+  @MinLength(1)
+  @MaxLength(3000)
+  message: string;
+
+  /**
+   * Chat type.
+   */
+  @IsOptional()
+  @IsEnum(ChatType)
+  type?: ChatType;
+
+  /**
+   * File url.
+   */
+  @IsOptional()
+  @IsString()
+  fileUrl?: string;
+
+  /**
+   * Reply message id.
+   */
+  @IsOptional()
+  @IsMongoId()
+  replyTo?: string;
+}
+
+/**
+ * DTO Update/Edit Chat (Pribadi)
+ */
+export class UpdateChatDTO {
+  @IsOptional()
+  @IsString()
+  @MinLength(1)
+  @MaxLength(3000)
+  message?: string;
+
+  /**
+   * Status apakah pesan telah diubah.
+   * Biasanya di-set true otomatis di backend jika properti 'message' berubah.
+   */
+  @IsOptional()
+  @IsBoolean()
+  isEdited?: boolean;
+
+  /**
+   * Status soft-delete pesan.
+   */
+  @IsOptional()
+  @IsBoolean()
+  isDeleted?: boolean;
+}
+
+/**
+ * DTO Mark Message as Read (Pribadi)
+ * Mengubah status dibaca dari sisi penerima.
+ */
+export class ReadChatDTO {
+  /**
+   * Room ID atau Chat ID spesifik.
+   * Saat user membuka ruang chat pribadi, client mengirim roomId
+   * untuk menandai semua pesan di room tersebut yang targetnya adalah dia menjadi isRead: true.
+   */
+  @IsString()
+  roomId: string;
+
+  /**
+   * Siapa yang membaca pesan (si penerima asli).
+   */
+  @IsMongoId()
+  readerId: string;
+}
+
+//
+// DTO UTUK GROUP --------------------------------
+//
+
 /**
  * Main chat DTO.
  */
-export class ChatDTO {
+export class GroupDTO {
   /**
    * Forum ID.
    */
@@ -348,7 +532,7 @@ export class ChatDTO {
 /**
  * DTO create/send chat.
  */
-export class CreateChatDTO {
+export class CreateGroupDTO {
   /**
    * Forum ID.
    */
@@ -394,7 +578,7 @@ export class CreateChatDTO {
 /**
  * DTO update/edit chat.
  */
-export class UpdateChatDTO {
+export class UpdateGroupDTO {
   @IsOptional()
   @IsString()
   @MaxLength(3000)
@@ -412,7 +596,16 @@ export class UpdateChatDTO {
 /**
  * DTO mark message as read.
  */
-export class ReadChatDTO {
+export class ReadGroupDTO {
+  /**
+   * Forum/Grup ID tempat user sedang membaca pesan.
+   */
+  @IsMongoId()
+  forumId: string;
+
+  /**
+   * User ID yang sedang membaca pesan.
+   */
   @IsMongoId()
   userId: string;
 }

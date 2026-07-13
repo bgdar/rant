@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 import { HydratedDocument, Types } from 'mongoose';
-import { ForumDTO, ForumMemberRole, ForumVisibility } from 'src/dto/forum.dto';
+import { ForumDTO, ForumMemberRole, ForumVisibility } from 'src/dto/forumis.dto';
 
 /**
  * Forum member schema.
@@ -10,7 +10,7 @@ import { ForumDTO, ForumMemberRole, ForumVisibility } from 'src/dto/forum.dto';
   _id: false,
 })
 // export class ForumMember implements ForumMemberDTO { // tidak cocok dengan type Response yang mengguankan string dari pada type database , walaupun database support
-export class ForumMember {
+export class ForumisMember {
   /**
    * User ID.
    */
@@ -50,9 +50,9 @@ export class ForumMember {
   joinedAt: Date;
 }
 
-export const ForumMemberSchema = SchemaFactory.createForClass(ForumMember);
+export const ForumMemberSchema = SchemaFactory.createForClass(ForumisMember);
 
-export type ForumDocument = HydratedDocument<Forum>;
+export type ForumDocument = HydratedDocument<Forumis>;
 
 /**
  * Main forum schema.
@@ -67,7 +67,7 @@ export type ForumDocument = HydratedDocument<Forum>;
   timestamps: true,
 })
 // export class Forum implements ForumDTO { // gak bisa di gunakan karana tidak cocok dengn type response dan type database
-export class Forum {
+export class Forumis {
   /**
    * Forum name/title.
    */
@@ -151,7 +151,7 @@ export class Forum {
 
     default: [],
   })
-  members: ForumMember[];
+  members: ForumisMember[];
 
   /**
    * Forum categories/tags.
@@ -205,4 +205,4 @@ export class Forum {
   lastMessageAt: Date | null;
 }
 
-export const ForumSchema = SchemaFactory.createForClass(Forum);
+export const ForumisSchema = SchemaFactory.createForClass(Forumis);

@@ -10,15 +10,13 @@ import { InjectModel } from '@nestjs/mongoose';
 
 import { Model, Types } from 'mongoose';
 import {
-  CreateChatDTO,
   CreateForumDTO,
   ForumMemberRole,
   ForumVisibility,
-  UpdateChatDTO,
   UpdateForumDTO,
-} from 'src/dto/forum.dto';
+} from 'src/dto/forumis.dto';
 import { Chat, ChatDocument } from 'src/schemas/chat.schema';
-import { Forum, ForumDocument } from 'src/schemas/forum.schema';
+import { Forumis, ForumDocument } from 'src/schemas/forumis.schema';
 
 /**
  * Forums Database Service
@@ -34,7 +32,7 @@ import { Forum, ForumDocument } from 'src/schemas/forum.schema';
 @Injectable()
 export class ForumsDbService {
   constructor(
-    @InjectModel(Forum.name)
+    @InjectModel(Forumis.name)
     private readonly forumModel: Model<ForumDocument>,
 
     @InjectModel(Chat.name)
@@ -97,8 +95,17 @@ export class ForumsDbService {
    * - pakek di home
    **/
   async findAllUserForums(userId: Types.ObjectId) {
+    const targetId =
+      typeof userId === 'string' ? new Types.ObjectId(userId) : userId;
+    // return this.forumModel.find({
+    //   'members.userId': userId,
+    // });
     return this.forumModel.find({
-      'members.userId': userId,
+      members: {
+        $elemMatch: {
+          userId: targetId,
+        },
+      },
     });
   }
 

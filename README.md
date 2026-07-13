@@ -1,6 +1,4 @@
-<div align="center">
-  <img src="./banner.png" />
-</div>
+[banner rant](./baner.png)
 
 <br>
 
@@ -83,8 +81,8 @@
 ##### Coomin Soon
 
 - `Redis` : saat aplikais besar nantik dan karena mengguankan **Session** maka sesi login pengguna akan di simpan dan di tangani oleh **_Redis_**
-- `Speech-to-Text (STT) ` : ini untuk kasus `**Audio**`  jadi kita ubah ke text dahulu baru di handle oleh model nantinya
-> ini sulit dan lama , butuh trining model terpisah agar akurasi untuk bahasa daerah cocok 
+- `Speech-to-Text (STT) ` : ini untuk kasus `**Audio**` jadi kita ubah ke text dahulu baru di handle oleh model nantinya
+  > ini sulit dan lama , butuh trining model terpisah agar akurasi untuk bahasa daerah cocok
 
 ### Bot
 
@@ -112,7 +110,9 @@ pendamping atau admin yang mengelola **grub**
 > Karena menggunakan session maka pilih
 > Id supervisor dengan id user itu 'BERBEDA'
 
-Forums Detail :
+### Forumis
+
+Forumis: Sebutan resmi untuk orang yang aktif berpartisipasi atau menjadi bagian dari suatu forum.
 
 - forums hanya bisa di buat oleh supervisor maka harus login ulang jika user login ,
 
@@ -127,6 +127,14 @@ Forums Detail :
 4. **Director (Direktur / Kepala)**: Pengawas tingkat tinggi yang mengambil keputusan strategis dan menangani kasus pelanggaran berat.
 5. **CEO (Bos Besar / Pemilik)**: Pengawas tertinggi dengan kendali penuh atas sistem, kebijakan, serta otoritas mutlak untuk blokir permanen.
 
+##### Chat , Group , Forums
+
+- Forums: Tempat atau wadah (kamar) diskusi besar yang berisi informasi grup, status akses, dan statistik obrolan komunitas.
+
+- Group: Koleksi data pesan/chat yang dikirim oleh anggota di dalam suatu Forums tertentu (dilengkapi fitur pelacakan baca banyak orang).
+
+- Chat: Koleksi data pesan/chat personal (1-on-1) antar-user yang terisolasi di dalam ruangan unik (roomId) tanpa terikat dengan forum mana pun.
+
 ### Sosmed
 
 > handle Sosmed
@@ -135,12 +143,17 @@ Forums Detail :
 
 ### Dataset
 
-- **Jenis Data**
+**Kemampuan monggoDB**
 
-1. data-keyword : daftar kata kata Lexicon (kata) , berguna untuk **filter** , **deteksi awal ( sebelum ke model )**
-2. database : daftar word ( kalimat ) yang di gunakan olek model AI (seperti : jigsaw-toxic-comment-classification-challenge )
+- NoSQL dirancang untuk menangani operasi tulis (write) skala besar dengan latensi sangat rendah jadi cocok utnuk chating
+- MongoDB menggunakan memori internal komputer (RAM caching) secara optimal untuk mempercepat proses penyimpanan pesan baru dan penarikan riwayat chat lama. Hal ini membuat pengalaman pengguna saat melakukan scrolling riwayat chat terasa sangat instan
+  <br>
+  **Kekurangan MongoDB**
+- database ini kurang optimal jika digunakan untuk mengelola data relasional yang sangat kompleks dengan banyak operasi JOIN, seperti sistem transaksi keuangan atau manajemen inventaris yang rumit.
 
-- **Dataset Column info**
+<br>
+
+**Dataset Column info**
 
 | Column          | Arti                | Penjelasan                                                                         |
 | --------------- | ------------------- | ---------------------------------------------------------------------------------- |
@@ -203,10 +216,13 @@ data ( payload ) yang masuk ke server yang menjalakan model dan response nya
 
 - data di queue dengan nama `queue-<media social>` :
   data yang media sosial kirim ke rabbitmq
+- field katagori di gunakan untuk spesifikasi response chat , tergantung bagaimaan response chat di tulis ulang
+  contoh: `grub`,`chat`,
 
 ```json
  {
      "chat_id": ,
+     "katagori" : ""
     "text": ,
     "plafrom": "telegra, || discord || dashboard"
 }
@@ -214,11 +230,14 @@ data ( payload ) yang masuk ke server yang menjalakan model dan response nya
 
 - data di queue dengan nama `queue-<media social>-response` :
   data yang di kriim dari rabbitmq
+- field katagori di gunakan untuk spesifikasi response chat , tergantung bagaimaan response chat di tulis ulang
+  contoh: `grub`,`chat`,
 
 ```json
  {
      "chat_id": ,
     "response": string,
+     "katagori" : ""
     is_toxic  : boolean
     "plafrom": string
 }
@@ -259,6 +278,13 @@ Biarkan WEb app ini menjadi pusat uatamanay , jadi semua data aakn di simpan di 
 
 1. Data Dummmy untuk semua bot
 2. Table database rant menentukan spesifikasi bahasa untuk rant nya ( indo , aceh , english) itu berdasarkan table nya
+
+##### Chat dan group
+
+- Meskipun jutaan pesan dari ribuan pengguna berada di dalam satu collection yang sama (chats), database tidak akan pernah tertukar atau salah menampilkan pesan.
+- roomId ini bertindak seperti "Nomor ID Kamar". Ketika User A mengobrol dengan User B, server akan men-generate ID kamar yang unik dan konsisten (misalnya: p2p_660a_660b).
+- Semua pesan yang mereka kirim selamanya akan dicap dengan roomId tersebut
+- Saat query dijalankan, MongoDB tidak perlu membaca seluruh isi database dari atas ke bawah. MongoDB akan langsung melompat ke bagian daftar isi roomId yang dicari, mengambil pesannya, dan mengurutkannya berdasarkan waktu (createdAt). Proses ini terjadi dalam hitungan milidetik!
 
 ##### hunggiFace
 

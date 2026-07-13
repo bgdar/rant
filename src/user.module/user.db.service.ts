@@ -102,10 +102,6 @@ export class UserDbService {
 
   /**
    * Mengambil semua user yang aktif.
-   * Filter:
-   * ```ts
-   * isActive: true
-   * ```
    * @returns Array active users
    */
   async findActiveUsers() {
@@ -125,10 +121,6 @@ export class UserDbService {
    *
    * @returns Array user yang cocok
    *
-   * Example:
-   * ```ts
-   * await userDbService.searchByUsername('zer');
-   * ```
    */
   async searchByUsername(username: string): Promise<UserDTO[]> {
     return this.userModel.find({
@@ -173,13 +165,6 @@ export class UserDbService {
    *
    * @returns Updated user
    *
-   * Example:
-   * ```ts
-   * await userDbService.updateRole(
-   *   id,
-   *   'ugnest',
-   * );
-   * ```
    */
   async updateRole(id: string, role: string): Promise<UserDTO> {
     const user = await this.userModel.findByIdAndUpdate(
@@ -237,13 +222,6 @@ export class UserDbService {
    *
    * @returns Updated user
    *
-   * Example:
-   * ```ts
-   * await userDbService.addTag(
-   *   id,
-   *   'developer',
-   * );
-   * ```
    */
   async addTag(id: string, tag: string): Promise<any> {
     return this.userModel.findByIdAndUpdate(
@@ -270,13 +248,6 @@ export class UserDbService {
    *
    * @returns Updated user
    *
-   * Example:
-   * ```ts
-   * await userDbService.removeTag(
-   *   id,
-   *   'developer',
-   * );
-   * ```
    */
   async removeTag(id: string, tag: string): Promise<any> {
     return this.userModel.findByIdAndUpdate(
@@ -323,7 +294,7 @@ export class UserDbService {
    * @returns MongoDB delete result
    * ```
    */
-  // async deleteAllInactiveUsers() : Promise< {
+  // async deleteAllInactiveUsers(): Promise<UserDTO[]> {
   //   return this.userModel.deleteMany({
   //     isActive: false,
   //   });
@@ -339,11 +310,6 @@ export class UserDbService {
    *
    * @returns Total user
    *
-   * Example:
-   * ```ts
-   * const total =
-   *   await userDbService.countUsers();
-   * ```
    */
   async countUsers(): Promise<number> {
     return await this.userModel.countDocuments();
@@ -353,16 +319,40 @@ export class UserDbService {
    * Menghitung total user aktif.
    *
    * @returns Total active users
-   *
-   * Example:
-   * ```ts
-   * const total =
-   *   await userDbService.countActiveUsers();
-   * ```
+
    */
   async countActiveUsers(): Promise<number> {
     return await this.userModel.countDocuments({
       isActive: true,
     });
+  }
+
+  async searchUsersExceptMe(
+    searchKeyword: string,
+    myId: string,
+  ): Promise<UserDTO[]> {
+    return (
+      this.userModel
+        .find({
+          _id: { $ne: myId }, // $ne = Not Equal (Kecualikan ID saya sendiri)
+          $or: [
+            { name: { $regex: searchKeyword, $options: 'i' } }, // 'i' artinya tidak sensitif huruf besar/kecil
+            { username: { $regex: searchKeyword, $options: 'i' } },
+          ],
+        })
+        // .limit(20) // Batasi maksimal 20 orang agar tidak lag
+        .select('name username image') // Hanya ambil kolom yang penting untuk UI chat
+        .exec()
+    );
+  }
+
+  async getRecentActiveUsers(myId: string): Promise<UserDTO[]> {
+    // Mengambil 5 user acak/terbaru untuk pajangan awal sebelum user mengetik sesuatu
+    return this.userModel
+      .find({ _id: { $ne: myId } })
+      .sort({ createdAt: -1 }) // Urutkan dari yang terbaru
+      .limit(5)
+      .select('name username image')
+      .exec();
   }
 }

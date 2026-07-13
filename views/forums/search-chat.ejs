@@ -1,0 +1,121 @@
+
+<div
+  class="bg-white-secondary text-black-primary font-sans antialiased min-h-screen flex flex-col justify-between"
+  x-data="searchChatHandler()"
+>
+  <!-- panggil Navbar dari component -->
+  <%- include('../components/navbar') %>
+
+  <div class="flex grow">
+ 
+    <main class="grow p-4 md:p-8 space-y-6">
+      <div class="bg-white-primary p-6 rounded-xl shadow-sm border border-white-accent flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+          <h2 class="text-xl md:text-2xl font-bold text-black-primary">Mulai Percakapan Baru</h2>
+          <p class="text-sm text-black-muted mt-1">Cari rekan tim berdasarkan nama atau nama pengguna untuk memulai chat pribadi.</p>
+        </div>
+      </div>
+
+      <!--  Menambahkan id, x-ref, dan x-on:input.debounce -->
+      <div class="bg-white-primary p-4 rounded-xl shadow-sm border border-white-accent">
+        <form 
+          id="searchForm"
+          x-ref="searchForm"
+          action="/forums/search-chat" 
+          method="GET" 
+          class="relative w-full flex gap-2"
+        >
+          <div class="relative grow">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-secondary">
+              <i class="fas fa-search"></i>
+            </span>
+            <!-- INPUT DIUBAH: Menambahkan x-on:input.debounce.1000ms -->
+            <input
+              type="text"
+              name="search"
+              value="<%= search %>"
+              x-on:input.debounce.1000ms="$refs.searchForm.submit()"
+              placeholder="Masukkan nama atau @username partner kerja..."
+              class="w-full pl-10 pr-4 py-2.5 bg-white-secondary border border-white-muted rounded-lg focus:outline-none focus:border-main-primary text-sm transition focus:ring-2 focus:ring-main-muted"
+            />
+          </div>
+          <button type="submit" class="bg-black-primary hover:bg-main-primary text-white-primary px-6 py-2.5 rounded-lg text-sm font-semibold transition shadow-sm">
+            Cari
+          </button>
+        </form>
+      </div>
+
+      <div class="space-y-4">
+        <h3 class="text-xs font-bold tracking-wider text-black-muted uppercase px-1">
+          <% if (search) { %> Hasil Pencarian Kunci: "<%= search %>" <% } else { %> Rekomendasi Kontak Terbaru <% } %>
+        </h3>
+
+        <% if (typeof users !== 'undefined' && users && users.length > 0) { %>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <% users.forEach(function(user) { %>
+              <div class="bg-white-primary rounded-xl border border-white-accent shadow-sm hover:shadow-md hover:border-main-accent/30 p-4 flex items-center justify-between transition duration-200 group">
+                <div class="flex items-center space-x-3 overflow-hidden">
+                  <div class="w-12 h-12 rounded-xl bg-white-secondary text-black-secondary border border-white-muted flex items-center justify-center font-bold text-base shadow-inner group-hover:bg-main-muted group-hover:text-main-primary transition duration-300 shrink-0">
+                    <%= user.name ? user.name.substring(0, 2).toUpperCase() : 'U' %>
+                  </div>
+                  <div class="overflow-hidden">
+                    <h4 class="font-bold text-sm text-black-primary truncate group-hover:text-main-primary transition"><%= user.name %></h4>
+                    <p class="text-xs text-gray-secondary truncate">@<%= user.username || 'username' %></p>
+                  </div>
+                </div>
+
+                <button
+                  @click="initiatePrivateChat('<%= user._id %>')"
+                  class="p-2.5 bg-white-secondary hover:bg-main-primary text-black-accent hover:text-white-primary rounded-lg transition-all duration-200 shadow-sm border border-white-accent"
+                  title="Kirim Pesan"
+                >
+                  <i class="fa-solid fa-paper-plane text-xs"></i>
+                </button>
+              </div>
+            <% }); %>
+          </div>
+        <% } else { %>
+          <div class="bg-white-primary rounded-xl border border-white-accent p-12 text-center shadow-sm">
+            <div class="w-16 h-16 bg-gray-muted text-gray-secondary rounded-full flex items-center justify-center text-2xl mx-auto mb-4">
+              <i class="fa-solid fa-user-slash"></i>
+            </div>
+            <h4 class="text-base font-bold text-black-primary">Pengguna tidak ditemukan</h4>
+            <p class="text-xs text-black-muted mt-1 max-w-sm mx-auto">
+              Tidak ada rekan tim dengan kata kunci "<%= search %>". Coba periksa kembali ejaan nama mereka.
+            </p>
+          </div>
+        <% } %>
+      </div>
+    </main>
+  </div>
+
+  <footer class="bg-black-secondary text-gray-primary text-center py-3 text-xs border-t border-black-accent">
+    &copy;Rant , search chat
+  </footer>
+</div>
+
+<script>
+  document.addEventListener('alpine:init', () => {
+    Alpine.data('searchChatHandler', () => ({
+      sidebarOpen: false,
+
+      init() {
+        console.info('[Search View] Sinkronisasi endpoint sukses dijalankan.');
+        
+        // Bonus kenyamanan: Fokuskan kursor otomatis ke ujung teks saat halaman dimuat ulang setelah mencari
+        const input = document.querySelector('input[name="search"]');
+        if (input && input.value) {
+          input.focus();
+          const val = input.value;
+          input.value = '';
+          input.value = val;
+        }
+      },
+
+      initiatePrivateChat(targetUserId) {
+        window.location.href = `/forums/chat?targetId=${targetUserId}`;
+      }
+    }));
+  });
+</script>
+

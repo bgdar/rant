@@ -1,0 +1,5 @@
+
+
+
+-  di sini gak usah buat menjadi pages untuk 2 jenis chat , tapi pisah aja sub halaman sendiri saat user click 
+- di sebelah menu pilihan atau navbar , nantik di sini ada traffik chatting atau data grafick user dan supervisorr aja dari pages

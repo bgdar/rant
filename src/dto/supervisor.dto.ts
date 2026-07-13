@@ -19,7 +19,7 @@ export enum SupervisorRole {
 
 export enum SupervisorPermission {
   CREATEUSER = 'createUser',
-  DELETEUSER = "deleteUser",
+  DELETEUSER = 'deleteUser',
 }
 
 /**
@@ -87,7 +87,7 @@ export class SupervisorDTO {
  * supervisor yang login akan punya session ini
  */
 export class SupervisorSessionDTO {
-  id : string ;
+  id: string;
   fullName: string;
   username: string;
   email: string;
@@ -145,7 +145,7 @@ export class CreateSupervisorDTO {
  */
 export class UpdateToSupervisor {
   fullname: string;
-  // password: string; // gak usah password lah 
+  // password: string; // gak usah password lah
 
   role: string;
 

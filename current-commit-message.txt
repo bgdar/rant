@@ -1,11 +1,12 @@
 
 
 
-commit 3 'success forums' #1
-
-- perbaiki cara user login ke supervisor 
-- memisahkan cara user dan supervisor mendapatkan data di forums
-- menambah token pada Icon fontawesome yang di gunakan
--  perbaiki structure pemilihan user dan supervisor di forum
-- update file chat
-- pisah logic controller dan forums ke file terpisah
+commit 4 'success forums' #2
+- update chatting antar orang , di pisah menjadi chat perorrangan dan grub 
+- nabra user dan supervisor di gabung menjadi 1 file navbar di dalam component , dan di sesuiakan untuk kategori halaman
+- pisahkan logic chat dan grub di bagian forumis 
+- ubah nama forum menjaid forumis , karena memiliki misi bisa chat antar user dan grub
+- dengan tujuan bisa chatting antar user yang bisa di cari 
+- dengan tujuan bisa bergabung ke group dan chatting antar groub a
+- ubah metode untuk mengirim data prediksi ke RabbitMq dari sebelumnya di api /rant/predict -> untuk di gunakan langsung pada gateway
+- update response Ai di chat dan grub page 

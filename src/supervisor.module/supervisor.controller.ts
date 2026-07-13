@@ -5,6 +5,7 @@ import {
   Get,
   HttpStatus,
   InternalServerErrorException,
+  Logger,
   Param,
   Post,
   Put,
@@ -30,6 +31,8 @@ import { AuthUserGuard } from 'src/guards/auth.user';
 @Controller('supervisor')
 @UseGuards(AuthUserGuard, AuthSupervisorGuard)
 export class SupervisorController {
+  private logger = new Logger();
+
   constructor(private readonly supervisorModel: SupervisorDbService) {}
 
   /**
@@ -143,7 +146,7 @@ export class SupervisorController {
       };
       return res.redirect('/supervisor/profile?status=updated_success');
     } catch (error) {
-      console.error('Error saat submit update user:', error);
+      this.logger.error(`Error saat update supervisor : ${error}`);
 
       // Jika internal error, tampilkan kembali halaman dengan log error
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
@@ -205,7 +208,7 @@ export class SupervisorController {
       });
     } catch (error) {
       // Penanganan jika terjadi kendala server atau database crash
-      console.error('Error saat update supervisor:', error);
+      this.logger.error('Error saat update supervisor:', error);
       throw new InternalServerErrorException(
         'Terjadi kesalahan internal server saat memperbarui data.',
       );
@@ -450,18 +453,19 @@ export class SupervisorController {
 
   /**
    * Logout supervisor.
+   * Logout sudah ada di user , karenaka akan menghapus semua session yag login di usernya
    */
-  @Get('/logout')
-  logout(
-    // @Session() session: Record<string, any>,
-    @Req() req: FastifyRequest,
-
-    @Res() res: FastifyReply,
-  ) {
-    req.session.destroy(() => {
-      // res.clearCookie('token');
-
-      res.redirect('/user/signIn');
-    });
-  }
+  // @Get('/logout')
+  // logout(
+  //   // @Session() session: Record<string, any>,
+  //   @Req() req: FastifyRequest,
+  //
+  //   @Res() res: FastifyReply,
+  // ) {
+  //   req.session.destroy(() => {
+  //     // res.clearCookie('token');
+  //
+  //     res.redirect('/user/signIn');
+  //   });
+  // }
 }

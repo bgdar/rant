@@ -1,9 +1,9 @@
 <div
-  x-data='forumsHome(<%= JSON.stringify({ forumsUser: forumsUser, forumsSupervisor: forumsSupervisor, username: username, status: status, isSupervisor: isSupervisor }) %>)'
+  x-data="forumsHome(<%= JSON.stringify({ forumsUser: forumsUser, forumsSupervisor: forumsSupervisor, username: username, status: status, isSupervisor: isSupervisor, userRecent  : userRecent }) %>)"
   class="bg-white text-black overflow-hidden"
 >
   <!-- panggil Navbar dari component -->
-  <%- include('../components/user-navbar') %>
+  <%- include('../components/navbar') %>
 
   <div class="flex h-screen">
     <aside
@@ -15,30 +15,37 @@
         <span class="text-white font-bold text-2xl"> R </span>
       </div>
 
-    
-     <template x-if="currentTab === 'supervisor'">
-  <a
-    href="/forums/create-forum"
-    title="Create New Forum"
-    class="w-14 h-14 rounded-2xl bg-neutral-900 hover:bg-main-primary transition flex items-center justify-center text-white text-2xl"
-  >
-    <i class="fa-solid fa-square-plus"></i> 
-  </a>
-</template>
+      <template x-if="currentTab === 'supervisor'">
+        <a
+          href="/forums/create-group"
+          title="Create New Group"
+          class="w-14 h-14 rounded-2xl bg-neutral-900 hover:bg-main-primary transition flex items-center justify-center text-white text-2xl"
+        >
+          <i class="fa-solid fa-square-plus"></i>
+        </a>
+      </template>
 
-<template x-if="currentTab === 'user'">
-  <a
-    href="/forums/search"
-    title="Join / Search Forum"
-    class="w-14 h-14 rounded-2xl bg-neutral-900 hover:bg-main-primary transition flex items-center justify-center text-white text-2xl"
-  >
-    <i class="fa-solid fa-right-to-bracket"></i>
-  </a>
-</template>
+      <template x-if="currentTab === 'user'">
+        <a
+          href="/forums/search-group"
+          title="Join / Search Group"
+          class="w-14 h-14 rounded-2xl bg-neutral-900 hover:bg-main-primary transition flex items-center justify-center text-white text-2xl"
+        >
+          <i class="fa-solid fa-right-to-bracket"></i>
+        </a>
+      </template>
+
+      <!-- nantik cari user di sini -->
+      <a
+        href="/forums/search-chat"
+        title="Cari Pengguna / Chat Personal"
+        class="w-14 h-14 rounded-2xl bg-neutral-900 hover:bg-main-primary transition flex items-center justify-center text-white text-2xl"
+      >
+        <i class="fa-solid fa-user-plus"></i>
+      </a>
 
       <div class="w-10 h-px bg-neutral-700"></div>
-
-      <template x-for="room in rooms" :key="room.id">
+      <template x-for="room in chat " :key="room.id">
         <a :href="`/forums/chat/${room.slug}`" class="group relative">
           <div
             class="w-14 h-14 rounded-2xl overflow-hidden bg-neutral-800 hover:rounded-xl transition-all duration-300"
@@ -58,17 +65,14 @@
     <section
       class="w-85 bg-[#111111] border-r border-neutral-800 flex flex-col"
     >
-      <!-- HEADER -->
+      <!-- header -->
       <div class="px-5 py-5 border-b border-neutral-800">
         <div class="flex items-center justify-between">
           <div>
             <h1 class="text-white font-bold text-2xl">Forums</h1>
 
             <p class="text-gray-primary text-sm mt-1">Community discussions</p>
-        
-
           </div>
-
         </div>
 
         <!-- Search -->
@@ -82,17 +86,17 @@
         </div>
       </div>
 
-        <!-- Tombol switch jika untuk supervisor -->
-<template x-if="isSupervisor">
+      <!-- Tombol switch jika untuk supervisor -->
+      <template x-if="isSupervisor">
         <div class="px-5 pb-2 flex gap-2">
-          <button 
+          <button
             @click="switchTab('supervisor')"
             :class="currentTab === 'supervisor' ? 'bg-main-primary text-white' : 'bg-neutral-900 text-neutral-400 border border-neutral-800'"
             class="flex-1 py-2 text-xs font-bold rounded-xl transition duration-200"
           >
             Forums Supervisor
           </button>
-          <button 
+          <button
             @click="switchTab('user')"
             :class="currentTab === 'user' ? 'bg-main-primary text-white' : 'bg-neutral-900 text-neutral-400 border border-neutral-800'"
             class="flex-1 py-2 text-xs font-bold rounded-xl transition duration-200"
@@ -103,75 +107,111 @@
       </template>
 
       <div class="flex-1 overflow-y-auto">
-     <!-- Container Utama List Forum -->
-<div class="flex-1 overflow-y-auto custom-scrollbar">
-  
-  <template x-if="filteredForums.length === 0">
-    <div class="flex flex-col items-center justify-center py-16 px-5 text-center">
-      <div class="w-16 h-16 bg-neutral-900 rounded-2xl flex items-center justify-center text-neutral-600 mb-4 border border-neutral-800">
-        <i class="fa-solid fa-folder-open text-2xl"></i>
-      </div>
-      <p class="text-white font-semibold text-base" x-text="currentTab === 'supervisor' ? 'Belum ada forum yang Anda buat' : 'Anda belum bergabung ke forum mana pun'"></p>
-      <p class="text-neutral-500 text-sm mt-1 max-w-xs leading-relaxed" x-text="currentTab === 'supervisor' ? 'Silakan buat forum baru Anda dengan menekan tombol tambah di atas.' : 'Temukan komunitas seru dengan menekan tombol join di atas.'"></p>
-    </div>
-  </template>
+        <!-- Container Utama List Forum -->
+        <div class="flex-1 overflow-y-auto custom-scrollbar">
+          <template x-if="filteredForums.length === 0">
+            <div
+              class="flex flex-col items-center justify-center py-16 px-5 text-center"
+            >
+              <div
+                class="w-16 h-16 bg-neutral-900 rounded-2xl flex items-center justify-center text-neutral-600 mb-4 border border-neutral-800"
+              >
+                <i class="fa-solid fa-folder-open text-2xl"></i>
+              </div>
+              <p
+                class="text-white font-semibold text-base"
+                x-text="currentTab === 'supervisor' ? 'Belum ada forum yang Anda buat' : 'Anda belum bergabung ke forum mana pun'"
+              ></p>
+              <p
+                class="text-neutral-500 text-sm mt-1 max-w-xs leading-relaxed"
+                x-text="currentTab === 'supervisor' ? 'Silakan buat forum baru Anda dengan menekan tombol tambah di atas.' : 'Temukan komunitas seru dengan menekan tombol join di atas.'"
+              ></p>
+            </div>
+          </template>
 
-  <template x-for="forum in filteredForums" :key="forum.id">
-    <a
-      :href="`/forums/chat/${forum.slug}`"
-      class="flex items-center gap-4 px-5 py-4 border-b border-neutral-900/50 hover:bg-neutral-900/60 active:bg-neutral-900 transition-all cursor-pointer group"
-    >
-      <!-- Avatar/Gambar Forum -->
-      <div class="relative w-12 h-12 rounded-xl overflow-hidden flex-shrink-0 bg-neutral-800 border border-neutral-800 shadow-md transition-transform duration-300 group-hover:scale-105">
-        <template x-if="forum.image && forum.image !== 'test'">
-          <img :src="forum.image" class="w-full h-full object-cover" :alt="forum.name" />
-        </template>
-        <!-- Fallback jika gambar bernilai 'test' atau kosong -->
-        <template x-if="!forum.image || forums.length <= 0 ">
-          <div class="w-full h-full bg-gradient-to-br from-neutral-800 to-neutral-950 flex items-center justify-center text-white font-bold text-lg uppercase" x-text="forum.name.substring(0, 2)"></div>
-        </template>
+          <template x-for="forum in filteredForums" :key="forum.id">
+            <a
+              :href="`/forums/group/${forum.slug}`"
+              class="flex items-center gap-4 px-5 py-4 border-b border-neutral-900/50 hover:bg-neutral-900/60 active:bg-neutral-900 transition-all cursor-pointer group"
+            >
+              <!-- Avatar/Gambar Forum -->
+              <div
+                class="relative w-12 h-12 rounded-xl overflow-hidden shrink-0 bg-neutral-800 border border-neutral-800 shadow-md transition-transform duration-300 group-hover:scale-105"
+              >
+                <template x-if="forum.image && forum.image !== 'test'">
+                  <img
+                    :src="forum.image"
+                    class="w-full h-full object-cover"
+                    :alt="forum.name"
+                  />
+                </template>
+                <!-- Fallback jika gambar bernilai 'test' atau kosong -->
+                <template x-if="!forum.image || forums.length <= 0 ">
+                  <div
+                    class="w-full h-full bg-linear-to-br from-neutral-800 to-neutral-950 flex items-center justify-center text-white font-bold text-lg uppercase"
+                    x-text="forum.name.substring(0, 2)"
+                  ></div>
+                </template>
 
-        <div class="absolute bottom-0.5 right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-[#111111]"></div>
-      </div>
+                <div
+                  class="absolute bottom-0.5 right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-[#111111]"
+                ></div>
+              </div>
 
-      <div class="flex-1 min-w-0">
-        <div class="flex items-center justify-between gap-2">
-          <h2 class="text-neutral-200 font-semibold text-sm group-hover:text-white transition-colors truncate" x-text="forum.name"></h2>
-          <span class="text-[11px] text-neutral-600 flex-shrink-0" x-text="new Date(forum.updatedAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})"></span>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between gap-2">
+                  <h2
+                    class="text-neutral-200 font-semibold text-sm group-hover:text-white transition-colors truncate"
+                    x-text="forum.name"
+                  ></h2>
+                  <span
+                    class="text-[11px] text-neutral-600 shrink-0"
+                    x-text="new Date(forum.updatedAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})"
+                  ></span>
+                </div>
+
+                <p
+                  class="text-xs text-neutral-500 truncate mt-1 leading-normal"
+                  x-text="forum.description || 'Tidak ada deskripsi forum.'"
+                ></p>
+
+                <!-- Baris Tag Meta & Member Count -->
+                <div class="flex items-center justify-between mt-2.5">
+                  <!-- Tag List -->
+                  <div class="flex flex-wrap items-center gap-1.5 min-w-0">
+                    <span
+                      class="text-[10px] px-2 py-0.5 rounded-md font-medium uppercase tracking-wider"
+                      :class="forum.visibility === 'public' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-amber-500/10 text-amber-400'"
+                      x-text="forum.visibility"
+                    ></span>
+
+                    <template x-for="tag in forum.tags">
+                      <span
+                        class="text-[10px] px-2 py-0.5 rounded-md bg-neutral-900 border border-neutral-800 text-neutral-400 truncate max-w-[80px]"
+                        x-text="tag"
+                      ></span>
+                    </template>
+                  </div>
+
+                  <!-- Total Members Counter -->
+                  <div
+                    class="flex items-center gap-1 text-neutral-500 text-[11px] flex-shrink-0"
+                  >
+                    <i class="fa-solid fa-users text-[10px]"></i>
+                    <span x-text="forum.totalMembers + ' member'"></span>
+                  </div>
+                </div>
+              </div>
+
+              <template x-if="forum.unread && forum.unread > 0">
+                <div
+                  class="min-w-5 h-5 px-1.5 rounded-full bg-main-primary flex items-center justify-center text-[10px] font-black text-white shadow-sm"
+                  x-text="forum.unread"
+                ></div>
+              </template>
+            </a>
+          </template>
         </div>
-
-        <p class="text-xs text-neutral-500 truncate mt-1 leading-normal" x-text="forum.description || 'Tidak ada deskripsi forum.'"></p>
-
-        <!-- Baris Tag Meta & Member Count -->
-        <div class="flex items-center justify-between mt-2.5">
-          <!-- Tag List -->
-          <div class="flex flex-wrap items-center gap-1.5 min-w-0">
-            <span 
-              class="text-[10px] px-2 py-0.5 rounded-md font-medium uppercase tracking-wider"
-              :class="forum.visibility === 'public' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-amber-500/10 text-amber-400'"
-              x-text="forum.visibility"
-            ></span>
-            
-            <template x-for="tag in forum.tags">
-              <span class="text-[10px] px-2 py-0.5 rounded-md bg-neutral-900 border border-neutral-800 text-neutral-400 truncate max-w-[80px]" x-text="tag"></span>
-            </template>
-          </div>
-
-          <!-- Total Members Counter -->
-          <div class="flex items-center gap-1 text-neutral-500 text-[11px] flex-shrink-0">
-            <i class="fa-solid fa-users text-[10px]"></i>
-            <span x-text="forum.totalMembers + ' member'"></span>
-          </div>
-        </div>
-      </div>
-
-      <template x-if="forum.unread && forum.unread > 0">
-        <div class="min-w-5 h-5 px-1.5 rounded-full bg-main-primary flex items-center justify-center text-[10px] font-black text-white shadow-sm" x-text="forum.unread"></div>
-      </template>
-    </a>
-  </template>
-
-</div>
       </div>
     </section>
 
@@ -186,7 +226,7 @@
         class="relative z-10 h-full flex flex-col items-center justify-center text-center px-10"
       >
         <div
-          class="w-28 h-28 rounded-[2rem] bg-main-prtext-main-primary flex items-center justify-center shadow-2xl"
+          class="w-28 h-28 rounded-4xl bg-main-prtext-main-primary flex items-center justify-center shadow-2xl"
         >
           <span class="text-white text-5xl font-bold"> R </span>
         </div>
@@ -220,7 +260,7 @@
         <!-- STATS -->
         <div class="grid grid-cols-3 gap-6 mt-16">
           <div
-            class="bg-neutral-900 border border-neutral-800 px-8 py-6 rounded-3xl min-w-[180px]"
+            class="bg-neutral-900 border border-neutral-800 px-8 py-6 rounded-3xl min-w-45"
           >
             <h3 class="text-4xl font-black text-white">120+</h3>
 
@@ -228,7 +268,7 @@
           </div>
 
           <div
-            class="bg-neutral-900 border border-neutral-800 px-8 py-6 rounded-3xl min-w-[180px]"
+            class="bg-neutral-900 border border-neutral-800 px-8 py-6 rounded-3xl min-w-45"
           >
             <h3 class="text-4xl font-black text-white">5K+</h3>
 
@@ -236,7 +276,7 @@
           </div>
 
           <div
-            class="bg-neutral-900 border border-neutral-800 px-8 py-6 rounded-3xl min-w-[180px]"
+            class="bg-neutral-900 border border-neutral-800 px-8 py-6 rounded-3xl min-w-45"
           >
             <h3 class="text-4xl font-black text-white">20K+</h3>
 
@@ -250,49 +290,24 @@
   <!-- alpine data -->
   <script>
     function forumsHome(data) {
-      
-      console.info("Data dari server : ",data)
+      console.info('Data dari server : ', data);
 
       return {
         search: '',
 
-        // nantik aja jadi chat antar user 
-        rooms: [
-          {
-            id: 1,
-            slug: 'javascript',
-            image: 'https://i.pravatar.cc/150?img=10',
-            active: true,
-          },
+        // data chat yang pernah di chat user , nantik user bisa mencari di tombol search
+        chat: data.userRecent || [],
 
-          {
-            id: 2,
-            slug: 'anime',
-            image: 'https://i.pravatar.cc/150?img=20',
-          },
-
-          {
-            id: 3,
-            slug: 'gaming',
-            image: 'https://i.pravatar.cc/150?img=30',
-          },
-
-          {
-            id: 4,
-            slug: 'linux',
-            image: 'https://i.pravatar.cc/150?img=40',
-          },
-        ],
-// Tangkap data dari backend
+        // Tangkap data dari backend
         forumsUser: data.forumsUser || [],
         forumsSupervisor: data.forumsSupervisor || [],
         username: data.username || '',
         isSupervisor: data.isSupervisor || false,
-        
+
         // Tab aktif default mengikuti status awal dari login
         currentTab: data.status || 'user',
 
-// Fungsi untuk berpindah tab
+        // Fungsi untuk berpindah tab
         switchTab(tabName) {
           this.currentTab = tabName;
           this.search = ''; // reset pencarian saat pindah tab
@@ -300,7 +315,9 @@
 
         // Mengambil data forum secara dinamis sesuai tab aktif
         get activeForums() {
-          return this.currentTab === 'supervisor' ? this.forumsSupervisor : this.forumsUser;
+          return this.currentTab === 'supervisor'
+            ? this.forumsSupervisor
+            : this.forumsUser;
         },
 
         get filteredForums() {

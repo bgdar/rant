@@ -5,8 +5,6 @@ import {
   IsString,
   MinLength,
 } from 'class-validator';
-import { ObjectId } from 'mongoose';
-
 
 // status bagaimaan perilaku user , nantik akan supervisor lihat
 export enum UserRole {
@@ -28,11 +26,10 @@ export class UserDTO {
 
   // id yang di gunakan user , untuk login dan terhubung ke sosmed
   @IsOptional()
-  discordId : number;
+  discordId: number;
   @IsOptional()
-  telegramId : number;
+  telegramId: number;
 }
-
 
 // sama dengan UserDTO cuman penambahan ID
 export class UserSessionDTO {

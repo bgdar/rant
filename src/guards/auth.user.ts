@@ -1,4 +1,8 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+} from '@nestjs/common';
 import { FastifyReply, FastifyRequest } from 'fastify';
 // import { UserSessionDTO } from 'src/dto/user.dto';
 

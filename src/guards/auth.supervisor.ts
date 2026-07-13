@@ -1,8 +1,15 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 import { FastifyReply, FastifyRequest } from 'fastify';
 
 @Injectable()
 export class AuthSupervisorGuard implements CanActivate {
+  private logger = new Logger('AuthSupervisorGuard');
+
   canActivate(context: ExecutionContext): boolean {
     const http = context.switchToHttp();
     const request = http.getRequest<FastifyRequest>();
@@ -18,7 +25,7 @@ export class AuthSupervisorGuard implements CanActivate {
 
     const sessionSupervisor = (request as any).session?.supervisor;
 
-    console.info('supervisor update user to /supervisor/update-user');
+    this.logger.log('supervisor update user to /supervisor/update-user');
 
     if (!sessionSupervisor) {
       response.redirect('/supervisor/update-user');
@@ -28,13 +35,3 @@ export class AuthSupervisorGuard implements CanActivate {
     return true;
   }
 }
-
-
-
-
-
-
-
-
-
-

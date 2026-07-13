@@ -1,8 +1,8 @@
 <!-- panggil Navbar dari component -->
-<%- include('../components/user-navbar') %>
+<%- include('../components/navbar') %>
 
 <div
-  class="bg-white-secondary min-h-[calc(100vh-3rem)] flex flex-col justify-start items-center pt-8 pb-12 p-0 sm:p-4 antialiased font-sans"
+  class="bg-white-secondary flex flex-col justify-start items-center pt-8 pb-12 p-0 sm:p-4 antialiased font-sans"
 >
   <div
     class="bg-white-primary w-full max-w-md h-screen sm:h-168 sm:rounded-2xl shadow-xl border border-white-accent flex flex-col overflow-hidden"
@@ -198,42 +198,42 @@
           class="block text-xs font-semibold text-gray-secondary mb-3 tracking-wide uppercase"
           >Action</label
         >
-
-
-      <div class="flex align-center gap-1.5">
-  <a
-    type="button"
-    href="/user/update"
-    class="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-main-primary hover:bg-main-secondary text-white-primary text-sm font-semibold rounded-xl shadow-md transition duration-200 cursor-pointer"
-  >
-    <i class="fas fa-arrow-up-from-bracket text-xs"></i>
-    Update Profile
-  </a>
-
-  <!-- Cek apakah supervisor tidak ada, atau tidak punya properti username -->
-  <% if (typeof supervisor === 'undefined' || !supervisor || !supervisor.username || supervisor.username.length === 0) { %>
-    <a
-      type="button"
-      href="/supervisor/update-user"
-      class="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-main-primary hover:bg-main-secondary text-white-primary text-sm font-semibold rounded-xl shadow-md transition duration-200 cursor-pointer"
-    >
-      <i class="fas fa-arrow-up-from-bracket text-xs"></i> Update to Supervisor
-    </a>
-  <% } else { %>
-    <!-- Jika supervisor ada dan punya username, tampilkan tombol ini -->
-    <a
-      href="/supervisor"
-      class="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-main-primary hover:bg-main-secondary text-white-primary text-sm font-semibold rounded-xl shadow-md transition duration-200 cursor-pointer"
-    >
-      <i class="fas fa-arrow-up-from-bracket text-xs"></i> <%= supervisor.username %>
-    </a>
-  <% } %>
-</div>
-        <!-- login ke Sosmed sosmed yang ada -->
         <div class="flex align-center gap-1.5">
           <a
+            type="button"
+            href="/user/update"
+            class="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-main-primary hover:bg-main-secondary text-white-primary text-sm font-semibold rounded-xl shadow-md transition duration-200 cursor-pointer"
+          >
+            <i class="fas fa-arrow-up-from-bracket text-xs"></i>
+            Update Profile
+          </a>
+
+          <template x-if="!supervisor || supervisor.username.length === 0">
+            <a
+              type="button"
+              href="/supervisor/update-user"
+              class="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-main-primary hover:bg-main-secondary text-white-primary text-sm font-semibold rounded-xl shadow-md transition duration-200 cursor-pointer"
+            >
+              <i class="fas fa-arrow-up-from-bracket text-xs"></i> Update to
+              Supervisor
+            </a>
+          </template>
+          <template x-if="supervisor.username && supervisor.username !== null">
+            <a
+              href="/supervisor"
+              class="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-main-primary hover:bg-main-secondary text-white-primary text-sm font-semibold rounded-xl shadow-md transition duration-200 cursor-pointer"
+            >
+              <i class="fas fa-arrow-up-from-bracket text-xs"></i>
+              <p x-text="supervisor.username ? supervisor.username : ''"></p>
+            </a>
+          </template>
+        </div>
+
+        <!-- login ke Sosmed sosmed yang ada -->
+        <div>
+          <a
             href="/auth/discord"
-            class="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-[#5865F2] hover:bg-[#4752C4]  text-sm font-semibold rounded-xl shadow-md transition duration-200 cursor-pointer"
+            class="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-[#5865F2] hover:bg-[#4752C4] text-white text-sm font-semibold rounded-xl shadow-md transition duration-200 cursor-pointer"
           >
             <i class="fab fa-discord text-base"></i> Connect to Discord
           </a>
@@ -241,22 +241,11 @@
           <!-- href diarahkan ke endpoint backend untuk inisialisasi login Telegram -->
           <a
             href="/auth/telegram"
-            class="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-[#26A5E4] hover:bg-[#1E87C4] text-sm font-semibold rounded-xl shadow-md transition duration-200 cursor-pointer"
+            class="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-[#26A5E4] hover:bg-[#1E87C4] text-white text-sm font-semibold rounded-xl shadow-md transition duration-200 cursor-pointer"
           >
             <i class="fab fa-telegram text-base"></i> Connect to Telegram
           </a>
         </div>
-
-
-      </div>
-      <div class="px-6 py-4 mt-4">
-      <a
-      href="/user/logout"
-      class="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-red-600 hover:bg-red-700  text-sm font-semibold rounded-xl shadow-md transition duration-200 cursor-pointer"
-      >
-      <i class="fas fa-sign-out-alt text-xs"></i>
-      Logout
-      </a>
       </div>
     </div>
   </div>

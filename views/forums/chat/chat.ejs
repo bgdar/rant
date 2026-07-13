@@ -1,16 +1,107 @@
-<div
-  class="flex h-screen bg-[#0f0f0f] text-white"
-  x-data="chatApp({
-    forum: <%= JSON.stringify(forum) %>,
-    initialChats: <%= JSON.stringify(chats) %>,
-    currentUser: <%= JSON.stringify(currentUser) %>
-  })"
+          <!-- Ini untuk perorangan aja , atau chat pribadi , bahkan botnya nantik -->
+<script>
+  window.CHAT_SERVER_DATA = {
+    roomId: "<%= roomId %>",
+    targetUser: <%- JSON.stringify(targetUser || {}) %>,
+    chats: <%- JSON.stringify(chats || []) %>, 
+    currentUser: <%- JSON.stringify(currentUser || {}) %>
+  };
+
+  // Log untuk melihat bentuk asli data dari server
+  console.log("=== DATA DARI SERVER ===", window.CHAT_SERVER_DATA);
+</script>
+<div 
+  class="flex flex-col ms:flex-row h-screen bg-[#0f0f0f] text-white" 
+  x-data="chatApp(window.CHAT_SERVER_DATA)" 
   x-init="init()"
 >
-  <aside class="w-[280px] bg-black border-r border-neutral-800 flex flex-col">
-    <div class="p-5 border-b border-neutral-800">
-      <h1 class="text-xl font-black truncate" x-text="forum.name"></h1>
-      <p class="text-neutral-500 text-sm mt-1">Live discussion room</p>
+  
+  <%- include('../../components/navbar',{responsivNav : 'left'}) %>
+
+
+  <main class="flex flex-col flex-1 min-w-0">
+    <header class="h-16 bg-[#111111] border-b border-neutral-800 flex items-center px-5 shadow-sm z-10">
+      <div class="flex items-center gap-3 w-full">
+        <a href="/forums/search-chat" class="md:hidden text-neutral-400 hover:text-white mr-2">
+          <i class="fas fa-arrow-left"></i>
+        </a>
+        
+        <div class="w-9 h-9 rounded-xl bg-neutral-800 flex items-center justify-center font-bold text-sm uppercase border border-neutral-700">
+          <span x-text="targetUser.username.substring(0, 2)"></span>
+        </div>
+
+        <div>
+          <h2 class="font-bold text-sm leading-tight" x-text="targetUser.username"></h2>
+          <p class="text-xs text-neutral-500">
+            Personal Chat
+          </p>
+        </div>
+      </div>
+    </header>
+
+    <div
+      class="flex-1 overflow-y-auto p-5 space-y-3 bg-[#0f0f0f]"
+      x-ref="chatBox"
+    >
+   <template x-for="(msg, i) in messages" :key="msg._id || i">
+  <div class="flex flex-col" :class="isMyChat(msg) ? 'items-end' : 'items-start'">
+    
+    <template x-if="!isMyChat(msg)">
+      <span class="text-[11px] font-bold text-neutral-500 mb-1 ml-1" 
+            x-text="msg.isAi ? 'AI Assistant' : targetUser.username"></span>
+    </template>
+
+    <div
+      class="max-w-[85%] md:max-w-[70%] px-4 py-2.5 rounded-2xl text-sm shadow-sm break-words relative group border"
+      :class="isMyChat(msg)
+        ? 'bg-neutral-800 text-white rounded-br-none border-neutral-700'
+        : (msg.isAi 
+            ? 'bg-purple-900/20 text-purple-200 rounded-bl-none border-purple-800' 
+            : 'bg-[#1a1a1a] text-white rounded-bl-none border-neutral-800')"
+    >
+      <div x-text="msg.message" class="whitespace-pre-wrap"></div>
+
+      <div class="text-[10px] mt-1.5 flex items-center gap-1 justify-end select-none"
+           :class="isMyChat(msg) ? 'text-neutral-400' : 'text-neutral-500'">
+        
+        <span x-text="formatTime(msg.createdAt)"></span>
+        
+        <template x-if="isMyChat(msg)">
+          <span>
+            <i class="fas fa-check-double" :class="msg.isRead ? 'text-blue-400' : 'text-neutral-500'"></i>
+          </span>
+        </template>
+      </div>
+    </div>
+  </div>
+</template>
+    </div>
+
+    <div class="p-4 bg-[#111111] border-t border-neutral-800 flex gap-2 items-end">
+      <textarea
+        x-model="newMessage"
+        @keydown.enter.prevent="sendMessage()"
+        placeholder="Ketik pesan..."
+        class="flex-1 px-4 py-3 rounded-2xl bg-black border border-neutral-800 text-white outline-none focus:border-neutral-600 text-sm transition resize-none max-h-32 min-h-[44px]"
+        rows="1"
+      ></textarea>
+
+      <button
+        @click="sendMessage()"
+        :disabled="!newMessage.trim()"
+        class="bg-white hover:bg-neutral-200 disabled:bg-neutral-900 disabled:text-neutral-700 text-black px-5 py-3 rounded-2xl font-bold text-sm transition cursor-pointer flex items-center justify-center"
+      >
+        <i class="fas fa-paper-plane"></i>
+      </button>
+    </div>
+  </main>
+  <aside class="w-[280px] bg-black border-r border-neutral-800 flex flex-col hidden md:flex">
+    <div class="p-5 border-b border-neutral-800 flex flex-col items-center text-center mt-4">
+      <div class="w-20 h-20 rounded-full bg-neutral-800 flex items-center justify-center font-bold text-2xl uppercase border-2 border-neutral-700 mb-3 text-neutral-300">
+        <span x-text="targetUser.username.substring(0, 2)"></span>
+      </div>
+      <h1 class="text-xl font-black truncate w-full" x-text="targetUser.username"></h1>
+      <p class="text-neutral-500 text-sm mt-1">@<span x-text="targetUser.username || 'user'"></span></p>
     </div>
 
     <div class="p-5 space-y-3">
@@ -23,86 +114,28 @@
         <span class="text-sm font-medium" x-text="status"></span>
       </div>
 
-      <div class="text-sm text-neutral-500 font-bold tracking-wider mt-5">MEMBERS</div>
-      <div class="text-white text-sm">
-        <span class="font-bold text-neutral-200" x-text="forum.totalMembers || 0"></span> registered
+      <div class="text-sm text-neutral-500 font-bold tracking-wider mt-5">KONEKSI AMAN</div>
+      <div class="text-xs text-neutral-400 leading-relaxed">
+        Percakapan ini dienkripsi secara end-to-end. Tidak ada seorang pun di luar ruang obrolan ini yang dapat membaca atau mendengarkannya.
       </div>
     </div>
   </aside>
-  <main class="flex flex-col flex-1 min-w-0">
-    <header class="h-16 bg-[#111111] border-b border-neutral-800 flex items-center px-5">
-      <div class="flex items-center gap-3">
-        <div class="w-9 h-9 rounded-xl bg-neutral-800 flex items-center justify-center font-bold text-sm uppercase border border-neutral-700">
-          <span x-text="forum.name.substring(0, 2)"></span>
-        </div>
-
-        <div>
-          <h2 class="font-bold text-sm" x-text="forum.name"></h2>
-          <p class="text-xs text-neutral-500">
-            #<span x-text="forum.slug"></span>
-          </p>
-        </div>
-      </div>
-    </header>
-
-    <div
-      class="flex-1 overflow-y-auto p-5 space-y-3 bg-[#0f0f0f]"
-      x-ref="chatBox"
-    >
-      <template x-for="(msg, i) in messages" :key="i">
-        <div class="flex flex-col" :class="isMyChat(msg) ? 'items-end' : 'items-start'">
-          <!-- Nama Pengirim (Hanya jika dikirim orang lain) -->
-          <template x-if="!isMyChat(msg)">
-            <span class="text-[11px] font-bold text-neutral-500 mb-1 ml-1" x-text="msg.senderId"></span>
-          </template>
-
-          <div
-            class="max-w-[70%] px-4 py-2.5 rounded-2xl text-sm shadow-sm break-words"
-            :class="isMyChat(msg)
-              ? 'bg-neutral-900 text-white rounded-br-none border border-neutral-800'
-              : 'bg-[#1a1a1a] text-white rounded-bl-none border border-neutral-800'"
-          >
-            <div x-text="msg.message"></div>
-
-            <div class="text-[9px] text-neutral-500 mt-1 text-right select-none">
-              <span x-text="formatTime(msg.createdAt)"></span>
-            </div>
-          </div>
-        </div>
-      </template>
-    </div>
-
-    <!-- INPUT BAR CHAT -->
-    <div class="p-4 bg-[#111111] border-t border-neutral-800 flex gap-2">
-      <input
-        x-model="newMessage"
-        @keydown.enter="sendMessage()"
-        placeholder="Type message..."
-        class="flex-1 px-4 py-3 rounded-2xl bg-black border border-neutral-800 text-white outline-none focus:border-neutral-700 text-sm transition"
-      />
-
-      <button
-        @click="sendMessage()"
-        :disabled="!newMessage.trim()"
-        class="bg-white hover:bg-neutral-200 disabled:bg-neutral-900 disabled:text-neutral-700 text-black px-5 rounded-2xl font-bold text-sm transition cursor-pointer"
-      >
-        Send
-      </button>
-    </div>
-  </main>
 </div>
 
 <script>
   function chatApp(serverData) {
+    
+console.log(", serverData");
     return {
       socket: null,
       status: 'Connecting...',
       newMessage: '',
       
-      // Inject data asli dari controller
-      forum: serverData.forum || {},
+      // Inject data dari controller HTTP
+      roomId: serverData.roomId,
+      targetUser: serverData.targetUser || {},
       currentUser: serverData.currentUser || {},
-      messages: serverData.initialChats || [],
+      messages: serverData.chats || [],
 
       init() {
         const serverUrl = window.location.hostname + ':3051';
@@ -111,23 +144,65 @@
           transports: ['websocket'],
         });
 
-        // CONNECT & JOIN
+        // 1. CONNECT & JOIN ROOM
         this.socket.on('connect', () => {
           this.status = 'Online';
 
-          // Emit joinRoom menggunakan _id asli database forum
-          this.socket.emit('joinRoom', {
-            forumId: this.forum._id || this.forum.id,
+          // Join ke ruangan spesifik antara kita dan targetUser
+          this.socket.emit('joinChatRoom', {
+            roomId: this.roomId,
+            senderId: this.currentUser.id || this.currentUser._id,
+            receiverId: this.targetUser._id
+          });
+          
+          // Beri tahu server bahwa kita membuka room ini, sehingga pesan lawan bicara otomatis 'Terbaca'
+          this.socket.emit('readChatMessage', {
+            roomId: this.roomId,
+            readerId: this.currentUser.id || this.currentUser._id
           });
         });
 
-        // RECEIVE MESSAGE: Menangkap payload asli ChatDTO dari gateway/server
-        this.socket.on('message', (data) => {
-          // Mencegah double push jika websocket mengirim balik pesan kita sendiri
-          if (data.senderId === (this.currentUser.id || this.currentUser._id)) return;
+        // 2. MENERIMA PESAN BARU
+        this.socket.on('chatMessage', (data) => {
+          // Mencegah pesan yang kita kirim sendiri muncul 2x di layar
+          if (this.isMyChat(data)) return;
 
           this.messages.push(data);
           this.scrollBottom();
+
+          // Karena kita sedang berada di room, otomatis tandai pesan baru ini sebagai 'Terbaca'
+          this.socket.emit('readChatMessage', {
+            roomId: this.roomId,
+            readerId: this.currentUser.id || this.currentUser._id
+          });
+        });
+        
+        // 3. MENERIMA STATUS DIBACA (CENTANG BIRU)
+        this.socket.on('messagesMarkedAsRead', (data) => {
+          if (data.readerId === this.targetUser._id) {
+            // Jika lawan bicara membaca pesan, ubah status pesan KITA menjadi isRead = true
+            this.messages.forEach(msg => {
+              if (this.isMyChat(msg)) {
+                msg.isRead = true;
+              }
+            });
+          }
+        });
+
+// -- Listener Prediksi ---
+this.socket.on('resultChatPredik', (result) => {
+          // Hanya tampilkan jika hasil prediksi ada isinya
+          if (result && result.response) {
+            const aiReply = {
+              message: result.response, // Hasil prediksi dari RabbitMQ/AI
+              senderId: 'ai-bot-id', // ID unik untuk membedakan dengan user
+              createdAt: new Date().toISOString(),
+              isAi: true // Flag tambahan untuk styling
+            };
+            
+            this.messages.push(aiReply);
+            this.scrollBottom();
+          }
         });
 
         // STATUS HANDLER
@@ -139,38 +214,49 @@
           console.error('Socket Error:', err);
         });
 
-        // Langsung scroll ke bawah setelah history chats bawaan ter-render
         this.scrollBottom();
       },
 
-      // Fungsi pencocokan status pengirim chat
       isMyChat(msg) {
+// Jika pesan adalah AI, kembalikan false agar dianggap pesan masuk (bukan pesan user)
+  if (msg.isAi) return false;
         if (!this.currentUser) return false;
-        return msg.senderId === (this.currentUser.id || this.currentUser._id);
+        const myId = this.currentUser.id || this.currentUser._id;
+        return msg.senderId === myId || (msg.senderId && msg.senderId._id === myId);
       },
 
       sendMessage() {
         if (!this.newMessage.trim()) return;
 
-        // Sesuaikan Payload 100% dengan kebutuhan ChatDTO di server
+        // Payload wajib sinkron dengan CreatePrivateChatDTO
         const payload = {
-          forumId: this.forum._id || this.forum.id,
-          senderId: this.currentUser.id || this.currentUser._id || 'Unknown',
+          roomId: this.roomId,
+          senderId: this.currentUser.id || this.currentUser._id,
+          receiverId: this.targetUser._id,
           message: this.newMessage.trim(),
-          type: 'text', // Mengikuti ChatType enum
+          type: 'text',
+          isRead: false, // Default belum dibaca
           isEdited: false,
           isDeleted: false,
-          readBy: [],
           createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
         };
 
-        // Kirim struktur data lengkap ke server Gateway
-        this.socket.emit('message', payload);
+        // Kirim event chatMessage (Sesuai dengan Gateway)
+        this.socket.emit('chatMessage', payload);
 
-        // Push ke UI lokal secara reaktif
+// kirim lagi untuk Memicu Prediksi AI ---
+        this.socket.emit('sendChatPredik', {
+          roomId: this.roomId, // Menggunakan roomId yang sama
+          user: this.currentUser.username || '',
+          message: payload.message,
+chatId: this.currentUser.id, // ambil curernt user yang di dapat dari login user
+        });
+        // ------------------------------------
+
+        // Langsung tampilkan di layar secara reaktif
         this.messages.push(payload);
         this.newMessage = '';
+        
         this.scrollBottom();
       },
 

@@ -1,0 +1,12 @@
+Forumis: Sebutan resmi untuk orang yang aktif berpartisipasi atau menjadi bagian dari suatu forum.
+
+Rencana mau di pisahin , cuman agar rapi dan gak perlu banyak halaman , maka fokus pada halaman utama forums.ejs dengan hanya controller aja di pisahin
+
+fitur forumus
+di sini adalah forum seperti chat chat pada media sosiao 
+
+
+
+- chat 
+chat di pisah antar per user dan grub
+

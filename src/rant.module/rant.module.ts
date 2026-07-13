@@ -1,4 +1,4 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import {  Module, NestModule } from '@nestjs/common';
 import { RantController } from './rant.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import {
@@ -68,6 +68,10 @@ import { SosmedController } from './sosmed.controller';
     RantKeywordIndoDbService,
     // RantAcehDbService
     RantDatasetIndoService,
+
+    // akan di gunakan di gateway 
+    RabbitMqDashboardClientProvider,
+    RabbitMqUserClientProvider,
   ],
 })
 export class RantModule {}

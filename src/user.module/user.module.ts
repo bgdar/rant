@@ -10,10 +10,12 @@ import { SupervisorModule } from 'src/supervisor.module/supervisor.module.module
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
 
     // externam provider & service
-    SupervisorModule
+    SupervisorModule,
   ],
 
   controllers: [UserController],
   providers: [UserDbService],
+
+  exports: [UserDbService],
 })
 export class UserModule {}
