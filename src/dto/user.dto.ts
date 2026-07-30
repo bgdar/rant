@@ -26,9 +26,9 @@ export class UserDTO {
 
   // id yang di gunakan user , untuk login dan terhubung ke sosmed
   @IsOptional()
-  discordId: number;
+  discordId: string;
   @IsOptional()
-  telegramId: number;
+  telegramId: string;
 }
 
 // sama dengan UserDTO cuman penambahan ID

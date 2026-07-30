@@ -19,10 +19,10 @@ export class User implements UserDTO {
   email: string;
 
   @Prop()
-  discordId: number;
+  discordId: string;
 
   @Prop()
-  telegramId: number;
+  telegramId: string;
 
   @Prop({
     default: 'Normal',

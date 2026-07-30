@@ -1,7 +1,3 @@
-[banner rant](./baner.png)
-
-<br>
-
 ### Tech Stack
 
 <p align="center">
@@ -49,6 +45,9 @@
 </a>
 
 </p>
+<br>
+
+[rant banner ](./baner.png)
 
 > rant bot to detect abusive words on several social media that use bots
 
@@ -164,6 +163,28 @@ Forumis: Sebutan resmi untuk orang yang aktif berpartisipasi atau menjadi bagian
 | `threat`        | Ancaman             | Mengandung ancaman kepada seseorang                                                |
 | `insult`        | Penghinaan          | Menghina, merendahkan, atau menyerang seseorang                                    |
 | `identity_hate` | Kebencian identitas | Ujaran kebencian terhadap identitas tertentu seperti ras, agama, suku, gender, dll |
+
+Referece bentuk dataset :
+<https://www.kaggle.com/competitions/jigsaw-toxic-comment-classification-challenge>
+
+##### Bot Authentikasi
+
+> sesuikan dengan global variabel selama di developing , ada di :
+> ./src/constan.ts
+
+_**Discord**_
+
+```bash
+# url akses yang di dapat dari discrod masih url ke discord
+https://discord.com/oauth2/authorize?client_id=1466430182339641560&permissions=2575047121354743&response_type=code&redirect_uri=https%3A%2F%2Frant.com%2Fsosmed%2Fdiscord%2Fcallback&integration_type=0&scope=identify+gdm.join+guilds.join+email+bot
+# jadi bagian parameter ini di ubah ke web sendiri aja atau manual
+# pastikan sudah di daftar di DIscord developer portal
+https://discord.com/oauth2/authorize?client_id=1466430182339641560&permissions=2575047121354743&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fsosmed%2Fdiscord%2Fcallback&integration_type=0&scope=identify+gdm.join+guilds.join+email+bot
+```
+
+_**Telegram**_
+
+> di telegram dia butuh domain yang `https` jadi sementara ( develoment ) bisa gunakan **ngrok**
 
 ### Model Api
 
@@ -323,9 +344,3 @@ dataset juga di simpan di sini
 ### Poblem
 
 1. Untuk menjalanakn , yang di hosting tidak hanya web tapi juga semua Bot , berdasarkan kataogi sosmed
-
-### License
-
-> Module di sini gak rapi sesuia konsep nest , tapi ide sendiri wkwkw
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).

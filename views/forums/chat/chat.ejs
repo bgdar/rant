@@ -95,7 +95,7 @@
       </button>
     </div>
   </main>
-  <aside class="w-[280px] bg-black border-r border-neutral-800 flex flex-col hidden md:flex">
+  <aside class="w-70 bg-black border-r border-neutral-800 flex flex-col hidden md:flex">
     <div class="p-5 border-b border-neutral-800 flex flex-col items-center text-center mt-4">
       <div class="w-20 h-20 rounded-full bg-neutral-800 flex items-center justify-center font-bold text-2xl uppercase border-2 border-neutral-700 mb-3 text-neutral-300">
         <span x-text="targetUser.username.substring(0, 2)"></span>
@@ -162,7 +162,7 @@ console.log(", serverData");
           });
         });
 
-        // 2. MENERIMA PESAN BARU
+        // MENERIMA PESAN BARU
         this.socket.on('chatMessage', (data) => {
           // Mencegah pesan yang kita kirim sendiri muncul 2x di layar
           if (this.isMyChat(data)) return;
@@ -177,7 +177,7 @@ console.log(", serverData");
           });
         });
         
-        // 3. MENERIMA STATUS DIBACA (CENTANG BIRU)
+        // MENERIMA STATUS DIBACA (CENTANG BIRU)
         this.socket.on('messagesMarkedAsRead', (data) => {
           if (data.readerId === this.targetUser._id) {
             // Jika lawan bicara membaca pesan, ubah status pesan KITA menjadi isRead = true

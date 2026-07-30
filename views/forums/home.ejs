@@ -45,16 +45,17 @@
       </a>
 
       <div class="w-10 h-px bg-neutral-700"></div>
-      <template x-for="room in chat " :key="room.id">
-        <a :href="`/forums/chat/${room.slug}`" class="group relative">
+      <template x-for="chat  in userRecent " :key="chat._id">
+        <a :href="`/forums/chat?targetId=${chat._id}`" class="group relative">
           <div
             class="w-14 h-14 rounded-2xl overflow-hidden bg-neutral-800 hover:rounded-xl transition-all duration-300"
           >
-            <img :src="room.image" class="w-full h-full object-cover" />
+                <!-- Gambar untuk target chat itu nantik aja , saat mengurus bagis storage image-->
+            <img :src="chat.image" class="w-full h-full object-cover" />
           </div>
 
           <div
-            x-show="room.active"
+            x-show="chat.active"
             class="absolute -left-3 top-1/2 -translate-y-1/2 w-1 h-8 rounded-full bg-white"
           ></div>
         </a>
@@ -146,7 +147,7 @@
                   />
                 </template>
                 <!-- Fallback jika gambar bernilai 'test' atau kosong -->
-                <template x-if="!forum.image || forums.length <= 0 ">
+                <template x-if="!forum.image || forum.length <= 0 ">
                   <div
                     class="w-full h-full bg-linear-to-br from-neutral-800 to-neutral-950 flex items-center justify-center text-white font-bold text-lg uppercase"
                     x-text="forum.name.substring(0, 2)"
@@ -296,7 +297,7 @@
         search: '',
 
         // data chat yang pernah di chat user , nantik user bisa mencari di tombol search
-        chat: data.userRecent || [],
+        userRecent: data.userRecent || [],
 
         // Tangkap data dari backend
         forumsUser: data.forumsUser || [],

@@ -62,10 +62,10 @@ export class ForumsDbService {
     const forum = await this.forumModel.create({
       ...data,
 
-      // 1. Paksa supervisorId menjadi Mongoose ObjectId yang asli
+      // Paksa supervisorId menjadi Mongoose ObjectId yang asli
       supervisorId: new Types.ObjectId(data.supervisorId),
 
-      // 2. Jika ada members yang diinput saat create, paksa userId-nya menjadi ObjectId juga
+      // Jika ada members yang diinput saat create, paksa userId-nya menjadi ObjectId juga
       members:
         data.members?.map((member) => ({
           ...member,

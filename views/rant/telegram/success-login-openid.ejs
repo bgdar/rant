@@ -1,0 +1,119 @@
+<section
+  class="bg-slate-100 min-h-screen flex items-center justify-center p-4 font-sans antialiased"
+>
+  <!-- Inject Data Claims dari Server ke Global Window -->
+  <script>
+    window.telegramClaims = <%- JSON.stringify(userClaims || {}) %>;
+    window.redirectTarget = "<%- targetUrl || '/user/profile' %>";
+  </script>
+
+  <div
+    x-data="telegramSuccess()"
+    x-init="startCountdown()"
+    class="bg-white w-full max-w-md rounded-2xl shadow-xl border border-slate-200 overflow-hidden p-6 sm:p-8 text-center"
+  >
+    <!-- Icon Success Animated -->
+    <div
+      class="relative w-20 h-20 mx-auto mb-5 flex items-center justify-center"
+    >
+      <div
+        class="absolute inset-0 bg-[#229ED9]/20 rounded-full animate-ping"
+      ></div>
+      <div
+        class="relative w-20 h-20 bg-[#229ED9] text-white rounded-full flex items-center justify-center shadow-lg"
+      >
+        <i class="fab fa-telegram-plane text-4xl"></i>
+      </div>
+    </div>
+
+    <!-- Title & Status -->
+    <h2 class="text-2xl font-bold text-slate-800 mb-1">Login Berhasil!</h2>
+    <p class="text-sm text-slate-500 mb-6">
+      Akun Telegram Anda berhasil terverifikasi via OpenID.
+    </p>
+
+    <!-- Ringkasan Claims Data User -->
+    <div
+      class="bg-slate-50 border border-slate-200 rounded-xl p-4 text-left mb-6 space-y-2 text-xs sm:text-sm"
+    >
+      <div
+        class="flex justify-between items-center py-1 border-b border-slate-200"
+      >
+        <span class="text-slate-500 font-medium">your instagram username</span>
+        <span
+          class="text-slate-800 font-semibold"
+          x-text="claims.name || claims.given_name || '-'"
+        ></span>
+      </div>
+
+      <div
+        class="flex justify-between items-center py-1 border-b border-slate-200"
+      >
+        <span class="text-slate-500 font-medium">Telegram ID</span>
+        <span
+          class="font-mono bg-slate-200 px-2 py-0.5 rounded text-slate-700 font-medium text-xs"
+          x-text="claims.id || '-'"
+        ></span>
+      </div>
+
+      <div
+        class="flex justify-between items-center py-1 border-b border-slate-200"
+      >
+        <span class="text-slate-500 font-medium">Subject (Sub)</span>
+        <span
+          class="font-mono text-slate-600 truncate max-w-[180px]"
+          x-text="claims.sub || '-'"
+        ></span>
+      </div>
+
+      <div class="flex justify-between items-center py-1">
+        <span class="text-slate-500 font-medium">Issuer</span>
+        <span class="text-emerald-600 font-semibold flex items-center gap-1">
+          <i class="fas fa-check-circle text-xs"></i>
+          <span x-text="claims.iss || 'oauth.telegram.org'"></span>
+        </span>
+      </div>
+    </div>
+
+    <!-- Countdown Redirect & Button Fallback -->
+    <div class="space-y-3">
+      <p class="text-xs text-slate-400">
+        Mengalihkan ke profil dalam
+        <span class="font-bold text-[#229ED9]" x-text="seconds">2</span>
+        detik...
+      </p>
+
+      <button
+        @click="redirectNow()"
+        class="w-full py-2.5 bg-[#229ED9] hover:bg-[#1d8cbf] text-white font-semibold rounded-xl text-sm shadow-md transition duration-200 flex items-center justify-center gap-2 cursor-pointer"
+      >
+        <span>Lanjutkan Sekarang</span>
+        <i class="fas fa-arrow-right text-xs"></i>
+      </button>
+    </div>
+  </div>
+
+  <script>
+    function telegramSuccess() {
+      return {
+        claims: window.telegramClaims || {},
+        target: window.redirectTarget || '/user/profile',
+        seconds: 2,
+
+        startCountdown() {
+          const interval = setInterval(() => {
+            this.seconds--;
+            if (this.seconds <= 0) {
+              clearInterval(interval);
+              this.redirectNow();
+            }
+          }, 1000);
+        },
+
+        redirectNow() {
+          window.location.href = this.target;
+        },
+      };
+    }
+  </script>
+</section>

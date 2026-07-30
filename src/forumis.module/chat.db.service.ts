@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Chat, ChatDocument } from 'src/schemas/chat.schema';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import {
   ChatType,
   CreateChatDTO,
@@ -180,22 +180,44 @@ export class ChatDbService {
   },
   ..]
    */
+
   async getRecentChats(myId: string) {
+    // Tahap MATCH yang mendukung data bertipe String maupun ObjectId di DB
     const recent = await this.chatModel.aggregate([
       {
         $match: {
-          $or: [{ senderId: myId }, { receiverId: myId }],
+          $or: [
+            { senderId: myId }, // Jika di DB tersimpan sebagai ObjectId
+            { senderId: myId }, // Jika di DB terlanjur tersimpan sebagai String
+            { receiverId: myId },
+            { receiverId: myId },
+          ],
         },
       },
       { $sort: { createdAt: -1 } },
       {
         $project: {
+          // Konversi dulu field DB ke string agar komparasi $cond di bawah akurat 100%
           partnerId: {
-            $cond: [{ $eq: ['$senderId', myId] }, '$receiverId', '$senderId'],
+            $cond: [
+              { $eq: [{ $toString: '$senderId' }, myId] },
+              '$receiverId',
+              '$senderId',
+            ],
           },
         },
       },
-      { $group: { _id: '$partnerId' } },
+      // Konversi partnerId ke ObjectId agar lookup ke koleksi 'users' sukses
+      {
+        $project: {
+          partnerIdObj: { $toObjectId: '$partnerId' },
+        },
+      },
+      {
+        $group: {
+          _id: '$partnerIdObj',
+        },
+      },
       {
         $lookup: {
           from: 'users',
@@ -204,15 +226,23 @@ export class ChatDbService {
           as: 'partnerInfo',
         },
       },
-      { $unwind: '$partnerInfo' },
+      { $unwind: { path: '$partnerInfo', preserveNullAndEmptyArrays: true } },
       {
         $project: {
-          name: '$partnerInfo.name',
-          username: '$partnerInfo.username',
-          image: '$partnerInfo.image',
+          _id: '$_id',
+          name: { $ifNull: ['$partnerInfo.name', 'User Tidak Ditemukan'] },
+          username: { $ifNull: ['$partnerInfo.username', '-'] },
+          image: { $ifNull: ['$partnerInfo.image', ''] },
         },
       },
     ]);
+
     return recent ?? [];
+  }
+  private extrakToRealId(id: string): string {
+    //Ekstrak hanya 24 karakter Hex ID asli (Menghilangkan bungkus 'new ObjectId')
+    // Extract exactly 24 hex characters of the original ID
+    const match = id.match(/[0-9a-fA-F]{24}/);
+    return match ? match[0] : id.trim();
   }
 }

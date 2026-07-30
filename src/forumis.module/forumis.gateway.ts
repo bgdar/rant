@@ -125,7 +125,7 @@ export class ForumsGateway
       this.logger.log(
         `[P2P Chat] Pesan dikirim di ${room}: ${payload.message}`,
       );
-    } catch (error) {
+    } catch (error : any) {
       this.logger.error(`Gagal memproses pesan chat: ${error.message}`);
       client.emit('error', { message: 'Gagal mengirim pesan' });
     }
@@ -149,7 +149,7 @@ export class ForumsGateway
         roomId: payload.roomId,
         readerId: payload.readerId,
       });
-    } catch (error) {
+    } catch (error : any) {
       this.logger.error(`Gagal memperbarui status baca: ${error.message}`);
     }
   }

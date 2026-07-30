@@ -65,7 +65,7 @@ export class UserDbService {
    * Akan dilempar jika user tidak ditemukan
    * ```
    */
-  async findById(id: string): Promise<UserDTO> {
+  async findById(id: string) {
     const user = await this.userModel.findById(id).select('-password');
 
     if (!user) {
@@ -145,7 +145,7 @@ export class UserDbService {
    * @throws NotFoundException
    *
    */
-  async update(id: string, data: UpdateUserDTO): Promise<UserDTO> {
+  async update(id: string, data: UpdateUserDTO) {
     const user = await this.userModel.findByIdAndUpdate(id, data, {
       new: true,
     });
@@ -166,7 +166,7 @@ export class UserDbService {
    * @returns Updated user
    *
    */
-  async updateRole(id: string, role: string): Promise<UserDTO> {
+  async updateRole(id: string, role: string) {
     const user = await this.userModel.findByIdAndUpdate(
       id,
       {
@@ -179,6 +179,40 @@ export class UserDbService {
 
     if (!user) {
       throw new NotFoundException('User not found');
+    }
+
+    return user;
+  }
+
+  async addDiscordId(id_user: string, discord_id: string) {
+    const user = await this.userModel.findByIdAndUpdate(
+      id_user,
+      {
+        discordId: discord_id,
+      },
+      {
+        returnDocument: 'after', // Memperbaiki warning Deprecation Mongoose
+      },
+    );
+    if (!user) {
+      throw new NotFoundException('User udpate discord not found ');
+    }
+
+    return user;
+  }
+
+  async addtelegramId(id_user: string, telegram_id: string) {
+    const user = await this.userModel.findByIdAndUpdate(
+      id_user,
+      {
+        telegramId: telegram_id,
+      },
+      {
+        returnDocument: 'after', // Memperbaiki warning Deprecation Mongoose
+      },
+    );
+    if (!user) {
+      throw new NotFoundException('User udpate discord not found ');
     }
 
     return user;
@@ -262,6 +296,14 @@ export class UserDbService {
       },
     );
   }
+  async findByTelegramId(telegramId: string) {
+    return await this.userModel.findOne({ telegramId });
+  }
+
+  async findByDiscordId(discordId: string) {
+    return await this.userModel.findOne({ discordId });
+  }
+
   /**
    * Menghapus user berdasarkan ID.
    *
@@ -327,10 +369,7 @@ export class UserDbService {
     });
   }
 
-  async searchUsersExceptMe(
-    searchKeyword: string,
-    myId: string,
-  ): Promise<UserDTO[]> {
+  async searchUsersExceptMe(searchKeyword: string, myId: string) {
     return (
       this.userModel
         .find({
@@ -346,7 +385,7 @@ export class UserDbService {
     );
   }
 
-  async getRecentActiveUsers(myId: string): Promise<UserDTO[]> {
+  async getRecentActiveUsers(myId: string) {
     // Mengambil 5 user acak/terbaru untuk pajangan awal sebelum user mengetik sesuatu
     return this.userModel
       .find({ _id: { $ne: myId } })

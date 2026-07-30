@@ -15,7 +15,7 @@ export class RabbitMqUserClientProvider {
       // Mencoba melakukan koneksi ke broker RabbitMQ
       await this.client.connect();
       return true; // Jika berhasil, RabbitMQ hidup
-    } catch (error) {
+    } catch (error : any) {
       // Jika gagal terhubung atau broker mati, tangkap error-nya
       console.error('RabbitMQ tidak merespons / mati:', error.message);
       return false; // RabbitMQ mati

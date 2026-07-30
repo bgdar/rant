@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Header,
   HttpStatus,
   Post,
   Render,
@@ -18,6 +19,8 @@ import { UserSessionDTO, UserSignUpDTO } from 'src/dto/user.dto';
 import { AuthUserGuard } from 'src/guards/auth.user';
 import { SupervisorDbService } from 'src/supervisor.module/supervisor.db.service';
 import { SupervisorSessionDTO } from 'src/dto/supervisor.dto';
+import { ConfigService } from '@nestjs/config';
+import { httpDomain } from '@/constan';
 // import { FastifySessionObject } from '@fastify/session';
 
 @UseGuards(AuthUserGuard)
@@ -25,6 +28,7 @@ import { SupervisorSessionDTO } from 'src/dto/supervisor.dto';
 export class UserController {
   constructor(
     private readonly userModel: UserDbService,
+    private readonly configService: ConfigService,
     private readonly supervisorModel: SupervisorDbService,
   ) {}
 
@@ -40,17 +44,17 @@ export class UserController {
   }
 
   @Get('/profile')
+  // izinkan menampilklan popup login telegram di halaman profile
+  @Header('Cross-Origin-Opener-Policy', 'same-origin-allow-popups')
   @Render('/user/profile.ejs')
   async Profile(@Req() req: FastifyRequest) {
     const user = (req as any).session?.user as UserSessionDTO;
-
     // jika user sudah supervisor
     const supervisor = (req as any).session?.supervisor as SupervisorSessionDTO;
 
     const dataUser = await this.userModel.findById(user.id);
 
-
-    console.info("Data user profile : ",dataUser)
+    console.info('profile session : ', dataUser);
 
     return {
       title: 'User Profile',
@@ -59,7 +63,15 @@ export class UserController {
         role: dataUser.role,
         email: dataUser.email,
       },
-      supervisor: supervisor || null ,
+      sosmed: {
+        telegramId: dataUser.telegramId || '',
+        discordId: dataUser.discordId || '',
+
+        telegram_client_id:
+          this.configService.get<string>('TELEGRAM_OIDC_CLIENT_ID') || '',
+        telegram_redirect: `${httpDomain}sosmed/telegram/callback`,
+      },
+      supervisor: supervisor || null,
     };
   }
 
@@ -129,8 +141,11 @@ export class UserController {
     //   maxAge: 1000 * 60 * 60 * 24,
     //   secure: false,
     // });
+
+    // ini id harus di ubah ke string , bisa juga ke hextring cuamn rentang crash
+    // jika tidak nanitk ata session yang di simpan jika ada tulisan new Objeck ("...") , maka ikutan ke bawa jadi string
     session.user = {
-      id: user._id,
+      id: user._id.toString(),
       username: user.username,
       email: user.email,
       role: user.role,
@@ -143,20 +158,16 @@ export class UserController {
       user.username,
     );
 
-    console.info("data supervisor di login : ",supervisor)
-
     // session untuk supervisor , langgsung login
     if (supervisor) {
       session.supervisor = {
-        id: supervisor._id,
+        id: supervisor._id.toString(),
         username: user.username,
         email: user.email,
         phone: supervisor.phone,
         token: supervisor.token,
         permission: supervisor.permissions,
       };
-
-      console.info(user.username, 'punya akses ke supervisor');
     }
 
     return res.status(HttpStatus.OK).send({
@@ -225,7 +236,6 @@ export class UserController {
       message: 'Register success',
       user,
     });
-
   }
 
   /**
@@ -244,10 +254,10 @@ export class UserController {
     });
 
     // spesifik tapi gak memastikan kridential tertingga
-// Menghapus objek user dari session
-// delete req.session.user;
+    // Menghapus objek user dari session
+    // delete req.session.user;
 
-// Atau menghapus supervisor juga jika ada
-// delete req.session.supervisor;
+    // Atau menghapus supervisor juga jika ada
+    // delete req.session.supervisor;
   }
 }

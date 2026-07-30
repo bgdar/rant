@@ -11,16 +11,17 @@ import fastifyCookie from '@fastify/cookie';
 // import fastifyFlash from '@fastify/flash'; // gak stabil di fastify
 import session from '@fastify/session';
 import fastifyView from '@fastify/view';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { join } from 'path';
 // import expressLayout from 'express-ejs-layouts'; // untuk express , dengan ejs sudha ada fastify/view
 import ejs from 'ejs';
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter(),
   );
+  const configService = new ConfigService();
 
   // Microservice RabbitMQ yang di guankan di projeck ini
   app.connectMicroservice<MicroserviceOptions>({
@@ -52,7 +53,7 @@ async function bootstrap() {
   await app.register(fastifyView, {
     engine: { ejs },
     root: join(__dirname, '..', 'views'),
-    // viewExt: 'ejs',
+    viewExt: 'ejs',
     templates: join(__dirname, '..', 'views'),
     layout: 'components/layouts.ejs',
   });
@@ -76,8 +77,7 @@ async function bootstrap() {
 
   await app.startAllMicroservices();
 
-  console.info('APP running on : localhost:3000');
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(configService.get<number>('PORT') ?? 3050);
 }
 bootstrap().catch((err) => {
   console.error('Gagal menjalankan aplikasi:', err);

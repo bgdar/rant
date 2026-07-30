@@ -17,6 +17,8 @@ import { RabbitMqDashboardClientProvider } from './rabbitMq.dashboard.client.pro
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { RabbitMqUserClientProvider } from './rabbitMq.user.client.provider';
 import { SosmedController } from './sosmed.controller';
+import { UserModule } from '@/user.module/user.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -51,6 +53,10 @@ import { SosmedController } from './sosmed.controller';
         },
       },
     ]),
+
+    // ----------- import external module 
+    ConfigModule,
+    UserModule,
   ],
   providers: [
     RantKeywordIndoDbService,

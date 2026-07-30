@@ -1,19 +1,13 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Query,
-  Render,
-} from '@nestjs/common';
+import { Controller, Get, Post, Query, Render } from '@nestjs/common';
 import { RabbitMqDashboardClientProvider } from './rabbitMq.dashboard.client.provider';
 
 @Controller('rant')
 export class RantController {
   // di sini hayer model nya nntik untuk di tampilkan di web app
 
-   /*
-  * *Bgdar : metode ini akan menambah layer , saya akan menganti nya dengan mengimport conection ke rabbitMq ke gateway langsung untuk prediksi 
-  */ 
+  /*
+   * *Bgdar : metode ini akan menambah layer , saya akan menganti nya dengan mengimport conection ke rabbitMq ke gateway langsung untuk prediksi
+   */
   // constructor(private RbDashboardClient: RabbitMqDashboardClientProvider) {}
 
   @Get()
@@ -31,9 +25,9 @@ export class RantController {
    * nantik forums view cukup panggil ke rant
    * yap predict untuk web dashboard
    */
-   /*
-  * *Bgdar : metode ini akan menambah layer , saya akan menganti nya dengan mengimport conection ke rabbitMq ke gateway langsung untuk prediksi 
-  */ 
+  /*
+   * *Bgdar : metode ini akan menambah layer , saya akan menganti nya dengan mengimport conection ke rabbitMq ke gateway langsung untuk prediksi
+   */
 
   // @Post('/predict')
   // async predictPost(@Query('text') text: string) {
@@ -46,6 +40,5 @@ export class RantController {
   //   }
   // }
 
-
-  // --- EXPORT MODEL Api data agar bisa di gunakan di   aplikasi lain---------- 
+  // --- EXPORT MODEL Api data agar bisa di gunakan di   aplikasi lain----------
 }
