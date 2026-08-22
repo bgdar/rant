@@ -1,9 +1,10 @@
+<!-- Data sudah diambil di root (alpine js), dan di dalam component ini tinggal panggil saja -->
 <div
   class="bg-white-secondary text-black-primary font-sans antialiased min-h-screen flex flex-col justify-between"
-  x-data="userManagementHandler()"
+  x-data="init()"
 >
   <header
-    class="bg-black-primary text-white-primary shadow-md px-6 py-4 flex justify-between items-center"
+    class="bg-black-primary text-white-primary shadow-md px-1 py-1 flex justify-between items-center"
   >
     <div class="flex items-center space-x-3">
       <div class="bg-main-primary text-white-primary p-2 rounded-lg">
@@ -68,12 +69,16 @@
                 <th class="p-4">Username</th>
                 <th class="p-4">Email</th>
                 <th class="p-4">Role</th>
-                <th class="p-4">Status</th>
+             <!-- matiin dulu karena belum di pakai di user-->
+             <!--   <th class="p-4">Status</th> -->
                 <th class="p-4 text-center">Aksi</th>
               </tr>
             </thead>
             <tbody class="text-xs divide-y divide-white-accent">
-              <template x-for="user in filteredUsers" :key="user.id">
+
+
+             <!-- -- LOOP USERS -- -->
+              <template x-for="user in filteredUsers" :key="user.username">
                 <tr
                   class="hover:bg-white-secondary transition"
                   :class="selectedUser.id === user.id ? 'bg-main-muted/20' : ''"
@@ -92,6 +97,7 @@
                       x-text="user.role"
                     ></span>
                   </td>
+                  <!-- masih di matikan dulu karena userActive belum aktive
                   <td class="p-4">
                     <span
                       class="inline-flex items-center gap-1 font-semibold"
@@ -105,7 +111,8 @@
                         x-text="user.isActive ? 'Active' : 'Suspended'"
                       ></span>
                     </span>
-                  </td>
+                  </td> -->
+
                   <td class="p-4 text-center">
                     <button
                       @click="selectUser(user)"
@@ -116,6 +123,8 @@
                   </td>
                 </tr>
               </template>
+             <!-- -- LOOP USERS -- -->
+
             </tbody>
           </table>
         </div>
@@ -258,6 +267,7 @@
                 </button>
                 <button
                   type="submit"
+                  @click="isEditing = false; selectedUser = null;" 
                   class="px-4 py-2 bg-main-primary hover:bg-main-secondary text-white-primary font-bold rounded-lg shadow transition"
                 >
                   <i class="fas fa-save mr-1"></i> Simpan DTO
@@ -270,67 +280,31 @@
     </div>
   </main>
 
-  <footer
-    class="bg-black-secondary text-gray-primary text-center py-3 text-xs border-t border-black-accent"
-  >
-    &copy; 2026 Admin Panel — Crafted for Supervisor. All rights reserved.
-  </footer>
+
 </div>
 
 <script>
-  function userManagementHandler() {
-    return {
-      searchQuery: '',
-      isEditing: false,
-      selectedUser: {},
-
-      // Objek form yang memetakan properti dari UpdateUserDTO (Tanpa Password)
-      form: {
-        username: '',
-        email: '',
-        role: '',
-        isActive: true,
-      },
-
-      alert: {
-        show: false,
-        type: 'error',
-        message: '',
-      },
-
-      // Mock Data Pengguna awal
-      users: [
-        {
-          id: 1,
-          username: 'megan_analyst',
-          email: 'megan@company.com',
-          role: 'analyst',
-          isActive: true,
+document.addEventListener('alpine:init', () => {
+    Alpine.data('init', () => ({
+        // 1. Definisikan state awal yang dibutuhkan HTML Anda
+        searchQuery: '',
+        users: [], 
+        selectedUser: null,
+        isEditing: false,
+        form: {
+            username: '',
+            email: ''
         },
-        {
-          id: 2,
-          username: 'alex_operator',
-          email: 'alex.ops@company.com',
-          role: 'operator',
-          isActive: true,
+        alert: {
+            show: false,
+            message: '',
+            type: ''
         },
-        {
-          id: 3,
-          username: 'fauzan_sup',
-          email: 'fauzan@company.com',
-          role: 'supervisor',
-          isActive: true,
-        },
-        {
-          id: 4,
-          username: 'danu_staf',
-          email: 'danu.s@company.com',
-          role: 'operator',
-          isActive: false,
-        },
-      ],
 
-      // Computed Filter untuk Live Search di Tabel
+        init() {
+            this.users = <%- JSON.stringify(users) %>;
+        },
+// Computed Filter untuk Live Search di Tabel
       get filteredUsers() {
         return this.users.filter((user) => {
           return (
@@ -341,7 +315,6 @@
           );
         });
       },
-
       // Memilih user dari tabel dan memetakan datanya ke Form DTO
       selectUser(user) {
         this.alert.show = false;

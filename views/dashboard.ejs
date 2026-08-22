@@ -1,29 +1,157 @@
 <!--  include("layouts")  ini tidak perlu lagi , karen otomatis dari fastify + ejs -->
-<div class="bg-[#FFFFFF] text-black-primary font-sans">
+<div class="bg-gray-primary text-[#000000] font-sans overflow-x-hidden">
   <section
-    class="relative h-screen flex items-center justify-center bg-fixed-custom"
+    class="relative h-screen flex items-center justify-center overflow-hidden bg-[#1f1f1f]"
+    x-data="{ show: false }"
+    x-init="setTimeout(() => show = true, 100)"
   >
-    <div class="absolute inset-0 bg-blue-900/40 backdrop-blur-[2px]"></div>
-
     <div
-      class="relative z-10 text-center px-4"
-      x-data="{ show: false }"
-      x-init="setTimeout(() => show = true, 100)"
+      class="absolute inset-0 z-0 flex items-center justify-center pointer-events-none select-none"
+      x-show="show"
+      x-transition:enter="transition ease-out duration-1000"
+      x-transition:enter-start="opacity-0 scale-95"
+      x-transition:enter-end="opacity-100 scale-100"
     >
+      <svg
+        class="w-full h-full"
+        viewBox="0 0 1000 600"
+        preserveAspectRatio="xMidYMid slice"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <defs>
+          <filter
+            id="subtle-wave-filter"
+            x="-10%"
+            y="-10%"
+            width="120%"
+            height="120%"
+          >
+            <feTurbulence
+              type="fractalNoise"
+              baseFrequency="0.003"
+              numOctaves="2"
+              result="noise"
+            >
+              <!-- Animasi gelombang yang sangat lambat dan halus -->
+              <!--     <animate 
+                attributeName="baseFrequency" 
+                values="0.003; 0.006; 0.004; 0.003" 
+                dur="12s" 
+                repeatCount="indefinite" 
+              /> 
+              -->
+            </feTurbulence>
+            <feDisplacementMap
+              in="SourceGraphic"
+              in2="noise"
+              scale="5"
+              xChannelSelector="R"
+              yChannelSelector="G"
+            />
+          </filter>
+
+          <!-- Gradient Vektor Kiri (Red Muted to Transparent) -->
+          <linearGradient
+            id="grad-left-shape"
+            x1="0%"
+            y1="0%"
+            x2="100%"
+            y2="100%"
+          >
+            <stop offset="0%" stop-color="#ffffff" stop-opacity="0.35" />
+            <stop offset="60%" stop-color="#dcdcdc" stop-opacity="0.2" />
+            <stop offset="100%" stop-color="#e0e0e0" stop-opacity="0.0" />
+          </linearGradient>
+
+          <!-- Gradient Background Huruf R (Dark Accent & Red Highlight) -->
+          <linearGradient id="grad-r-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#333333" stop-opacity="0.85" />
+            <stop offset="50%" stop-color="#1f1f1f" stop-opacity="0.9" />
+            <stop offset="100%" stop-color="#ff0000" stop-opacity="0.25" />
+          </linearGradient>
+
+          <!-- Stroke Gradient -->
+          <linearGradient id="grad-stroke" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#ff4d4d" stop-opacity="0.9" />
+            <stop offset="50%" stop-color="#ffffff" stop-opacity="0.7" />
+            <stop offset="100%" stop-color="#dcdcdc" stop-opacity="0.4" />
+          </linearGradient>
+        </defs>
+
+        <g filter="url(#subtle-wave-filter)">
+          <!-- kelompok vektor sisi kiri (background fill merah + stroke) -->
+          <!-- Inner Background Fill -->
+          <path
+            d="M -50,-20 Q 200,80 320,160 T 180,320 T 300,480 Q 480,520 780,620 L -50,650 Z"
+            fill="url(#grad-left-shape)"
+          />
+          <!-- Outline Stroke Hand-drawn -->
+          <path
+            d="M -50,30 Q 150,120 300,160 T 180,320 T 280,480 Q 450,520 750,580 L 800,650"
+            fill="none"
+            stroke="url(#grad-stroke)"
+            stroke-width="5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M -80,280 Q 120,290 220,380 T 320,450 Q 500,530 850,620"
+            fill="none"
+            stroke="#ff4d4d"
+            stroke-opacity="0.4"
+            stroke-width="3"
+            stroke-dasharray="10 10"
+          />
+
+          <!-- Background Fill Huruf R -->
+          <path
+            d="M 610,110 Q 750,80 920,100 T 980,220 T 820,330 L 610,340 Z M 800,330 Q 840,420 980,520 L 990,560 L 730,570 L 740,340 Z"
+            fill="url(#grad-r-bg)"
+          />
+          <!-- Outline Stroke Huruf R -->
+          <path
+            d="M 610,110 Q 750,80 920,100 T 980,220 T 820,330 L 610,340 Z M 800,330 Q 840,420 980,520 L 990,560"
+            fill="none"
+            stroke="url(#grad-stroke)"
+            stroke-width="7"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <!-- Inner Loop & Accent Lines Huruf R -->
+          <path
+            d="M 720,170 Q 780,140 860,170 T 820,270 L 720,280 Z"
+            fill="#1f1f1f"
+            stroke="#ffffff"
+            stroke-opacity="0.6"
+            stroke-width="4"
+          />
+          <path
+            d="M 760,280 L 740,530 Q 730,560 760,570"
+            fill="none"
+            stroke="url(#grad-stroke)"
+            stroke-width="6"
+            stroke-linecap="round"
+          />
+        </g>
+      </svg>
+    </div>
+
+    <div class="relative z-10 text-center px-4 max-w-3xl mx-auto">
       <h1
         x-show="show"
         x-transition:enter="transition ease-out duration-1000"
         x-transition:enter-start="opacity-0 transform translate-y-10"
         x-transition:enter-end="opacity-100 transform translate-y-0"
-        class="text-5xl md:text-7xl font-bold text-[#FFFFFF] mb-6 tracking-tight"
+        class="text-5xl md:text-7xl font-extrabold text-white-primary mb-6 tracking-tight drop-shadow-md"
       >
-        Eksplorasi <span class="text-[#FF0000]">Inovasi</span>
+        Wellcome <span class="text-main-primary">Rant</span>
+        <span class="bold"> Dashboard </span>
       </h1>
 
       <p
         x-show="show"
         x-transition:enter="transition ease-out duration-1000 delay-300"
-        class="text-[#FFFFFF] text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed"
+        class="text-[#f5f5f5] text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed font-normal drop-shadow"
       >
         Platform modern yang menggabungkan kecepatan teknologi dengan estetika
         desain minimalis untuk pengalaman pengguna terbaik.
@@ -32,136 +160,22 @@
       <div
         x-show="show"
         x-transition:enter="transition ease-out duration-1000 delay-500"
+        class="flex flex-wrap justify-center gap-5"
       >
         <a
           href="/rant"
-          class="bg-main-primary hover:bg-red-700 text-[#FFFFFF] font-bold py-4 px-10 rounded-full transition duration-300 shadow-lg inline-block"
+          class="bg-[#ff0000] hover:bg-[#cc0000] text-white-primary font-bold py-4 px-10 rounded-full transition duration-300 shadow-lg hover:shadow-[#ff0000]/40 transform hover:-translate-y-1 active:scale-95 inline-block"
         >
           Rant
         </a>
 
         <a
           href="/user"
-          class="bg-white-secondary hover:bg-red-700 text-black-primary hover:text-white-primary font-bold py-4 px-10 rounded-full transition duration-300 shadow-lg inline-block"
+          class="bg-[#ffffff] hover:bg-[#f5f5f5] text-[#000000] font-bold py-4 px-10 rounded-full transition duration-300 shadow-lg transform hover:-translate-y-1 active:scale-95 inline-block"
         >
           Your
         </a>
       </div>
     </div>
   </section>
-
-  <section id="info" class="py-20 px-6 max-w-7xl mx-auto">
-    <div class="text-center mb-16">
-      <h2 class="text-3xl font-bold text-black-primary mb-4">
-        Informasi Layanan
-      </h2>
-      <div class="w-20 h-1 bg-color-main-primary mx-auto"></div>
-    </div>
-
-    <div
-      class="grid grid-cols-1 md:grid-cols-3 gap-8"
-      x-data="{ selected: null }"
-    >
-      <div
-        @mouseenter="selected = 1"
-        @mouseleave="selected = null"
-        class="p-8 border border-gray-pritext-gray-primary /20 rounded-xl transition-all duration-300 hover:shadow-2xl bg-[#FFFFFF]"
-        :class="selected === 1 ? 'border-[#FF0000] -translate-y-2' : ''"
-      >
-        <div
-          class="w-12 h-12 bg-[#FF0000] flex items-center justify-center rounded-lg mb-6"
-        >
-          <svg
-            class="w-6 h-6 text-[#FFFFFF]"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M13 10V3L4 14h7v7l9-11h-7z"
-            ></path>
-          </svg>
-        </div>
-        <h3 class="text-xl font-bold mb-3 text-black-primary">
-          Performa Cepat
-        </h3>
-        <p class="text-gray-primary">
-          Dibangun dengan teknologi terbaru untuk memastikan akses tanpa
-          hambatan di semua perangkat.
-        </p>
-      </div>
-
-      <div
-        @mouseenter="selected = 2"
-        @mouseleave="selected = null"
-        class="p-8 border border-gray-pritext-gray-primary /20 rounded-xl transition-all duration-300 hover:shadow-2xl bg-[#FFFFFF]"
-        :class="selected === 2 ? 'border-[#FF0000] -translate-y-2' : ''"
-      >
-        <div
-          class="w-12 h-12 bg-black-primary flex items-center justify-center rounded-lg mb-6"
-        >
-          <svg
-            class="w-6 h-6 text-[#FFFFFF]"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-            ></path>
-          </svg>
-        </div>
-        <h3 class="text-xl font-bold mb-3 text-black-primary">Keamanan Data</h3>
-        <p class="text-gray-primary">
-          Privasi Anda adalah prioritas kami. Enkripsi tingkat tinggi di setiap
-          lapisan data.
-        </p>
-      </div>
-
-      <div
-        @mouseenter="selected = 3"
-        @mouseleave="selected = null"
-        class="p-8 border border-gray-pritext-gray-primary /20 rounded-xl transition-all duration-300 hover:shadow-2xl bg-[#FFFFFF]"
-        :class="selected === 3 ? 'border-[#FF0000] -translate-y-2' : ''"
-      >
-        <div
-          class="w-12 h-12 bg-gray-pritext-gray-primary flex items-center justify-center rounded-lg mb-6"
-        >
-          <svg
-            class="w-6 h-6 text-[#FFFFFF]"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"
-            ></path>
-          </svg>
-        </div>
-        <h3 class="text-xl font-bold mb-3 text-black-primary">
-          Desain Adaptif
-        </h3>
-        <p class="text-gray-primary">
-          Antarmuka yang menyesuaikan dengan kebutuhan visual Anda, bersih dan
-          fungsional.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <footer class="bg-black-primary py-10 text-center">
-    <p class="text-gray-primary text-sm">
-      &copy; 2026 Rant. All rights reserved.
-    </p>
-  </footer>
-  >
 </div>

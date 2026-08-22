@@ -88,12 +88,11 @@ export class SupervisorDTO {
  */
 export class SupervisorSessionDTO {
   id: string;
-  fullName: string;
   username: string;
   email: string;
-  role: string;
   permissions: SupervisorPermission[];
   token: string;
+  role: SupervisorRole;
   phone: string;
 }
 

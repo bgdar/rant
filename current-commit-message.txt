@@ -1,8 +1,7 @@
-
-
-
-commit 5 add outh dicord #v1 ( data id sosmed user sudah di simpan di DB)
-- perbaiki session login untuk menampilkan data history chatting di /forums ( home )
-- authentikasi connect ke bot rant disocrd
-- authentikasi connect ke bot rant telegram
-- update versi Typescript dan perubhana hasil dist ddengan config di nest-cli
+commit 6 fix penamaan dan 
+- fix : perbaiki lebih spesifik antara nama <chat/group>.sosmed.<sosmed/forumis>
+- update : migrasi service yang sebelumnya untuk koneksi ke database , di ubah ke repo , karena repositori yang bertugas koneksi ke database
+- update :  supervisor update , memnabhakan method method terkait untuk memanggil data di halaman supervisor
+- update : memindahkan repository setiap module ke module tersendiri untuk merapikan dlam projeck besar dan menjadi lebih rapi
+- update : structure utama aplikasi yg sebelumnya terpisah antar module sekarang menjadi apliaksi yang independent dan berat wkwk
+- add : template system logging , untuk aktifitas system yang akan di perlihataknan ke semua supervisor tapi ada batasanya

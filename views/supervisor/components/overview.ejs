@@ -1,25 +1,30 @@
-<!-- Welcome Banner -->
+
+<!-- data sudah di ambil di root ( alpine js ) , dan di dalam component ini tinggal panggil aja -->
+
 <div
-  class="bg-white-primary p-6 rounded-xl shadow-sm border border-white-accent flex flex-col md:flex-row justify-between items-start md:items-center gap-4"
+  class="bg-white-primary p-1 rounded-xl shadow-sm border border-white-accent flex flex-col md:flex-row justify-between items-start md:items-center gap-4"
 >
   <div>
-    <h2 class="text-xl md:text-2xl font-bold text-black-primary">
-      Selamat Datang Kembali, Supervisor 👋
-    </h2>
+   
+<h2 class="text-xl md:text-2xl font-bold text-black-primary flex items-center gap-2">
+  Selamat Datang Kembali, Supervisor
+  <i class="fas fa-hand-wave text-amber-500 animate-bounce"></i>
+</h2>
+
     <p class="text-sm text-black-muted mt-1">
-      Berikut adalah ringkasan performa sistem dan manajemen tim Anda hari ini.
+      Berikut adalah ringkasan performa sistem dan status groub sampai hari ini  
     </p>
   </div>
-  <!-- Quick Action Button -->
-  <a
-    href="create-user.html"
+  <!-- quick action button -->
+  <button
+        @click.prevent="activeTab = 'create-user'; sidebarOpen = false"
     class="bg-main-primary hover:bg-main-secondary text-white-primary font-semibold text-sm px-4 py-2.5 rounded-lg shadow transition duration-200 flex items-center gap-2"
   >
     <i class="fas fa-plus"></i> Tambah User Baru
-  </a>
+  </button>
 </div>
 
-<!-- STATS CARDS GRID -->
+<!-- stats cards grid -->
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
   <!-- Card 1 -->
   <div
@@ -29,9 +34,9 @@
       <p
         class="text-xs font-semibold uppercase text-gray-secondary tracking-wider"
       >
-        Total Operator
+        Total Group
       </p>
-      <h3 class="text-2xl font-bold text-black-primary">24</h3>
+      <h3 class="text-2xl font-bold text-black-primary" x-text="info.totalGroups" ></h3>
       <p class="text-[11px] text-green-6xl font-medium">
         <i class="fas fa-caret-up mr-1"></i> +3 baru minggu ini
       </p>
@@ -53,7 +58,7 @@
       >
         User Aktif
       </p>
-      <h3 class="text-2xl font-bold text-black-primary">18</h3>
+      <h3 class="text-2xl font-bold text-black-primary" x-text="info.totalUsers"></h3>
       <p class="text-[11px] text-gray-secondary">
         <span
           class="inline-block w-2 h-2 rounded-full bg-green-500 mr-1 animate-pulse"
@@ -68,29 +73,7 @@
     </div>
   </div>
 
-  <!-- Card 3 -->
-  <div
-    class="bg-white-primary p-5 rounded-xl shadow-sm border border-white-accent flex items-center justify-between"
-  >
-    <div class="space-y-1">
-      <p
-        class="text-xs font-semibold uppercase text-gray-secondary tracking-wider"
-      >
-        Total Laporan
-      </p>
-      <h3 class="text-2xl font-bold text-black-primary">142</h3>
-      <p class="text-[11px] text-main-secondary font-medium">
-        <i class="fas fa-exclamation-circle mr-1"></i> 5 Butuh Review
-      </p>
-    </div>
-    <div
-      class="w-12 h-12 rounded-lg bg-white-accent text-black-accent flex items-center justify-center text-xl"
-    >
-      <i class="fas fa-file-alt"></i>
-    </div>
-  </div>
-
-  <!-- Card 4 -->
+  <!-- card 3 -->
   <div
     class="bg-white-primary p-5 rounded-xl shadow-sm border border-white-accent flex items-center justify-between"
   >
@@ -112,10 +95,10 @@
     </div>
   </div>
 </div>
+<!-- stats cards grid -->
 
-<!-- DATA SECTION GRID -->
+<!-- data section grid -->
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-  <!-- Table: Aktivitas Pengguna Terbaru (2/3 width) -->
   <div
     class="lg:col-span-2 bg-white-primary rounded-xl shadow-sm border border-white-accent overflow-hidden"
   >
@@ -126,7 +109,10 @@
         <i class="fas fa-bolt text-main-primary mr-2"></i> Aktivitas Pengguna
         Terbaru
       </h4>
+      <!-- ambil dari global root -->
       <button
+       @click.prevent="activeTab = 'logs'; sidebarOpen = false"
+        :class="activeTab === 'logs' ? 'bg-main-primary text-white-primary' : 'hover:bg-black-accent text-gray-accent hover:text-white-primary'"
         class="text-xs font-semibold text-main-primary hover:text-main-secondary transition"
       >
         Lihat Semua <i class="fas fa-arrow-right ml-0.5"></i>
@@ -257,3 +243,618 @@
     </div>
   </div>
 </div>
+
+
+
+
+
+<!-- ------------- Chat Forum Terindikasi Tidak Pantas ---------------- -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+  <!-- Tabel Chat Terindikasi (2/3 width) -->
+  <div class="lg:col-span-2 bg-white-primary rounded-xl shadow-sm border border-white-accent overflow-hidden">
+    <div class="p-5 border-b border-white-accent flex justify-between items-center bg-white-primary">
+      <h4 class="font-bold text-black-secondary">
+        <i class="fas fa-exclamation-circle text-red-500 mr-2"></i> Moderasi Chat Tidak Pantas
+      </h4>
+      <!-- Tombol Filter / Aksi Global -->
+      <button
+        @click.prevent="activeTab = 'moderation'; sidebarOpen = false"
+        :class="activeTab === 'moderation' ? 'bg-main-primary text-white-primary' : 'hover:bg-black-accent text-gray-accent hover:text-white-primary'"
+        class="text-xs font-semibold px-3 py-1.5 rounded transition flex items-center gap-1"
+      >
+        Kelola Semua <i class="fas fa-sliders-h ml-0.5"></i>
+      </button>
+    </div>
+    
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="bg-white-secondary border-b border-white-accent text-xs font-semibold text-gray-secondary uppercase">
+            <th class="p-4">Pengirim</th>
+            <th class="p-4">Forum & Pesan</th>
+            <th class="p-4">Tanggal</th>
+            <th class="p-4 text-center">Aksi</th>
+          </tr>
+        </thead>
+        <tbody class="text-sm divide-y divide-white-accent">
+          <% if (typeof badChats !== 'undefined' && badChats.length > 0) { %>
+            <% badChats.forEach(function(chat) { %>
+              <tr class="hover:bg-white-secondary/50 transition">
+                <!-- Kolom User -->
+                <td class="p-4 align-top">
+                  <div class="font-medium text-black-primary"><%= chat.user %></div>
+                  <div class="text-[11px] text-red-500 font-semibold mt-0.5 bg-red-50 inline-block px-1.5 py-0.2 rounded">
+                    Terindikasi Toxic
+                  </div>
+                </td>
+                
+                <!-- Kolom Forum Name & Message -->
+                <td class="p-4 align-top max-w-xs">
+                  <div class="text-xs font-semibold text-main-primary mb-1">
+                    <i class="fas fa-comments mr-1"></i> <%= chat.forumName %>
+                  </div>
+                  <p class="text-black-muted text-xs bg-white-secondary p-2 rounded border border-white-accent italic">
+                    "<%= chat.message %>"
+                  </p>
+                </td>
+                
+                <!-- Kolom Created At / Tanggal -->
+                <td class="p-4 align-top text-xs text-gray-secondary whitespace-nowrap">
+                  <%= new Date(chat.createdAt).toLocaleString('id-ID', { dateStyle: 'short', timeStyle: 'short' }) %>
+                </td>
+                
+                <!-- Kolom Tombol Action (Ke Group & Chat ke User) -->
+                <td class="p-4 align-top text-center whitespace-nowrap">
+                  <div class="flex items-center justify-center gap-2">
+                    <!-- Tombol Menuju Group/Forum -->
+                    <a 
+                      href="/forum/group/<%= chat.forumId %>" 
+                      class="px-2 py-1.5 text-xs font-medium rounded border border-white-accent text-black-accent bg-white-secondary hover:bg-main-primary hover:text-white-primary transition flex items-center gap-1.5"
+                      title="Periksa Grup"
+                    >
+                      <i class="fas fa-users text-[11px]"></i> Ke Grup
+                    </a>
+                    
+                    <!-- Tombol Chat Langsung ke User -->
+                    <a 
+                      href="/chat/user/<%= chat.userId %>" 
+                      class="px-2 py-1.5 text-xs font-medium rounded border border-white-accent text-black-accent bg-white-secondary hover:border-black-primary hover:text-black-primary transition flex items-center gap-1.5"
+                      title="Chat Pengguna"
+                    >
+                      <i class="fas fa-comment-alt text-[11px]"></i> Hubungi
+                    </a>
+                  </div>
+                </td>
+              </tr>
+            <% }); %>
+          <% } else { %>
+            <!-- State jika data kosong -->
+            <tr>
+              <td colspan="4" class="p-8 text-center text-sm text-gray-secondary">
+                <i class="fas fa-check-circle text-green-500 text-2xl mb-2 block"></i>
+                Tidak ada indikasi pesan tidak pantas hari ini.
+              </td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Info Card / Panel Moderasi Ringkas (1/3 width) -->
+  <div class="bg-white-primary rounded-xl shadow-sm border border-white-accent p-5 space-y-4">
+    <h4 class="font-bold text-black-secondary border-b border-white-accent pb-3">
+      <i class="fas fa-shield-alt text-black-accent mr-2"></i> Ringkasan Moderasi
+    </h4>
+
+    <!-- Shortcut Aksi Tambahan -->
+    <div class="space-y-2">
+      <a
+        href="/moderation/rules"
+        class="w-full flex items-center justify-between p-3 rounded-lg border border-white-accent hover:border-main-accent bg-white-secondary hover:bg-white-primary transition group"
+      >
+        <div class="flex items-center space-x-3">
+          <div class="w-8 h-8 rounded bg-main-muted text-main-primary flex items-center justify-center">
+            <i class="fas fa-gavel text-xs"></i>
+          </div>
+          <span class="text-sm font-medium text-black-accent group-hover:text-black-primary">Atur Filter Kata SARA</span>
+        </div>
+        <i class="fas fa-chevron-right text-xs text-gray-secondary"></i>
+      </a>
+
+      <a
+        href="/moderation/blacklist"
+        class="w-full flex items-center justify-between p-3 rounded-lg border border-white-accent hover:border-black-primary bg-white-secondary hover:bg-white-primary transition group"
+      >
+        <div class="flex items-center space-x-3">
+          <div class="w-8 h-8 rounded bg-white-accent text-black-secondary flex items-center justify-center">
+            <i class="fas fa-ban text-xs"></i>
+          </div>
+          <span class="text-sm font-medium text-black-accent group-hover:text-black-primary">Daftar Pengguna Diblokir</span>
+        </div>
+        <i class="fas fa-chevron-right text-xs text-gray-secondary"></i>
+      </a>
+    </div>
+
+    <!-- Banner Peringatan Kritis -->
+    <div class="bg-black-secondary text-white-secondary p-4 rounded-lg space-y-2">
+      <div class="flex items-center space-x-2 text-red-400 text-xs font-bold uppercase tracking-wider">
+        <i class="fas fa-exclamation-triangle"></i>
+        <span>Peringatan Sistem</span>
+      </div>
+      <p class="text-xs text-gray-muted leading-relaxed">
+        Grup dengan tingkat pelanggaran chat tertinggi minggu ini terdeteksi pada forum <strong><%= typeof badChats !== 'undefined' ? (badChats[0]?.forumName || 'N/A') : 'N/A' %></strong>.
+      </p>
+      <a href="#" class="inline-block text-[11px] font-bold text-white-primary underline hover:text-red-400">
+        Tinjau Log Keamanan &rarr;
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ------------- Chat Forum Terindikasi Tidak Pantas ---------------- -->
+
+
+
+
+
+
+
+<!-- ------------- Chat Discord Terindikasi Tidak Pantas ---------------- -->
+<!-- Data Section Grid: Moderasi Bot Discord -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+  <!-- Tabel Chat Discord Terindikasi (2/3 width) -->
+  <div class="lg:col-span-2 bg-white-primary rounded-xl shadow-sm border border-white-accent overflow-hidden">
+    <div class="p-5 border-b border-white-accent flex justify-between items-center bg-white-primary">
+      <h4 class="font-bold text-black-secondary flex items-center">
+        <!-- Ikon Discord diganti warna Indigo/Blurple untuk penanda platform -->
+        <i class="fab fa-discord text-[#5865F2] text-lg mr-2"></i> Log Chat Discord Melanggar
+      </h4>
+      <!-- Status Bot Integrasi -->
+      <div class="flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full bg-green-50 text-green-600 border border-green-200">
+        <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span> Bot Online
+      </div>
+    </div>
+    
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="bg-white-secondary border-b border-white-accent text-xs font-semibold text-gray-secondary uppercase">
+            <th class="p-4">User Discord</th>
+            <th class="p-4">Server & Channel</th>
+            <th class="p-4">Pesan Terdeteksi</th>
+            <th class="p-4 text-center">Tindakan</th>
+          </tr>
+        </thead>
+        <tbody class="text-sm divide-y divide-white-accent">
+          <% if (typeof discordChats !== 'undefined' && discordChats.length > 0) { %>
+            <% discordChats.forEach(function(chat) { %>
+              <tr class="hover:bg-white-secondary/50 transition">
+                <!-- Kolom User (Username + Discriminator/ID) -->
+                <td class="p-4 align-top">
+                  <div class="font-medium text-black-primary flex items-center gap-1">
+                    <%= chat.user %> 
+                  </div>
+                  <div class="text-[10px] font-mono text-gray-secondary mt-0.5">
+                    ID: <%= chat.userId %>
+                  </div>
+                </td>
+                
+                <!-- Kolom Server Name & Channel Name -->
+                <td class="p-4 align-top whitespace-nowrap">
+                  <div class="text-xs font-semibold text-black-secondary">
+                    <i class="fas fa-server text-gray-accent mr-1 text-[11px]"></i> <%= chat.forumName %>
+                  </div>
+                  <div class="text-[11px] text-main-primary font-medium mt-0.5">
+                    <i class="fas fa-hashtag mr-0.5"></i> <%= chat.channelName || 'general' %>
+                  </div>
+                </td>
+                
+                <!-- Kolom Message & Tanggal -->
+                <td class="p-4 align-top max-w-xs">
+                  <p class="text-black-muted text-xs bg-white-secondary p-2 rounded border border-white-accent italic mb-1.5">
+                    "<%= chat.message %>"
+                  </p>
+                  <div class="text-[10px] text-gray-secondary">
+                    <i class="far fa-clock mr-1"></i> <%= new Date(chat.createdAt).toLocaleString('id-ID', { dateStyle: 'short', timeStyle: 'short' }) %>
+                  </div>
+                </td>
+                
+                <!-- Kolom Tombol Action Terarah -->
+                <td class="p-4 align-top text-center whitespace-nowrap">
+                  <div class="flex items-center justify-center gap-2">
+                    <!-- Tombol Menuju Link Group/Server Discord -->
+                    <a 
+                      href="<%= chat.discordLink %>" 
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="px-2 py-1.5 text-xs font-medium rounded text-white-primary bg-[#5865F2] hover:bg-[#4752C4] transition flex items-center gap-1.5 shadow-sm"
+                      title="Buka Aplikasi Discord"
+                    >
+                      <i class="fab fa-discord text-[12px]"></i> Ke Discord
+                    </a>
+                    
+                    <!-- Tombol Log Aksi Internal (Bawaan Sistem Anda) -->
+                    <a 
+                      href="/moderation/discord/user/<%= chat.userId %>" 
+                      class="px-2 py-1.5 text-xs font-medium rounded border border-white-accent text-black-accent bg-white-secondary hover:border-black-primary hover:text-black-primary transition flex items-center gap-1.5"
+                      title="Detail Pelanggaran Pengguna"
+                    >
+                      <i class="fas fa-user-shield text-[11px]"></i> Profil
+                    </a>
+                  </div>
+                </td>
+              </tr>
+            <% }); %>
+          <% } else { %>
+            <!-- State jika data kosong -->
+            <tr>
+              <td colspan="4" class="p-8 text-center text-sm text-gray-secondary">
+                <i class="fas fa-shield-alt text-main-primary text-2xl mb-2 block"></i>
+                Belum ada log pelanggaran baru dari Bot Discord.
+              </td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Info Card / Panel Kontrol Bot (1/3 width) -->
+  <div class="bg-white-primary rounded-xl shadow-sm border border-white-accent p-5 space-y-4">
+    <h4 class="font-bold text-black-secondary border-b border-white-accent pb-3">
+      <i class="fas fa-robot text-black-accent mr-2"></i> Kontrol Bot Gateway
+    </h4>
+
+    <!-- Shortcut Aksi Tambahan untuk Bot -->
+    <div class="space-y-2">
+      <a
+        href="/discord/settings"
+        class="w-full flex items-center justify-between p-3 rounded-lg border border-white-accent hover:border-main-accent bg-white-secondary hover:bg-white-primary transition group"
+      >
+        <div class="flex items-center space-x-3">
+          <div class="w-8 h-8 rounded bg-main-muted text-main-primary flex items-center justify-center">
+            <i class="fas fa-cog text-xs"></i>
+          </div>
+          <span class="text-sm font-medium text-black-accent group-hover:text-black-primary">Konfigurasi Token Bot</span>
+        </div>
+        <i class="fas fa-chevron-right text-xs text-gray-secondary"></i>
+      </a>
+
+      <a
+        href="/discord/webhooks"
+        class="w-full flex items-center justify-between p-3 rounded-lg border border-white-accent hover:border-black-primary bg-white-secondary hover:bg-white-primary transition group"
+      >
+        <div class="flex items-center space-x-3">
+          <div class="w-8 h-8 rounded bg-white-accent text-black-secondary flex items-center justify-center">
+            <i class="fas fa-link text-xs"></i>
+          </div>
+          <span class="text-sm font-medium text-black-accent group-hover:text-black-primary">Kelola Webhook Alert</span>
+        </div>
+        <i class="fas fa-chevron-right text-xs text-gray-secondary"></i>
+      </a>
+    </div>
+
+    <!-- Banner Info Khusus Discord -->
+    <div class="bg-black-secondary text-white-secondary p-4 rounded-lg space-y-2">
+      <div class="flex items-center space-x-2 text-[#5865F2] text-xs font-bold uppercase tracking-wider">
+        <i class="fab fa-discord"></i>
+        <span>Skoring Otomatis</span>
+      </div>
+      <p class="text-xs text-gray-muted leading-relaxed">
+        Sistem bot otomatis memberikan sanksi berupa <strong>Timeout (Mute)</strong> jika pengguna melakukan spam kata kasar sebanyak 3 kali berturut-turut.
+      </p>
+      <a href="/discord/automod-rules" class="inline-block text-[11px] font-bold text-white-primary underline hover:text-[#5865F2]">
+        Lihat Aturan AutoMod &rarr;
+      </a>
+    </div>
+  </div>
+</div>
+<!-- ------------- Chat Discord Terindikasi Tidak Pantas ---------------- -->
+
+
+<!-- ------------- Chat Telegram Terindikasi Tidak Pantas ---------------- -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+  <!-- Tabel Chat Telegram Terindikasi (2/3 width) -->
+  <div class="lg:col-span-2 bg-white-primary rounded-xl shadow-sm border border-white-accent overflow-hidden">
+    <div class="p-5 border-b border-white-accent flex justify-between items-center bg-white-primary">
+      <h4 class="font-bold text-black-secondary flex items-center">
+        <!-- Ikon Telegram dengan warna biru khas -->
+        <i class="fab fa-telegram text-[#24A1DE] text-lg mr-2"></i> Log Chat Telegram Melanggar
+      </h4>
+      <!-- Status Webhook / Long Polling Telegram -->
+      <div class="flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full bg-green-50 text-green-600 border border-green-200">
+        <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span> Webhook Aktif
+      </div>
+    </div>
+    
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="bg-white-secondary border-b border-white-accent text-xs font-semibold text-gray-secondary uppercase">
+            <th class="p-4">User / Username</th>
+            <th class="p-4">Grup / Channel</th>
+            <th class="p-4">Pesan Terdeteksi</th>
+            <th class="p-4 text-center">Tindakan</th>
+          </tr>
+        </thead>
+        <tbody class="text-sm divide-y divide-white-accent">
+          <% if (typeof telegramChats !== 'undefined' && telegramChats.length > 0) { %>
+            <% telegramChats.forEach(function(chat) { %>
+              <tr class="hover:bg-white-secondary/50 transition">
+                <!-- Kolom User (Nama Lengkap + @Username Telegram) -->
+                <td class="p-4 align-top">
+                  <div class="font-medium text-black-primary"><%= chat.user %></div>
+                  <div class="text-[11px] text-[#24A1DE] font-medium mt-0.5">
+                    <%= chat.username ? '@' + chat.username : 'No Username' %>
+                  </div>
+                  <div class="text-[9px] font-mono text-gray-secondary mt-0.5">
+                    ID: <%= chat.userId %>
+                  </div>
+                </td>
+                
+                <!-- Kolom Group Name / Supergroup Title -->
+                <td class="p-4 align-top whitespace-nowrap">
+                  <div class="text-xs font-semibold text-black-secondary">
+                    <i class="fas fa-users text-gray-accent mr-1 text-[11px]"></i> <%= chat.forumName %>
+                  </div>
+                  <div class="text-[10px] text-gray-secondary mt-1">
+                    Chat ID: <%= chat.chatId %>
+                  </div>
+                </td>
+                
+                <!-- Kolom Message & Tanggal Waktu -->
+                <td class="p-4 align-top max-w-xs">
+                  <p class="text-black-muted text-xs bg-white-secondary p-2 rounded border border-white-accent italic mb-1.5">
+                    "<%= chat.message %>"
+                  </p>
+                  <div class="text-[10px] text-gray-secondary">
+                    <i class="far fa-clock mr-1"></i> <%= new Date(chat.createdAt).toLocaleString('id-ID', { dateStyle: 'short', timeStyle: 'short' }) %>
+                  </div>
+                </td>
+                
+                <!-- Kolom Tombol Action Terarah -->
+                <td class="p-4 align-top text-center whitespace-nowrap">
+                  <div class="flex items-center justify-center gap-2">
+                    <!-- Tombol Menuju Tautan Grup/Pesan Telegram -->
+                    <!-- chat.telegramLink bisa berupa tautan ke grup atau deep link ke pesan t.me/c/chat_id/message_id -->
+                    <a 
+                      href="<%= chat.telegramLink %>" 
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="px-2 py-1.5 text-xs font-medium rounded text-white-primary bg-[#24A1DE] hover:bg-[#208bbf] transition flex items-center gap-1.5 shadow-sm"
+                      title="Buka Aplikasi Telegram"
+                    >
+                      <i class="fab fa-telegram-plane text-[12px]"></i> Ke Telegram
+                    </a>
+                    
+                    <a 
+                      href="/moderation/telegram/user/<%= chat.userId %>" 
+                      class="px-2 py-1.5 text-xs font-medium rounded border border-white-accent text-black-accent bg-white-secondary hover:border-black-primary hover:text-black-primary transition flex items-center gap-1.5"
+                      title="Detail Log User"
+                    >
+                      <i class="fas fa-user-shield text-[11px]"></i> Profil
+                    </a>
+                  </div>
+                </td>
+              </tr>
+            <% }); %>
+          <% } else { %>
+            <!-- State jika data kosong -->
+            <tr>
+              <td colspan="4" class="p-8 text-center text-sm text-gray-secondary">
+                <i class="fas fa-shield-alt text-main-primary text-2xl mb-2 block"></i>
+                Belum ada log pelanggaran baru dari Bot Telegram.
+              </td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="bg-white-primary rounded-xl shadow-sm border border-white-accent p-5 space-y-4">
+    <h4 class="font-bold text-black-secondary border-b border-white-accent pb-3">
+      <i class="fas fa-robot text-black-accent mr-2"></i> Kontrol Telegram Bot
+    </h4>
+
+    <!-- Shortcut Akses Pengaturan Telegram -->
+    <div class="space-y-2">
+      <a
+        href="/telegram/settings"
+        class="w-full flex items-center justify-between p-3 rounded-lg border border-white-accent hover:border-main-accent bg-white-secondary hover:bg-white-primary transition group"
+      >
+        <div class="flex items-center space-x-3">
+          <div class="w-8 h-8 rounded bg-main-muted text-main-primary flex items-center justify-center">
+            <i class="fas fa-key text-xs"></i>
+          </div>
+          <span class="text-sm font-medium text-black-accent group-hover:text-black-primary">Pengaturan BotFather Token</span>
+        </div>
+        <i class="fas fa-chevron-right text-xs text-gray-secondary"></i>
+      </a>
+
+      <a
+        href="/telegram/restricted-words"
+        class="w-full flex items-center justify-between p-3 rounded-lg border border-white-accent hover:border-black-primary bg-white-secondary hover:bg-white-primary transition group"
+      >
+        <div class="flex items-center space-x-3">
+          <div class="w-8 h-8 rounded bg-white-accent text-black-secondary flex items-center justify-center">
+            <i class="fas fa-spell-check text-xs"></i>
+          </div>
+          <span class="text-sm font-medium text-black-accent group-hover:text-black-primary">Kamus Kata Terlarang</span>
+        </div>
+        <i class="fas fa-chevron-right text-xs text-gray-secondary"></i>
+      </a>
+    </div>
+
+    <!-- Banner Info Mekanisme Telegram -->
+    <div class="bg-black-secondary text-white-secondary p-4 rounded-lg space-y-2">
+      <div class="flex items-center space-x-2 text-[#24A1DE] text-xs font-bold uppercase tracking-wider">
+        <i class="fab fa-telegram"></i>
+        <span>Sistem Restriksi</span>
+      </div>
+      <p class="text-xs text-gray-muted leading-relaxed">
+        Pesan melanggar yang tertangkap oleh bot akan otomatis **dihapus langsung** dari grup menggunakan metode API `deleteMessage`.
+      </p>
+      <a href="/telegram/logs" class="inline-block text-[11px] font-bold text-white-primary underline hover:text-[#24A1DE]">
+        Buka Log Penghapusan &rarr;
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ------------- Chat Telegram Terindikasi Tidak Pantas ---------------- -->
+
+<!-- ------------- Chat WhatApp Terindikasi Tidak Pantas ---------------- -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+  <!-- Tabel Chat WhatsApp Terindikasi (2/3 width) -->
+  <div class="lg:col-span-2 bg-white-primary rounded-xl shadow-sm border border-white-accent overflow-hidden">
+    <div class="p-5 border-b border-white-accent flex justify-between items-center bg-white-primary">
+      <h4 class="font-bold text-black-secondary flex items-center">
+        <!-- Ikon WhatsApp dengan warna hijau khas -->
+        <i class="fab fa-whatsapp text-[#25D366] text-lg mr-2"></i> Log Chat WhatsApp Melanggar
+      </h4>
+      <!-- Status Integrasi Baileys / Webhook WA -->
+      <div class="flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full bg-green-50 text-green-600 border border-green-200">
+        <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span> Device Connected
+      </div>
+    </div>
+    
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="bg-white-secondary border-b border-white-accent text-xs font-semibold text-gray-secondary uppercase">
+            <th class="p-4">Pengirim / Nomor</th>
+            <th class="p-4">Nama Grup</th>
+            <th class="p-4">Pesan Terdeteksi</th>
+            <th class="p-4 text-center">Tindakan</th>
+          </tr>
+        </thead>
+        <tbody class="text-sm divide-y divide-white-accent">
+          <% if (typeof whatsappChats !== 'undefined' && whatsappChats.length > 0) { %>
+            <% whatsappChats.forEach(function(chat) { %>
+              <tr class="hover:bg-white-secondary/50 transition">
+                <!-- Kolom User (Nama Kontak + Nomor WA / JID) -->
+                <td class="p-4 align-top">
+                  <div class="font-medium text-black-primary"><%= chat.user %></div>
+                  <div class="text-[11px] text-[#25D366] font-mono font-medium mt-0.5">
+                    <%= chat.phoneNumber || chat.userId %>
+                  </div>
+                </td>
+                
+                <!-- Kolom Group Name -->
+                <td class="p-4 align-top whitespace-nowrap">
+                  <div class="text-xs font-semibold text-black-secondary">
+                    <i class="fas fa-users-cog text-gray-accent mr-1 text-[11px]"></i> <%= chat.forumName %>
+                  </div>
+                  <div class="text-[9px] font-mono text-gray-secondary mt-1">
+                    JID: <%= chat.chatId %>
+                  </div>
+                </td>
+                
+                <!-- Kolom Message & Tanggal Waktu -->
+                <td class="p-4 align-top max-w-xs">
+                  <p class="text-black-muted text-xs bg-white-secondary p-2 rounded border border-white-accent italic mb-1.5">
+                    "<%= chat.message %>"
+                  </p>
+                  <div class="text-[10px] text-gray-secondary">
+                    <i class="far fa-clock mr-1"></i> <%= new Date(chat.createdAt).toLocaleString('id-ID', { dateStyle: 'short', timeStyle: 'short' }) %>
+                  </div>
+                </td>
+                
+                <!-- Kolom Tombol Action Terarah -->
+                <td class="p-4 align-top text-center whitespace-nowrap">
+                  <div class="flex items-center justify-center gap-2">
+                    <!-- Tombol Menuju Tautan Grup WhatsApp -->
+                    <a 
+                      href="<%= chat.whatsappLink %>" 
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="px-2 py-1.5 text-xs font-medium rounded text-white-primary bg-[#25D366] hover:bg-[#20ba5a] transition flex items-center gap-1.5 shadow-sm"
+                      title="Buka WhatsApp Web / App"
+                    >
+                      <i class="fab fa-whatsapp text-[12px]"></i> Ke Grup
+                    </a>
+                    
+                    <!-- Tombol Chat Personal Langsung (wa.me) -->
+                    <a 
+                      href="https://wa.me<%= chat.phoneNumber %>" 
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="px-2 py-1.5 text-xs font-medium rounded border border-white-accent text-black-accent bg-white-secondary hover:border-black-primary hover:text-black-primary transition flex items-center gap-1.5"
+                      title="Kirim Pesan Peringatan Pribadi"
+                    >
+                      <i class="fas fa-paper-plane text-[11px]"></i> Warning
+                    </a>
+                  </div>
+                </td>
+              </tr>
+            <% }); %>
+          <% } else { %>
+            <!-- State jika data kosong -->
+            <tr>
+              <td colspan="4" class="p-8 text-center text-sm text-gray-secondary">
+                <i class="fas fa-shield-alt text-main-primary text-2xl mb-2 block"></i>
+                Belum ada log pelanggaran baru dari Bot WhatsApp.
+              </td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Info Card / Panel Kontrol Bot WhatsApp (1/3 width) -->
+  <div class="bg-white-primary rounded-xl shadow-sm border border-white-accent p-5 space-y-4">
+    <h4 class="font-bold text-black-secondary border-b border-white-accent pb-3">
+      <i class="fas fa-qrcode text-black-accent mr-2"></i> Kontrol WhatsApp Bot
+    </h4>
+
+    <!-- Shortcut Akses Pengaturan WhatsApp -->
+    <div class="space-y-2">
+      <a
+        href="/whatsapp/session"
+        class="w-full flex items-center justify-between p-3 rounded-lg border border-white-accent hover:border-main-accent bg-white-secondary hover:bg-white-primary transition group"
+      >
+        <div class="flex items-center space-x-3">
+          <div class="w-8 h-8 rounded bg-main-muted text-main-primary flex items-center justify-center">
+            <i class="fas fa-sync text-xs"></i>
+          </div>
+          <span class="text-sm font-medium text-black-accent group-hover:text-black-primary">Scan QR / Cek Sesi</span>
+        </div>
+        <i class="fas fa-chevron-right text-xs text-gray-secondary"></i>
+      </a>
+
+      <a
+        href="/whatsapp/anti-spammer"
+        class="w-full flex items-center justify-between p-3 rounded-lg border border-white-accent hover:border-black-primary bg-white-secondary hover:bg-white-primary transition group"
+      >
+        <div class="flex items-center space-x-3">
+          <div class="w-8 h-8 rounded bg-white-accent text-black-secondary flex items-center justify-center">
+            <i class="fas fa-user-slash text-xs"></i>
+          </div>
+          <span class="text-sm font-medium text-black-accent group-hover:text-black-primary">Auto Kick Pengguna</span>
+        </div>
+        <i class="fas fa-chevron-right text-xs text-gray-secondary"></i>
+      </a>
+    </div>
+
+    <!-- Banner Info Mekanisme WhatsApp -->
+    <div class="bg-black-secondary text-white-secondary p-4 rounded-lg space-y-2">
+      <div class="flex items-center space-x-2 text-[#25D366] text-xs font-bold uppercase tracking-wider">
+        <i class="fab fa-whatsapp"></i>
+        <span>Kebijakan Admin</span>
+      </div>
+      <p class="text-xs text-gray-muted leading-relaxed">
+        Pastikan nomor bot Anda sudah dijadikan **Admin Grup** agar fungsi penghapusan pesan (`deleteMessage`) dapat berjalan normal.
+      </p>
+      <a href="/whatsapp/logs" class="inline-block text-[11px] font-bold text-white-primary underline hover:text-[#25D366]">
+        Buka Log Sanksi &rarr;
+      </a>
+    </div>
+  </div>
+</div>
+<!-- ------------- Chat WhatApp Terindikasi Tidak Pantas ---------------- -->
+
+
+
+

@@ -13,33 +13,41 @@ import {
 } from '@nestjs/common';
 
 import argon from 'argon2';
-import { UserDbService } from './user.db.service';
+
+import { UserRepository } from '@/repository/user.repository';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import { UserSessionDTO, UserSignUpDTO } from 'src/dto/user.dto';
 import { AuthUserGuard } from 'src/guards/auth.user';
-import { SupervisorDbService } from 'src/supervisor.module/supervisor.db.service';
 import { SupervisorSessionDTO } from 'src/dto/supervisor.dto';
+import { SupervisorRepository } from '@/repository/supervisor.repository';
 import { ConfigService } from '@nestjs/config';
 import { httpDomain } from '@/constan';
+import { GroupMessageForumisRepository } from '@/repository/group.message.forumis.repository';
 // import { FastifySessionObject } from '@fastify/session';
 
 @UseGuards(AuthUserGuard)
 @Controller('/user')
 export class UserController {
   constructor(
-    private readonly userModel: UserDbService,
+    private readonly userRepo: UserRepository,
     private readonly configService: ConfigService,
-    private readonly supervisorModel: SupervisorDbService,
+    private readonly supervisorRepo: SupervisorRepository,
+    private readonly groubForumisRepo: GroupMessageForumisRepository,
   ) {}
 
   @Get()
   @Render('user/home.ejs')
-  Home(@Req() req: FastifyRequest) {
+  async Home(@Req() req: FastifyRequest) {
     const user = (req as any).session?.user as UserSessionDTO;
+
+    const latesGroupDiscution = await this.groubForumisRepo.getLatesChatUser(
+      user.id,
+    );
 
     return {
       title: 'home In',
       username: user.username,
+      latestGroubMessage: latesGroupDiscution?.message || '',
     };
   }
 
@@ -52,9 +60,7 @@ export class UserController {
     // jika user sudah supervisor
     const supervisor = (req as any).session?.supervisor as SupervisorSessionDTO;
 
-    const dataUser = await this.userModel.findById(user.id);
-
-    console.info('profile session : ', dataUser);
+    const dataUser = await this.userRepo.findById(user.id);
 
     return {
       title: 'User Profile',
@@ -66,7 +72,7 @@ export class UserController {
       sosmed: {
         telegramId: dataUser.telegramId || '',
         discordId: dataUser.discordId || '',
-
+        whatsappId: dataUser.whatsappId || '',
         telegram_client_id:
           this.configService.get<string>('TELEGRAM_OIDC_CLIENT_ID') || '',
         telegram_redirect: `${httpDomain}sosmed/telegram/callback`,
@@ -112,7 +118,7 @@ export class UserController {
   ) {
     const { email, password }: UserSignUpDTO = data;
 
-    const user = await this.userModel.findByEmail(email);
+    const user = await this.userRepo.findByEmail(email);
 
     if (!user) {
       return res.status(HttpStatus.OK).send({
@@ -153,7 +159,7 @@ export class UserController {
 
     // nah di sini cek jika akun user ada di supervisor
     // dengan syarat di supervosor akun nya tidak di update , jika iya nantik ubha ke ID atau semacam forenkey
-    const supervisor = await this.supervisorModel.findByUsernameEmail(
+    const supervisor = await this.supervisorRepo.findByUsernameEmail(
       user.email,
       user.username,
     );
@@ -166,6 +172,7 @@ export class UserController {
         email: user.email,
         phone: supervisor.phone,
         token: supervisor.token,
+        role: supervisor.role,
         permission: supervisor.permissions,
       };
     }
@@ -201,7 +208,7 @@ export class UserController {
   ) {
     const hashPassword = await argon.hash(data.password);
 
-    const user = await this.userModel.create({
+    const user = await this.userRepo.create({
       username: data.username,
       email: data.email,
       password: hashPassword,

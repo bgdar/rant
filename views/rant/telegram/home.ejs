@@ -1,0 +1,415 @@
+<div
+  class="bg-white-secondary text-black-primary font-sans min-h-screen flex flex-col justify-between antialiased"
+  x-data="appData()"
+>
+  <header
+    class="bg-white-primary/90 backdrop-blur-md border-b border-white-accent sticky top-0 z-50 shadow-sm"
+  >
+    <div
+      class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between"
+    >
+      <div class="flex items-center gap-3">
+        <div class="relative flex items-center justify-center">
+          <!-- SVG Background Shapes/Blob (~80% scale effect) -->
+          <svg
+            class="absolute -inset-1.5 w-12 h-12 text-telegram/20 animate-spin-slow opacity-80"
+            viewBox="0 0 100 100"
+            fill="currentColor"
+          >
+            <path
+              d="M50 15 C68 12, 85 25, 88 45 C91 65, 78 85, 58 88 C38 91, 15 78, 12 58 C9 38, 32 18, 50 15 Z"
+            />
+          </svg>
+          <div
+            class="relative w-10 h-10 bg-telegram text-white-primary rounded-full flex items-center justify-center text-lg shadow-md shadow-telegram/30"
+          >
+            <i class="fa-paper-plane text-base -ml-0.5 mt-0.5"></i>
+          </div>
+        </div>
+        <span
+          class="font-extrabold text-xl text-black-primary tracking-tight hidden sm:block"
+          >TeleGuard</span
+        >
+      </div>
+
+      <nav
+        class="hidden md:flex items-center gap-8 text-sm font-semibold text-black-muted"
+      >
+        <a
+          href="#analisis"
+          class="hover:text-telegram transition-colors flex items-center gap-2"
+        >
+          <i class="fa-solid fa-shield-halved text-xs text-telegram"></i> Etika
+          & Aturan
+        </a>
+        <a
+          href="#bot-dashboard"
+          class="hover:text-telegram transition-colors flex items-center gap-2"
+        >
+          <i class="fa-solid fa-square-poll-vertical text-xs text-telegram"></i>
+          Bot & Web
+        </a>
+        <a
+          href="#deteksi-ai"
+          class="hover:text-telegram transition-colors flex items-center gap-2"
+        >
+          <i class="fa-solid fa-microchip text-xs text-telegram"></i> Prediksi
+          AI
+        </a>
+      </nav>
+
+      <div class="hidden md:flex items-center">
+        <a
+          href="#bot-dashboard"
+          class="bg-telegram hover:bg-telegram-hover text-white-primary px-6 py-2.5 rounded-full font-bold text-sm transition-all shadow-md shadow-telegram/25 active:scale-95 flex items-center gap-2"
+        >
+          <i class="fa-solid fa-plus text-xs"></i> Tambah ke Grup
+        </a>
+      </div>
+
+      <button
+        @click="mobileMenuOpen = !mobileMenuOpen"
+        class="md:hidden p-2 text-black-muted hover:text-telegram focus:outline-none"
+      >
+        <i
+          class="fa-solid"
+          :class="mobileMenuOpen ? 'fa-xmark text-2xl' : 'fa-bars text-xl'"
+        ></i>
+      </button>
+    </div>
+
+    <div
+      x-show="mobileMenuOpen"
+      x-transition
+      class="md:hidden bg-white-primary border-b border-white-accent px-4 pt-2 pb-6 space-y-3"
+    >
+      <a
+        href="#analisis"
+        @click="mobileMenuOpen = false"
+        class="block px-3 py-2.5 rounded-xl text-base font-semibold text-black-muted hover:bg-white-secondary"
+      >
+        <i class="fa-solid fa-shield-halved text-telegram w-6"></i> Etika &
+        Aturan
+      </a>
+      <a
+        href="#bot-dashboard"
+        @click="mobileMenuOpen = false"
+        class="block px-3 py-2.5 rounded-xl text-base font-semibold text-black-muted hover:bg-white-secondary"
+      >
+        <i class="fa-solid fa-square-poll-vertical text-telegram w-6"></i> Bot &
+        Web
+      </a>
+      <a
+        href="#deteksi-ai"
+        @click="mobileMenuOpen = false"
+        class="block px-3 py-2.5 rounded-xl text-base font-semibold text-black-muted hover:bg-white-secondary"
+      >
+        <i class="fa-solid fa-microchip text-telegram w-6"></i> Prediksi AI
+      </a>
+      <div class="pt-2">
+        <a
+          href="#bot-dashboard"
+          @click="mobileMenuOpen = false"
+          class="block w-full text-center bg-telegram text-white-primary py-3 rounded-full font-bold text-sm shadow-md shadow-telegram/20"
+        >
+          <i class="fa-solid fa-plus"></i> Tambah ke Grup
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-grow">
+    <section
+      class="bg-white-primary border-b border-white-accent py-20 md:py-28 relative overflow-hidden"
+    >
+      <div
+        class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center flex flex-col items-center relative z-10"
+      >
+        <div class="relative mb-8 flex items-center justify-center">
+          <!-- Abstract Non-Uniform SVG Circle (~80% offset size) -->
+          <svg
+            class="absolute w-28 h-28 text-telegram/15 -z-0"
+            viewBox="0 0 200 200"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill="currentColor"
+              d="M44.7,-59.2C56.8,-50.7,64.8,-35.8,68.2,-20.1C71.6,-4.3,70.5,12.3,64.1,26.9C57.7,41.4,46,54,31.8,61.9C17.6,69.8,0.9,73,-16.1,70.1C-33.1,67.2,-50.3,58.2,-61.2,44.1C-72.1,30,-76.6,10.8,-74.6,-7.3C-72.7,-25.4,-64.3,-42.4,-51.2,-51.2C-38.1,-60,-20.3,-60.6,-2.3,-57.9C15.7,-55.1,32.6,-67.7,44.7,-59.2Z"
+              transform="translate(100 100)"
+            />
+          </svg>
+
+          <div
+            class="w-20 h-20 bg-telegram text-white-primary rounded-3xl flex items-center justify-center text-4xl shadow-xl shadow-telegram/30 border-2 border-white relative z-10 transform rotate-3 hover:rotate-0 transition-transform duration-300"
+          >
+            <i class="fa-solid fa-paper-plane -ml-1 mt-1"></i>
+          </div>
+        </div>
+
+        <span
+          class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold bg-telegram-light text-telegram mb-6 border border-telegram/20"
+        >
+          <i class="fa-solid fa-circle-check text-xs"></i>
+          Sistem Moderasi Telegram Supergroup & Channel
+        </span>
+
+        <h1
+          class="text-3xl sm:text-5xl md:text-6xl font-extrabold text-black-primary tracking-tight leading-tight mb-6 max-w-3xl"
+        >
+          Keamanan Komunitas Telegram
+          <span class="text-telegram">Terpusat & Otomatis</span>
+        </h1>
+
+        <p
+          class="text-base sm:text-lg text-black-muted max-w-2xl mb-10 leading-relaxed"
+        >
+          Saring pesan berisiko secara otomatis, cegah spam bot real-time, dan
+          kelola aturan etika grup Telegram secara terpusat dari Web Dashboard.
+        </p>
+
+        <div
+          class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto justify-center"
+        >
+          <a
+            href="/telegram/add-bot"
+            class="bg-telegram hover:bg-telegram-hover text-white-primary font-bold px-8 py-3.5 rounded-full transition shadow-lg shadow-telegram/25 flex items-center justify-center gap-2 active:scale-95"
+          >
+            <i class="fa-solid fa-wand-magic-sparkles"></i> Add Bot
+          </a>
+          <a
+            href="#bot-dashboard"
+            class="bg-white-secondary hover:bg-white-accent text-black-primary font-semibold px-8 py-3.5 rounded-full border border-white-accent transition flex items-center justify-center gap-2 active:scale-95"
+          >
+            <i class="fa-solid fa-sliders"></i> Pelajari Dashboard
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section id="analisis" class="py-16 md:py-24">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto mb-16">
+          <span
+            class="text-xs font-bold uppercase tracking-wider text-telegram mb-2 block"
+            >Pengawasan Konten</span
+          >
+          <h2
+            class="text-2xl sm:text-4xl font-extrabold text-black-primary mb-4"
+          >
+            Klasifikasi Pelanggaran Etika
+          </h2>
+          <p class="text-black-muted text-sm sm:text-base">
+            Kategori penindakan pesan otomatis berdasarkan tingkat risiko kata
+            yang digunakan dalam percakapan.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div
+            class="bg-white-primary p-8 rounded-3xl border border-white-accent shadow-sm hover:shadow-md transition text-center flex flex-col items-center"
+          >
+            <div
+              class="w-14 h-14 bg-main-muted text-main-primary rounded-2xl flex items-center justify-center text-2xl mb-6"
+            >
+              <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h3 class="text-lg font-bold text-black-primary mb-3">
+              Ujaran Kebencian & SARA
+            </h3>
+            <p class="text-sm text-black-muted leading-relaxed mb-6">
+              Diskriminasi verbal, konten provokasi, dan serangan personal
+              secara kasar.
+            </p>
+            <span
+              class="mt-auto inline-flex items-center gap-1.5 px-4 py-1.5 bg-main-muted text-main-secondary text-xs font-bold rounded-full"
+            >
+              <i class="fa-solid fa-gavel text-[10px]"></i> Banned & Kick
+            </span>
+          </div>
+
+          <div
+            class="bg-white-primary p-8 rounded-3xl border border-white-accent shadow-sm hover:shadow-md transition text-center flex flex-col items-center"
+          >
+            <div
+              class="w-14 h-14 bg-telegram-light text-telegram rounded-2xl flex items-center justify-center text-2xl mb-6"
+            >
+              <i class="fa-solid fa-comment-slash"></i>
+            </div>
+            <h3 class="text-lg font-bold text-black-primary mb-3">
+              Bahasa Berisiko & Kasar
+            </h3>
+            <p class="text-sm text-black-muted leading-relaxed mb-6">
+              Penggunaan kosa kata eksplisit atau umpatan yang mengganggu
+              standar kenyamanan grup.
+            </p>
+            <span
+              class="mt-auto inline-flex items-center gap-1.5 px-4 py-1.5 bg-telegram-light text-telegram text-xs font-bold rounded-full"
+            >
+              <i class="fa-solid fa-filter text-[10px]"></i> Hapus Pesan & Warn
+            </span>
+          </div>
+
+          <div
+            class="bg-white-primary p-8 rounded-3xl border border-white-accent shadow-sm hover:shadow-md transition text-center flex flex-col items-center"
+          >
+            <div
+              class="w-14 h-14 bg-white-accent text-black-primary rounded-2xl flex items-center justify-center text-2xl mb-6"
+            >
+              <i class="fa-solid fa-robot"></i>
+            </div>
+            <h3 class="text-lg font-bold text-black-primary mb-3">
+              Spam & Link Ilegal
+            </h3>
+            <p class="text-sm text-black-muted leading-relaxed mb-6">
+              Pengiriman pesan berulang atau tautan yang memicu potensi
+              penipuan.
+            </p>
+            <span
+              class="mt-auto inline-flex items-center gap-1.5 px-4 py-1.5 bg-white-accent text-black-muted text-xs font-bold rounded-full"
+            >
+              <i class="fa-solid fa-clock-rotate-left text-[10px]"></i> Catat
+              Log Dashboard
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section
+      id="bot-dashboard"
+      class="bg-white-primary border-y border-white-accent py-16 md:py-24"
+    >
+      <div
+        class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center flex flex-col items-center"
+      >
+        <span
+          class="text-xs font-bold uppercase tracking-wider text-telegram mb-2 block"
+        >
+          <i class="fa-solid fa-link text-xs mr-1"></i> Koneksi Terpusat
+        </span>
+        <h2
+          class="text-2xl sm:text-4xl font-extrabold text-black-primary mb-4 max-w-2xl"
+        >
+          Bot Telegram Terhubung Langsung ke Web Dashboard
+        </h2>
+        <p class="text-black-muted text-sm sm:text-base max-w-xl mb-12">
+          Kelola parameter moderasi, atur filter kata-kata berisiko, dan lihat
+          analitik performa server secara terpadu.
+        </p>
+
+        <!-- Centered Interactive Dashboard Mockup -->
+        <div
+          class="w-full bg-white-secondary p-4 sm:p-8 rounded-3xl border border-white-accent shadow-inner max-w-3xl"
+        >
+          <div
+            class="bg-white-primary rounded-2xl p-6 border border-white-accent shadow-sm text-left"
+          >
+            <!-- Dashboard Top Bar -->
+            <div
+              class="flex items-center justify-between border-b border-white-accent pb-4 mb-6"
+            >
+              <div class="flex items-center gap-3">
+                <div class="w-3 h-3 rounded-full bg-main-accent"></div>
+                <div class="w-3 h-3 rounded-full bg-white-muted"></div>
+                <div class="w-3 h-3 rounded-full bg-telegram"></div>
+                <span class="text-xs text-black-muted font-mono ml-2"
+                  >tele-admin.teleguard.id</span
+                >
+              </div>
+              <span
+                class="text-xs bg-telegram-light text-telegram font-bold px-3 py-1 rounded-full flex items-center gap-1.5"
+              >
+                <span
+                  class="w-2 h-2 rounded-full bg-telegram animate-ping"
+                ></span>
+                <i class="fa-solid fa-wifi text-[10px]"></i> Bot Active
+              </span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div
+                class="p-4 bg-white-secondary rounded-xl border border-white-accent"
+              >
+                <i class="fa-solid fa-bolt text-telegram text-lg mb-2"></i>
+                <h4 class="font-bold text-sm text-black-primary">
+                  Respon Real-Time
+                </h4>
+                <p class="text-xs text-black-muted mt-1">
+                  Filter kata bekerja dalam &lt; 100ms di grup Telegram.
+                </p>
+              </div>
+
+              <div
+                class="p-4 bg-white-secondary rounded-xl border border-white-accent"
+              >
+                <i class="fa-solid fa-sliders text-telegram text-lg mb-2"></i>
+                <h4 class="font-bold text-sm text-black-primary">
+                  Atur Filter Kata
+                </h4>
+                <p class="text-xs text-black-muted mt-1">
+                  Tambahkan kata berisiko kustom sesuai kebutuhan grup.
+                </p>
+              </div>
+            </div>
+
+            <!-- Mock Console Log -->
+            <div
+              class="mt-4 p-3 bg-black-accent text-white-primary rounded-xl font-mono text-xs flex justify-between items-center"
+            >
+              <span class="text-telegram"
+                >[LOG 09:20]
+                <span class="text-white-primary"
+                  >Pesan berisiko dihapus di grup @indonesia_dev</span
+                ></span
+              >
+              <span
+                class="text-[10px] bg-main-secondary/80 px-2 py-0.5 rounded text-white-primary"
+                >Auto Clean</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-white-primary border-t border-white-accent py-10">
+    <div
+      class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center flex flex-col items-center gap-4 text-xs text-black-muted"
+    >
+      <div class="flex items-center gap-2">
+        <div class="relative flex items-center justify-center">
+          <svg
+            class="absolute -inset-1 w-8 h-8 text-telegram/20"
+            viewBox="0 0 100 100"
+            fill="currentColor"
+          >
+            <path
+              d="M50 15 C68 12, 85 25, 88 45 C91 65, 78 85, 58 88 C38 91, 15 78, 12 58 C9 38, 32 18, 50 15 Z"
+            />
+          </svg>
+          <div
+            class="relative w-7 h-7 bg-telegram text-white-primary rounded-full flex items-center justify-center font-bold text-xs"
+          >
+            <i class="fa-solid fa-paper-plane text-[10px]"></i>
+          </div>
+        </div>
+        <span class="font-bold text-black-primary text-sm"
+          >TeleGuard Systems</span
+        >
+      </div>
+      <p>&copy; 2026 TeleGuard. Hak Cipta Dilindungi.</p>
+    </div>
+  </footer>
+
+  <!-- ALPINE.JS LOGIC -->
+  <script>
+    function appData() {
+      return {
+        mobileMenuOpen: false,
+        inputText: '',
+        result: null,
+      };
+    }
+  </script>
+</div>

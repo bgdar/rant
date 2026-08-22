@@ -17,36 +17,62 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import argon from 'argon2';
-import { SupervisorDbService } from './supervisor.db.service';
 import type { FastifyReply, FastifyRequest } from 'fastify';
-import { CreateUserDTO, UpdateUserDTO, UserSessionDTO } from 'src/dto/user.dto';
+import { SupervisorRepository } from '@/repository/supervisor.repository';
+import {
+  CreateUserDTO,
+  UpdateUserDTO,
+  UserRole,
+  UserSessionDTO,
+} from 'src/dto/user.dto';
 import { AuthSupervisorGuard } from 'src/guards/auth.supervisor';
 import {
   SupervisorDTO,
   SupervisorPermission,
+  SupervisorSessionDTO,
   UpdateToSupervisor,
 } from 'src/dto/supervisor.dto';
 import { AuthUserGuard } from 'src/guards/auth.user';
+import { ForumisRepository } from '@/repository/forumis.repository';
+import { UserRepository } from '@/repository/user.repository';
 
 @Controller('supervisor')
+// karena supervisor adalah user yang di upgrade
 @UseGuards(AuthUserGuard, AuthSupervisorGuard)
 export class SupervisorController {
   private logger = new Logger();
 
-  constructor(private readonly supervisorModel: SupervisorDbService) {}
+  constructor(
+    private readonly forumisRepo: ForumisRepository,
+    private readonly supervisorRepo: SupervisorRepository,
+    private readonly userRepo: UserRepository,
+  ) {}
 
   /**
    * supervisor dashboard.
    */
   @Get()
   @Render('supervisor/home.ejs')
-  dashboard(@Req() req: FastifyRequest) {
+  async dashboard(@Req() req: FastifyRequest) {
     // const totalUsers =
-    //   await this.supervisorModel.countAll();
+    //   await this.supervisorRepo.countAll();
 
     // const totalActiveUsers =
-    //   await this.supervisorModel.countActiveUsers();
-    const sessionSupervisor = (req as any).session?.supervisor as SupervisorDTO;
+    //   await this.supervisorRepo.countActiveUsers();
+    const sessionSupervisor = (req as any).session
+      ?.supervisor as SupervisorSessionDTO;
+
+    const supervisor = await this.supervisorRepo.findById(sessionSupervisor.id);
+
+    const totalUsers = await this.supervisorRepo.countTotalUser();
+    const totalGroups = await this.forumisRepo.countTotalSupervisorForum(
+      supervisor.id,
+    );
+
+    // ambil semua user yang berhubungan atau di bawah supervisor
+    const users = await this.userRepo.findAllByIds(
+      supervisor.usersId ? supervisor.usersId : [],
+    );
 
     return {
       title: 'supervisor Dashboard',
@@ -54,8 +80,18 @@ export class SupervisorController {
       supervisor: {
         username: sessionSupervisor.username,
         email: sessionSupervisor.email,
-        address: sessionSupervisor.address,
+        phone: sessionSupervisor.phone,
       },
+      info: {
+        totalUsers,
+        totalGroups,
+      },
+      user: {
+        role: Object.values(UserRole),
+      },
+      users: users.map(
+        ({ whatsappId, telegramId, discordId, id, ...filter }) => filter,
+      ),
 
       // stats: {
       //   totalUsers,
@@ -91,31 +127,13 @@ export class SupervisorController {
     try {
       const sessionUser = (req as any).session?.user as UserSessionDTO;
 
-      // Ambil ID supervisor, misal dari session atau dari objek DTO/hidden input form
-      // Contoh: const supervisorId = req.session.user.id;
-      // const supervisorId = sessionUser.i;
-
-      // Validasi & Proteksi Password seperti alur sebelumnya
-      // if (
-      //   !updateSupervisor.password ||
-      //   updateSupervisor.password.trim() === ''
-      // ) {
-      //   return res.status(HttpStatus.BAD_GATEWAY).send({
-      //     message: 'Isi dulu aswword nya',
-      //     status: 'warning',
-      //   });
-      // } else {
-      //   // Jika ada password baru, lakukan hashing
-      //   updateSupervisor.password = await argon.hash(updateSupervisor.password);
-      // }
-
       // Konversi data string dari form HTML menjadi Boolean untuk tipe data target
       updateSupervisor.isActive = String(updateSupervisor.isActive) === 'true';
       updateSupervisor.isVerified =
         String(updateSupervisor.isVerified) === 'true';
       updateSupervisor.isBanned = String(updateSupervisor.isBanned) === 'true';
 
-      const result = await this.supervisorModel.create({
+      const result = await this.supervisorRepo.create({
         fullName: updateSupervisor.fullname || '',
         username: sessionUser.username,
         email: sessionUser.email,
@@ -184,7 +202,7 @@ export class SupervisorController {
       }
 
       //Panggil service untuk mengeksekusi perubahan ke database
-      const updatedSupervisor = await this.supervisorModel.update(
+      const updatedSupervisor = await this.supervisorRepo.update(
         id,
         updateData,
       );
@@ -227,7 +245,7 @@ export class SupervisorController {
   @Get('/users')
   @Render('supervisor/users/home.ejs')
   async usersView() {
-    const users = await this.supervisorModel.findAll();
+    const users = await this.supervisorRepo.findAll();
 
     return {
       title: 'Manage Users',
@@ -245,7 +263,7 @@ export class SupervisorController {
     @Res() res: FastifyReply,
   ) {
     try {
-      const user = await this.supervisorModel.findById(id);
+      const user = await this.supervisorRepo.findById(id);
 
       return res.status(HttpStatus.OK).send({
         message: 'User found',
@@ -256,17 +274,6 @@ export class SupervisorController {
         message: 'User not found',
       });
     }
-  }
-
-  /**
-   * Render create user page.
-   */
-  @Get('/users/create')
-  @Render('supervisor/users/create.ejs')
-  createUserView() {
-    return {
-      title: 'Create User',
-    };
   }
 
   /**
@@ -282,7 +289,7 @@ export class SupervisorController {
     try {
       const hashPassword = await argon.hash(data.password);
 
-      const supervisor = await this.supervisorModel.create({
+      const supervisor = await this.supervisorRepo.create({
         ...data,
         password: hashPassword,
       });
@@ -335,7 +342,7 @@ export class SupervisorController {
         data.password = await argon.hash(data.password);
       }
 
-      const user = await this.supervisorModel.update(id, data);
+      const user = await this.supervisorRepo.update(id, data);
 
       return res.status(HttpStatus.OK).send({
         message: 'User updated successfully',
@@ -360,7 +367,7 @@ export class SupervisorController {
     @Res() res: FastifyReply,
   ) {
     try {
-      await this.supervisorModel.delete(id);
+      await this.supervisorRepo.delete(id);
 
       return res.status(HttpStatus.OK).send({
         message: 'User deleted successfully',
@@ -383,7 +390,7 @@ export class SupervisorController {
     @Res() res: FastifyReply,
   ) {
     try {
-      const user = await this.supervisorModel.toggleActive(id);
+      const user = await this.supervisorRepo.toggleActive(id);
 
       return res.status(HttpStatus.OK).send({
         message: 'User status updated',
@@ -409,7 +416,7 @@ export class SupervisorController {
     @Res() res: FastifyReply,
   ) {
     try {
-      const user = await this.supervisorModel.updateRole(id, role);
+      const user = await this.supervisorRepo.updateRole(id, role);
 
       return res.status(HttpStatus.OK).send({
         message: 'Role updated successfully',
@@ -436,7 +443,7 @@ export class SupervisorController {
   ) {
     try {
       // cari berdasarkan username aja
-      const users = await this.supervisorModel.search(username);
+      const users = await this.supervisorRepo.search(username);
 
       // kirim dalam bentuk Ajax
       return res.status(HttpStatus.OK).send({

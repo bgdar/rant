@@ -26,6 +26,27 @@
   --color-gray-secondary: #777777;
   --color-gray-accent: #bbbbbb;
   --color-gray-muted: #e0e0e0;
+
+
+   /* sosmed  */
+  --color-discord : #252ea8;
+  --color-whatsApp : #24cc63;
+  --color-telegram : #2fa3d9
 }
 
 
+ .wa-bg-pattern {
+      background-color: #efeae2;
+      background-image: radial-gradient(#d1d7db 1px, transparent 1px);
+      background-size: 16px 16px;
+    }
+
+
+@keyframes wave {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}

@@ -5,32 +5,43 @@ import {
   HttpStatus,
   Post,
   Query,
+  Render,
   Req,
   Res,
   Session,
 } from '@nestjs/common';
 import type { FastifyRequest, FastifyReply } from 'fastify';
 import { ConfigService } from '@nestjs/config';
-import { UserDbService } from 'src/user.module/user.db.service';
 import { UserSessionDTO } from 'src/dto/user.dto';
 
 import { domain, httpDomain } from '@/constan';
 import { DiscordUserDto, TelegramUserDto } from '@/dto/rant.dto';
+import { UserRepository } from '@/repository/user.repository';
 
 const discord: string = 'discord';
 const telegram: string = 'telegram';
+const whatsapp: string = 'whatsapp';
 
 @Controller('sosmed')
 export class SosmedController {
   constructor(
     private readonly config: ConfigService,
-    private readonly userDbService: UserDbService,
+    private readonly userRepo: UserRepository,
   ) {}
 
   @Get(discord)
+  @Render('rant/discord/home.ejs')
   discordHome() {
     return {
-      title: 'Welcome Discord',
+      title: 'Home | Discord',
+    };
+  }
+
+  @Get(discord + '/add-bot')
+  @Render('rant/discord/how-to-add-bot.ejs')
+  discordAddBot() {
+    return {
+      title: 'Home | whatsapp',
     };
   }
 
@@ -105,8 +116,7 @@ export class SosmedController {
         // user session
         const currentUser = (req as any).session?.user as UserSessionDTO;
 
-        const existingTelegramUser =
-          await this.userDbService.findByDiscordId(id);
+        const existingTelegramUser = await this.userRepo.findByDiscordId(id);
         if (
           existingTelegramUser &&
           existingTelegramUser.id !== currentUser.id
@@ -118,7 +128,7 @@ export class SosmedController {
         }
 
         // save id
-        await this.userDbService.addDiscordId(currentUser.id, id);
+        await this.userRepo.addDiscordId(currentUser.id, id);
 
         //update session  ke id yg baru
         session.user = {
@@ -155,11 +165,21 @@ export class SosmedController {
   }
 
   @Get(telegram)
+  @Render('rant/telegram/home.ejs')
   telegramdHome() {
     return {
-      title: 'Welcome Discord',
+      title: 'Home | telegram',
     };
   }
+
+  @Get(telegram + '/add-bot')
+  @Render('rant/telegram/how-to-add-bot.ejs')
+  telegramAddBot() {
+    return {
+      title: 'Home | whatsapp',
+    };
+  }
+
   /*
    * ini untuk login  telegram mengguakan OpenID Connect mirip metode discord
    */
@@ -223,14 +243,14 @@ export class SosmedController {
       const currentUser = (req as any).session?.user as UserSessionDTO;
 
       //  Ambil data user saat ini dari DB
-      const dbUser = await this.userDbService.findById(currentUser.id);
+      const dbUser = await this.userRepo.findById(currentUser.id);
       if (!dbUser) {
         return res.redirect('/auth/login?error=user_not_found');
       }
 
       // KEAMANAN: Cek apakah ID Telegram ini sudah dipakai oleh AKUN LAIN di sistem
       const existingTelegramUser =
-        await this.userDbService.findByTelegramId(telegramId);
+        await this.userRepo.findByTelegramId(telegramId);
       if (existingTelegramUser && existingTelegramUser.id !== currentUser.id) {
         // Telegram ID sudah terhubung ke akun orang lain!
         return res.redirect(
@@ -241,7 +261,7 @@ export class SosmedController {
       //  Cek apakah AKUN SAAT INI sudah memiliki Telegram ID
       if (!dbUser.telegramId) {
         // Simpan ke Database
-        await this.userDbService.addtelegramId(currentUser.id, telegramId);
+        await this.userRepo.addtelegramId(currentUser.id, telegramId);
 
         //update session  ke id yg baru
         session.user = {
@@ -307,7 +327,7 @@ export class SosmedController {
       }
       // cek keamana
       const existingTelegramUser =
-        await this.userDbService.findByTelegramId(telegramId);
+        await this.userRepo.findByTelegramId(telegramId);
       if (existingTelegramUser && existingTelegramUser.id !== currentUser.id) {
         // Telegram ID sudah terhubung ke akun orang lain!
         return res.redirect(
@@ -316,10 +336,7 @@ export class SosmedController {
       }
 
       // Simpan ke Database
-      await this.userDbService.addtelegramId(
-        currentUser.id,
-        String(telegramId),
-      );
+      await this.userRepo.addtelegramId(currentUser.id, String(telegramId));
 
       //update session  ke id yg baru
       session.user = {
@@ -353,6 +370,25 @@ export class SosmedController {
   telegramGagalLogin() {
     return {
       title: 'gagal loogin',
+    };
+  }
+
+  @Get(whatsapp)
+  @Render('rant/whatsapp/home.ejs')
+  whatsappdHome() {
+    return {
+      title: 'Home | whatsapp',
+    };
+  }
+
+  @Get(whatsapp + '/callback')
+  whatsappCallback() {}
+
+  @Get(whatsapp + '/add-bot')
+  @Render('rant/whatsapp/how-to-add-bot.ejs')
+  whatsappdAddBot() {
+    return {
+      title: 'Home | whatsapp',
     };
   }
 }

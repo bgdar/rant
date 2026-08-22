@@ -1,3 +1,5 @@
+
+<!-- data sudah di ambil di root ( alpine js ) , dan di dalam component ini tinggal panggil aja -->
 <div
   class="bg-white-secondary text-black-primary font-sans antialiased min-h-screen flex flex-col justify-between"
   x-data="activityLogHandler()"
@@ -331,71 +333,8 @@
 
       // Mock Data Log Aktivitas terintegrasi dengan variabel warna anda
       logs: [
-        {
-          id: 4012,
-          timestamp: '2026-06-09 00:12:04',
-          actorInitials: 'SP',
-          actorName: 'Supriyadi',
-          actorRole: 'Supervisor',
-          action: 'BAN_USER',
-          target: 'operator_danu',
-          ip: '192.168.1.45',
-          severity: 'high',
-          payload:
-            '{\n  "target_id": "usr_992",\n  "status": "banned",\n  "reason": "Indikasi fraud manipulasi report"\n}',
-        },
-        {
-          id: 4011,
-          timestamp: '2026-06-08 23:45:12',
-          actorInitials: 'AN',
-          actorName: 'Anisa K.',
-          actorRole: 'Analyst',
-          action: 'EXPORT_REPORT',
-          target: 'financial_q2.xlsx',
-          ip: '192.168.1.12',
-          severity: 'medium',
-          payload:
-            '{\n  "file_type": "EXCEL",\n  "records_exported": 1420,\n  "scope": "Q2_Finance"\n}',
-        },
-        {
-          id: 4010,
-          timestamp: '2026-06-08 22:10:55',
-          actorInitials: 'OP',
-          actorName: 'Deni Setiawan',
-          actorRole: 'Operator',
-          action: 'UPDATE_PROFILE',
-          target: 'customer_id_88',
-          ip: '103.22.14.8',
-          severity: 'low',
-          payload:
-            '{\n  "changed_fields": ["phone", "address"],\n  "old_phone": "0812345"\n}',
-        },
-        {
-          id: 4009,
-          timestamp: '2026-06-08 19:04:31',
-          actorInitials: 'SP',
-          actorName: 'Supriyadi',
-          actorRole: 'Supervisor',
-          action: 'FORCE_LOGOUT',
-          target: 'analyst_bagus',
-          ip: '192.168.1.45',
-          severity: 'high',
-          payload:
-            '{\n  "session_token": "token_expired_xyz",\n  "reason": "Idle more than 2 hours"\n}',
-        },
-        {
-          id: 4008,
-          timestamp: '2026-06-08 14:22:19',
-          actorInitials: 'AU',
-          actorName: 'Bambang Tri',
-          actorRole: 'Auditor',
-          action: 'READ_AUDIT_LOG',
-          target: 'all_system_logs',
-          ip: '172.16.4.11',
-          severity: 'low',
-          payload:
-            '{\n  "filter_applied": "none",\n  "read_duration_sec": 45\n}',
-        },
+     
+      
         {
           id: 4007,
           timestamp: '2026-06-08 11:15:02',

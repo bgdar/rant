@@ -1,0 +1,301 @@
+
+<div class="bg-white-secondary text-black-secondary font-sans min-h-screen flex flex-col justify-between antialiased" x-data="appData() border border-gray-300 bg-white hover:bg-gray-100 hover:border-gray-400 transition-colors duration-200 ease-in-out">
+
+  <header class="bg-white-primary border-b border-white-accent sticky top-0 z-50 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-discord text-white-primary rounded-xl flex items-center justify-center font-extrabold text-xl shadow-md shadow-discord/20">
+          D
+        </div>
+        <div>
+          <span class="font-extrabold text-lg text-black-primary tracking-tight block leading-none">SafeGuard</span>
+          <span class="text-xs text-gray-secondary font-medium">Discord Community Shield</span>
+        </div>
+      </div>
+
+      <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-black-muted">
+        <a href="#analisis" class="hover:text-discord transition-colors">Kategori Konten</a>
+        <a href="#bot-dashboard" class="hover:text-discord transition-colors">Bot & Dashboard</a>
+        <a href="#deteksi-ai" class="hover:text-discord transition-colors">Model AI</a>
+      </nav>
+
+      <div class="hidden md:flex items-center gap-3">
+        <a href="#bot-dashboard" class="bg-discord hover:bg-discord-hover text-white-primary px-5 py-2.5 rounded-xl font-bold text-sm transition-all shadow-md shadow-discord/20 active:scale-95">
+          Hubungkan Server
+        </a>
+      </div>
+
+      <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden p-2 text-black-accent hover:text-discord focus:outline-none">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path x-show="!mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          <path x-show="mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile Navigation Drawer -->
+    <div x-show="mobileMenuOpen" x-transition class="md:hidden bg-white-primary border-b border-white-accent px-4 pt-2 pb-6 space-y-3">
+      <a href="#analisis" @click="mobileMenuOpen = false" class="block px-3 py-2 rounded-lg text-base font-semibold text-black-muted hover:bg-white-secondary">Kategori Konten</a>
+      <a href="#bot-dashboard" @click="mobileMenuOpen = false" class="block px-3 py-2 rounded-lg text-base font-semibold text-black-muted hover:bg-white-secondary">Bot & Dashboard</a>
+      <a href="#deteksi-ai" @click="mobileMenuOpen = false" class="block px-3 py-2 rounded-lg text-base font-semibold text-black-muted hover:bg-white-secondary">Model AI</a>
+      <div class="pt-2">
+        <a href="#bot-dashboard" @click="mobileMenuOpen = false" class="block w-full text-center bg-discord text-white-primary py-3 rounded-xl font-bold text-sm">
+          Hubungkan Server
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-grow">
+    
+    <!-- HERO SECTION -->
+    <section class="bg-white-primary border-b border-white-accent py-16 md:py-24">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold bg-discord/10 text-discord mb-6">
+          <span class="w-2 h-2 rounded-full bg-discord animate-pulse"></span>
+          Sistem Moderasi Komunitas Otomatis
+        </span>
+        <h1 class="text-3xl sm:text-5xl md:text-6xl font-extrabold text-black-primary tracking-tight leading-tight mb-6">
+          Jaga Komunitas Discord Tetap <span class="text-discord">Aman & Kondusif</span>
+        </h1>
+        <p class="text-base sm:text-lg text-gray-secondary max-w-2xl mx-auto mb-8 font-normal leading-relaxed">
+          Lindungi server Discord Anda dari materi akses terbatas, ujaran kebencian, dan pelanggaran etika menggunakan bot pintar yang terhubung langsung dengan dashboard analitik.
+        </p>
+        <div class="flex flex-col sm:flex-row justify-center gap-4">
+          
+          <a href="/discord/add-bot" class="bg-discord hover:bg-discord-hover text-white-primary font-bold px-7 py-3.5 rounded-xl transition shadow-lg shadow-discord/20">
+             Cara mengguankan Bot
+          </a>
+          <a href="#analisis" class="bg-white-secondary hover:bg-white-accent text-black-secondary font-semibold px-7 py-3.5 rounded-xl border border-white-accent transition">
+            Pelajari Kategori
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section id="analisis" class="py-16 md:py-20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto mb-12">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-black-primary mb-3">Klasifikasi Pelanggaran Etika</h2>
+          <p class="text-gray-secondary text-sm sm:text-base">Sistem mengidentifikasi berbagai tingkat pelanggaran bahasa untuk menjaga kenyamanan seluruh anggota server.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          
+          <!-- Card 1 -->
+          <div class="bg-white-primary p-6 sm:p-8 rounded-2xl border border-white-accent shadow-sm hover:shadow-md transition">
+            <div class="w-12 h-12 bg-main-muted text-main-primary rounded-xl flex items-center justify-center font-bold text-xl mb-6">
+              ⚠️
+            </div>
+            <h3 class="text-lg font-bold text-black-primary mb-2">Ujaran Kebencian & SARA</h3>
+            <p class="text-sm text-gray-secondary leading-relaxed mb-4">
+              Pesan yang mengandung unsur diskriminasi, penghinaan personal secara agresif, dan ujaran kebencian.
+            </p>
+            <span class="inline-block px-3 py-1 bg-main-muted text-main-secondary text-xs font-bold rounded-md">
+              Tindakan: Ban / Mute Otomatis
+            </span>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="bg-white-primary p-6 sm:p-8 rounded-2xl border border-white-accent shadow-sm hover:shadow-md transition">
+            <div class="w-12 h-12 bg-discord/10 text-discord rounded-xl flex items-center justify-center font-bold text-xl mb-6">
+              🛑
+            </div>
+            <h3 class="text-lg font-bold text-black-primary mb-2">Bahasa Kasar / Toksisitas</h3>
+            <p class="text-sm text-gray-secondary leading-relaxed mb-4">
+              Penggunaan kosa kata eksplisit atau umpatan umum yang mengganggu kenyamanan obrolan publik.
+            </p>
+            <span class="inline-block px-3 py-1 bg-discord/10 text-discord text-xs font-bold rounded-md">
+              Tindakan: Sensor & Peringatan
+            </span>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="bg-white-primary p-6 sm:p-8 rounded-2xl border border-white-accent shadow-sm hover:shadow-md transition">
+            <div class="w-12 h-12 bg-white-accent text-black-accent rounded-xl flex items-center justify-center font-bold text-xl mb-6">
+              💬
+            </div>
+            <h3 class="text-lg font-bold text-black-primary mb-2">Sarkasme & Spam Berisiko</h3>
+            <p class="text-sm text-gray-secondary leading-relaxed mb-4">
+              Kalimat sindiran berlebihan atau pengulangan kata yang berpotensi memicu perselisihan antar anggota.
+            </p>
+            <span class="inline-block px-3 py-1 bg-white-accent text-black-muted text-xs font-bold rounded-md">
+              Tindakan: Log Moderasi
+            </span>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. BOT DISCORD & DASHBOARD INTEGRATION -->
+    <section id="bot-dashboard" class="bg-white-primary border-y border-white-accent py-16 md:py-20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-discord mb-2 block">Integrasi Ekosistem</span>
+            <h2 class="text-2xl sm:text-4xl font-extrabold text-black-primary mb-6 leading-tight">
+              Satu Bot untuk Server, Terhubung ke Dashboard Web
+            </h2>
+            
+            <div class="space-y-6">
+              <div class="flex gap-4">
+                <div class="w-8 h-8 rounded-full bg-discord/10 text-discord flex-shrink-0 flex items-center justify-center font-bold text-sm">1</div>
+                <div>
+                  <h4 class="font-bold text-black-primary text-base">Pemantauan Real-Time 24/7</h4>
+                  <p class="text-sm text-gray-secondary mt-1">Bot bekerja di latar belakang server Discord Anda tanpa mengurangi kecepatan pesan.</p>
+                </div>
+              </div>
+
+              <div class="flex gap-4">
+                <div class="w-8 h-8 rounded-full bg-discord/10 text-discord flex-shrink-0 flex items-center justify-center font-bold text-sm">2</div>
+                <div>
+                  <h4 class="font-bold text-black-primary text-base">Atur Sensitivitas Lewat Web</h4>
+                  <p class="text-sm text-gray-secondary mt-1">Atur tingkat ketatnya filter kata-kata berisiko sesuai norma komunitas Anda melalui Web Dashboard yang praktis.</p>
+                </div>
+              </div>
+
+              <div class="flex gap-4">
+                <div class="w-8 h-8 rounded-full bg-discord/10 text-discord flex-shrink-0 flex items-center justify-center font-bold text-sm">3</div>
+                <div>
+                  <h4 class="font-bold text-black-primary text-base">Laporan & Statistik Pelanggaran</h4>
+                  <p class="text-sm text-gray-secondary mt-1">Dapatkan grafik tren perilaku anggota server dan rekap penindakan otomatis secara transparan.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-8">
+              <button class="bg-discord hover:bg-discord-hover text-white-primary px-6 py-3 rounded-xl font-bold text-sm shadow-md shadow-discord/20">
+                Undang Bot ke Server
+              </button>
+            </div>
+          </div>
+
+          <!-- Visual Dashboard Mockup -->
+          <div class="bg-white-secondary p-4 sm:p-6 rounded-2xl border border-white-accent shadow-inner">
+            <div class="bg-white-primary rounded-xl p-4 sm:p-6 border border-white-accent shadow-sm">
+              <div class="flex items-center justify-between border-b border-white-accent pb-4 mb-4">
+                <div class="flex items-center gap-3">
+                  <div class="w-3 h-3 rounded-full bg-main-accent"></div>
+                  <div class="w-3 h-3 rounded-full bg-gray-accent"></div>
+                  <div class="w-3 h-3 rounded-full bg-discord"></div>
+                  <span class="text-xs text-gray-primary font-mono ml-2">dashboard.safeguard.id</span>
+                </div>
+                <span class="text-xs bg-discord/10 text-discord font-bold px-2.5 py-1 rounded">Live Sync</span>
+              </div>
+
+              <!-- Content Mockup -->
+              <div class="space-y-3">
+                <div class="p-3 bg-white-secondary rounded-lg border border-white-accent flex justify-between items-center text-xs">
+                  <div>
+                    <span class="font-bold text-black-primary block">Aktivitas Terakhir</span>
+                    <span class="text-gray-secondary">Server: Gaming ID Hub</span>
+                  </div>
+                  <span class="font-bold text-discord">98.2% Aman</span>
+                </div>
+
+                <div class="p-3 bg-main-muted/50 rounded-lg border border-main-accent/20 flex justify-between items-center text-xs">
+                  <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-main-primary"></span>
+                    <span class="text-black-secondary font-medium">Pesan Berisiko Dihapus</span>
+                  </div>
+                  <span class="text-gray-secondary font-mono">10 Detik lalu</span>
+                </div>
+
+                <div class="p-3 bg-white-secondary rounded-lg border border-white-accent flex justify-between items-center text-xs">
+                  <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-discord"></span>
+                    <span class="text-black-secondary font-medium">Auto-Mute Diberlakukan</span>
+                  </div>
+                  <span class="text-gray-secondary font-mono">2 Menit lalu</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+          <div class="flex flex-wrap items-center justify-between gap-4 border-t border-white-accent pt-6">
+            <div class="flex gap-2">
+              <button @click="setInput('Halo semuanya, selamat malam!')" class="text-xs bg-white-secondary hover:bg-white-accent text-black-muted px-3 py-1.5 rounded-lg border border-white-accent">
+                Contoh Aman
+              </button>
+              <button @click="setInput('Otakmu memang ga pernah dipakai ya!')" class="text-xs bg-main-muted text-main-secondary hover:bg-main-muted/80 px-3 py-1.5 rounded-lg">
+                Contoh Berisiko
+              </button>
+            </div>
+
+            <button 
+              @click="analyzeText()" 
+              class="bg-discord hover:bg-discord-hover text-white-primary font-bold px-6 py-2.5 rounded-xl text-sm transition shadow-md shadow-discord/20">
+              Analisis Pesan
+            </button>
+          </div>
+
+          <div x-show="result" x-transition class="mt-8 pt-6 border-t border-white-accent">
+            <h4 class="text-xs font-bold text-black-muted uppercase tracking-wider mb-4">Hasil Analisis Model AI:</h4>
+            
+            <div class="bg-white-secondary p-5 rounded-xl border border-white-accent">
+              <div class="flex justify-between items-center mb-3">
+                <span class="text-sm font-bold text-black-primary">Status Identifikasi:</span>
+                
+                <span x-text="result.statusText" 
+                      :class="{
+                        'bg-discord/10 text-discord': result.level === 'Aman',
+                        'bg-main-muted text-main-secondary': result.level === 'Berisiko'
+                      }"
+                      class="px-3 py-1 rounded-full text-xs font-bold">
+                </span>
+              </div>
+
+              <!-- Progress Bar -->
+              <div class="w-full bg-white-accent h-3 rounded-full overflow-hidden mb-3">
+                <div class="h-full transition-all duration-500" 
+                     :style="'width: ' + result.score + '%'"
+                     :class="result.level === 'Aman' ? 'bg-discord' : 'bg-main-primary'">
+                </div>
+              </div>
+
+              <div class="flex justify-between text-xs text-gray-secondary">
+                <span>Skor Indikasi Risiko:</span>
+                <span class="font-bold text-black-primary" x-text="result.score + '%'"></span>
+              </div>
+
+              <p class="text-xs text-gray-secondary mt-3 pt-3 border-t border-white-accent" x-text="result.recommendation"></p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="bg-white-primary border-t border-white-accent py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-secondary">
+      <div class="flex items-center gap-2">
+        <div class="w-6 h-6 bg-discord text-white-primary rounded-md flex items-center justify-center font-bold text-xs">D</div>
+        <span class="font-bold text-black-primary">SafeGuard Discord</span>
+      </div>
+      <p>&copy; 2026 SafeGuard Systems. Hak Cipta Dilindungi.</p>
+    </div>
+  </footer>
+
+  <!-- ALPINE.JS LOGIC -->
+  <script>
+    function appData() {
+      return {
+        mobileMenuOpen: false,
+        inputText: '',
+        result: null,
+
+      }
+    }
+  </script>
+</div>

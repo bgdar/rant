@@ -1,4 +1,4 @@
-// untuk menyimpan chat forums
+// untuk menyimpan chat forumsis
 // src/dto/forum.dto.ts
 
 import {
@@ -20,7 +20,7 @@ import { Types } from 'mongoose';
 /**
  * Forum visibility type.
  */
-export enum ForumVisibility {
+export enum ForumisVisibility {
   PUBLIC = 'public',
   PRIVATE = 'private',
   PROTECTED = 'protected',
@@ -29,7 +29,7 @@ export enum ForumVisibility {
 /**
  * Member role.
  */
-export enum ForumMemberRole {
+export enum ForumisMemberRole {
   MEMBER = 'member',
   SUPERVISOR = 'supervisor',
   OWNER = 'owner', // jadi bgdar di sini wkwkkw
@@ -37,8 +37,9 @@ export enum ForumMemberRole {
 
 /**
  * Chat message type.
+ * type ini juga akan di gunakna di benerapa type
  */
-export enum ChatType {
+export enum MessageType {
   TEXT = 'text',
   IMAGE = 'image',
   FILE = 'file',
@@ -48,7 +49,7 @@ export enum ChatType {
 /**
  * Forum member object.
  */
-export class ForumMemberDTO {
+export class ForumisMemberDTO {
   /**
    * User ID.
    */
@@ -58,8 +59,8 @@ export class ForumMemberDTO {
   /**
    * Member role.
    */
-  @IsEnum(ForumMemberRole)
-  role: ForumMemberRole;
+  @IsEnum(ForumisMemberRole)
+  role: ForumisMemberRole;
 
   /**
    * Join date.
@@ -74,7 +75,7 @@ export class ForumMemberDTO {
 /**
  * Main forum DTO.
  */
-export class ForumDTO {
+export class ForumisDTO {
   /**
    * Forum name.
    */
@@ -98,7 +99,7 @@ export class ForumDTO {
   /**
    * Forum visibility.
    */
-  visibility: ForumVisibility;
+  visibility: ForumisVisibility;
 
   /**
    * Forum owner/supervisor id.
@@ -108,7 +109,7 @@ export class ForumDTO {
   /**
    * Forum members.
    */
-  members: ForumMemberDTO[];
+  members: ForumisMemberDTO[];
 
   /**
    * Forum tags.
@@ -149,7 +150,7 @@ export class ForumDTO {
 /**
  * DTO create forum.
  */
-export class CreateForumDTO {
+export class CreateForumisDTO {
   /**
    * Forum title/name.
    */
@@ -185,8 +186,8 @@ export class CreateForumDTO {
    * Forum visibility.
    */
   @IsOptional()
-  @IsEnum(ForumVisibility)
-  visibility?: ForumVisibility;
+  @IsEnum(ForumisVisibility)
+  visibility?: ForumisVisibility;
 
   /**
    * Supervisor/admin owner id.
@@ -196,10 +197,11 @@ export class CreateForumDTO {
 
   /**
    * Forum members.
+   *  poblem id kosong , karena saat pembuatan forum , tidak ada memmber yang bergabung dahulu
    */
-  @IsOptional()
-  @IsArray()
-  members?: ForumMemberDTO[];
+  // @IsOptional()
+  // @IsArray()
+  // members?: ForumisMemberDTO[];
 
   /**
    * Tags/categories.
@@ -213,7 +215,7 @@ export class CreateForumDTO {
 /**
  * DTO update forum.
  */
-export class UpdateForumDTO {
+export class UpdateForumisDTO {
   @IsOptional()
   @IsString()
   @MinLength(3)
@@ -234,8 +236,8 @@ export class UpdateForumDTO {
   image?: string;
 
   @IsOptional()
-  @IsEnum(ForumVisibility)
-  visibility?: ForumVisibility;
+  @IsEnum(ForumisVisibility)
+  visibility?: ForumisVisibility;
 
   @IsOptional()
   @IsBoolean()
@@ -262,8 +264,8 @@ export class AddForumMemberDTO {
   userId: Types.ObjectId;
 
   @IsOptional()
-  @IsEnum(ForumMemberRole)
-  role?: ForumMemberRole;
+  @IsEnum(ForumisMemberRole)
+  role?: ForumisMemberRole;
 }
 
 /**
@@ -281,8 +283,8 @@ export class UpdateForumMemberRoleDTO {
   @IsMongoId()
   userId: string;
 
-  @IsEnum(ForumMemberRole)
-  role: ForumMemberRole;
+  @IsEnum(ForumisMemberRole)
+  role: ForumisMemberRole;
 }
 
 //
@@ -293,11 +295,11 @@ export class UpdateForumMemberRoleDTO {
  * Main chat DTO.
  * Untuk Chatting antar user
  */
-export class ChatDTO {
+export class ChatMessageForumisDTO {
   /**
    * Unique Chat Room ID for 1-on-1 (Opsional tapi sangat bagus)
    * Gabungan enkripsi ID kedua user (misal: "userA_userB")
-   * agar query riwayat chat mereka berdua sangat instan.
+   * agar query riwayat chat mereka berdua sangat instan ( p2p ).
    */
   roomId?: string;
 
@@ -321,7 +323,7 @@ export class ChatDTO {
   /**
    * Message type (text, image, file, dll).
    */
-  type: ChatType;
+  type: MessageType;
 
   /**
    * File/image url.
@@ -360,12 +362,22 @@ export class ChatDTO {
    * Updated at.
    */
   updatedAt: Date;
+
+  /*
+   * response ai  , ini ada yang eperlu di tambha lagi
+   */
+  messageResponseModel?: string;
+
+  /*
+   * tanggal model response
+   */
+  dateResponseModel?: Date;
 }
 
 /**
  * DTO Create/Send Chat (Pribadi)
  */
-export class CreateChatDTO {
+export class CreateChatMessageForumisDTO {
   /**
    * Sender ID.
    * ID pengguna yang mengirim chat.
@@ -401,8 +413,8 @@ export class CreateChatDTO {
    * Chat type.
    */
   @IsOptional()
-  @IsEnum(ChatType)
-  type?: ChatType;
+  @IsEnum(MessageType)
+  type?: MessageType;
 
   /**
    * File url.
@@ -422,7 +434,7 @@ export class CreateChatDTO {
 /**
  * DTO Update/Edit Chat (Pribadi)
  */
-export class UpdateChatDTO {
+export class UpdateChatMessageForumisDTO {
   @IsOptional()
   @IsString()
   @MinLength(1)
@@ -449,7 +461,7 @@ export class UpdateChatDTO {
  * DTO Mark Message as Read (Pribadi)
  * Mengubah status dibaca dari sisi penerima.
  */
-export class ReadChatDTO {
+export class ReadChatMessageForumisDTO {
   /**
    * Room ID atau Chat ID spesifik.
    * Saat user membuka ruang chat pribadi, client mengirim roomId
@@ -465,6 +477,18 @@ export class ReadChatDTO {
   readerId: string;
 }
 
+export class AddResponseModelChatMessageForumisDTO {
+  /*
+   * response ai  , ini ada yang eperlu di tambha lagi
+   */
+  messageResponseModel?: string;
+
+  /*
+   * tanggal model response
+   */
+  dateResponseModel?: Date;
+}
+
 //
 // DTO UTUK GROUP --------------------------------
 //
@@ -472,9 +496,9 @@ export class ReadChatDTO {
 /**
  * Main chat DTO.
  */
-export class GroupDTO {
+export class GroupMessageForumisDTO {
   /**
-   * Forum ID.
+   * Forum ID. , karena forum di gunakan di group
    */
   forumId: string;
 
@@ -491,7 +515,7 @@ export class GroupDTO {
   /**
    * Message type.
    */
-  type: ChatType;
+  type: MessageType;
 
   /**
    * File/image url.
@@ -527,12 +551,23 @@ export class GroupDTO {
    * Updated at.
    */
   updatedAt: Date;
+
+  /*
+   * response ai  , ini ada yang eperlu di tambha lagi
+   */
+  messageResponseModel?: string;
+
+  /*
+   * tanggal model response
+   */
+  dateResponseModel?: Date;
 }
 
 /**
  * DTO create/send chat.
  */
-export class CreateGroupDTO {
+export class CreateGroupMessageForumisDTO {
+  // untuk nama pembuat alias supperviso , cek di forum , karena ini menampung chat doang
   /**
    * Forum ID.
    */
@@ -557,8 +592,8 @@ export class CreateGroupDTO {
    * Chat type.
    */
   @IsOptional()
-  @IsEnum(ChatType)
-  type?: ChatType;
+  @IsEnum(MessageType)
+  type?: MessageType;
 
   /**
    * File url.
@@ -578,7 +613,7 @@ export class CreateGroupDTO {
 /**
  * DTO update/edit chat.
  */
-export class UpdateGroupDTO {
+export class UpdateGroupMessageForumisDTO {
   @IsOptional()
   @IsString()
   @MaxLength(3000)
@@ -596,7 +631,7 @@ export class UpdateGroupDTO {
 /**
  * DTO mark message as read.
  */
-export class ReadGroupDTO {
+export class ReadGroupMessageForumisDTO {
   /**
    * Forum/Grup ID tempat user sedang membaca pesan.
    */

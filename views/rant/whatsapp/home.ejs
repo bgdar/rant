@@ -1,0 +1,388 @@
+<div class="bg-white-secondary text-black-primary font-sans min-h-screen flex flex-col justify-between antialiased relative overflow-hidden" x-data="appData()">
+
+  <div class="absolute top-0 right-0 -z-10 pointer-events-none opacity-40 transform translate-x-1/4 -translate-y-1/4 lg:translate-x-10 lg:-translate-y-10">
+    <svg width="600" height="600" viewBox="0 0 600 600" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-[400px] h-[400px] lg:w-[650px] lg:h-[650px]">
+      <path d="M450 150C510 210 550 300 520 380C490 460 390 530 290 540C190 550 90 500 50 420C10 340 30 230 90 160C150 90 250 60 350 80C410 92 390 90 450 150Z" fill="url(#grad1)" />
+      <defs>
+        <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:var(--color-whatsApp,#24cc63);stop-opacity:0.2" />
+          <stop offset="100%" style="stop-color:var(--color-main-muted,#ffe5e5);stop-opacity:0.4" />
+        </linearGradient>
+      </defs>
+    </svg>
+  </div>
+
+  <header class="bg-white-primary/80 backdrop-blur-md border-b border-white-accent sticky top-0 z-50 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-whatsApp text-white-primary rounded-xl flex items-center justify-center text-xl shadow-md shadow-whatsApp/20">
+          <i class="fa-brands fa-whatsapp text-2xl"></i>
+        </div>
+        <div>
+          <span class="font-extrabold text-lg text-black-primary tracking-tight block leading-none">WA SafeGuard</span>
+          <span class="text-xs text-gray-secondary font-medium">Group & Business Shield</span>
+        </div>
+      </div>
+
+      <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-black-accent">
+        <a href="#analisis" class="hover:text-whatsApp transition-colors flex items-center gap-2">
+          <i class="fa-solid fa-shield-halved text-xs"></i> Klasifikasi Etika
+        </a>
+        <a href="/user/profile" class="hover:text-whatsApp transition-colors flex items-center gap-2">
+          <i class="fa-solid fa-robot text-xs"></i> Bot & Dashboard
+        </a>
+        <a href="#deteksi-ai" class="hover:text-whatsApp transition-colors flex items-center gap-2">
+          <i class="fa-solid fa-brain text-xs"></i> Model AI
+        </a>
+      </nav>
+      <div class="hidden md:flex items-center gap-3">
+        <a href="#bot-dashboard" class="bg-whatsApp hover:opacity-90 text-white-primary px-5 py-2.5 rounded-xl font-bold text-sm transition-all shadow-md shadow-whatsApp/20 active:scale-95 flex items-center gap-2">
+          <i class="fa-solid fa-link text-xs"></i> Tautkan Nomor WA
+        </a>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden p-2 text-black-accent hover:text-whatsApp focus:outline-none">
+        <i class="fa-solid" :class="mobileMenuOpen ? 'fa-xmark text-2xl' : 'fa-bars text-xl'"></i>
+      </button>
+    </div>
+
+    <!-- Mobile Nav Drawer -->
+    <div x-show="mobileMenuOpen" x-transition class="md:hidden bg-white-primary border-b border-white-accent px-4 pt-2 pb-6 space-y-3">
+      <a href="#analisis" @click="mobileMenuOpen = false" class="block px-3 py-2 rounded-lg text-base font-semibold text-black-accent hover:bg-white-secondary">
+        <i class="fa-solid fa-shield-halved text-whatsApp w-6"></i> Klasifikasi Etika
+      </a>
+      <a href="#bot-dashboard" @click="mobileMenuOpen = false" class="block px-3 py-2 rounded-lg text-base font-semibold text-black-accent hover:bg-white-secondary">
+        <i class="fa-solid fa-robot text-whatsApp w-6"></i> Bot & Dashboard
+      </a>
+      <a href="#deteksi-ai" @click="mobileMenuOpen = false" class="block px-3 py-2 rounded-lg text-base font-semibold text-black-accent hover:bg-white-secondary">
+        <i class="fa-solid fa-brain text-whatsApp w-6"></i> Model AI
+      </a>
+      <div class="pt-2">
+        <a href="#bot-dashboard" @click="mobileMenuOpen = false" class="block w-full text-center bg-whatsApp text-white-primary py-3 rounded-xl font-bold text-sm">
+          <i class="fa-solid fa-link"></i> Tautkan Nomor WA
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-grow">
+    
+    <section class="relative py-12 lg:py-24 border-b border-white-accent bg-white-primary/60 overflow-hidden">
+      <!-- Decorative SVG Background Dots Pattern -->
+      <div class="absolute inset-0 opacity-10 pointer-events-none">
+        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="dot-pattern" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse">
+              <circle cx="3" cy="3" r="1.5" fill="var(--color-black-accent, #333)" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#dot-pattern)" />
+        </svg>
+      </div>
+
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+          
+          <!-- Kiri: Konten Teks & Call-to-Action (7 Columns) -->
+          <div class="lg:col-span-7 text-left space-y-6">
+            <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold bg-whatsApp/10 text-whatsApp border border-whatsApp/20">
+              <i class="fa-solid fa-circle-check text-xs"></i>
+              Solusi Moderasi WhatsApp Group & Business
+            </span>
+            
+            <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-black-primary tracking-tight leading-tight">
+              Lindungi Grup WhatsApp Dari <span class="text-whatsApp relative inline-block">
+                Bahasa Berisiko
+                <!-- SVG Underline Brush Effect -->
+                <svg class="absolute -bottom-2 left-0 w-full h-3 text-whatsApp/40" viewBox="0 0 200 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M2.00024 6.99996C50.0002 2.49996 150.003 -1.50004 198.003 4.49996" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+                </svg>
+              </span>
+            </h1>
+            
+            <p class="text-base sm:text-lg text-gray-secondary max-w-xl font-normal leading-relaxed">
+              Otomatisasi pemantauan pesan, deteksi teks tidak pantas, dan integrasi kontrol penuh melalui Web Dashboard yang ramah pengguna.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 pt-2">
+              <a href="/whatsapp/add-bot" class="bg-whatsApp hover:bg-whatsApp/90 text-white-primary font-bold px-7 py-3.5 rounded-xl transition shadow-lg shadow-whatsApp/20 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Uji Coba AI
+              </a>
+              <a href="#analisis" class="bg-white-secondary hover:bg-white-accent text-black-primary font-semibold px-7 py-3.5 rounded-xl border border-white-accent transition flex items-center justify-center gap-2">
+                <i class="fa-solid fa-list-check"></i> Pelajari Kategori
+              </a>
+            </div>
+
+            <!-- Stats/Badges Mini -->
+            <div class="pt-6 border-t border-white-accent/80 grid grid-cols-3 gap-4 max-w-lg">
+              <div>
+                <span class="block text-2xl font-black text-black-primary">99.4%</span>
+                <span class="text-xs text-gray-secondary">Akurasi AI</span>
+              </div>
+              <div>
+                <span class="block text-2xl font-black text-black-primary">&lt;1s</span>
+                <span class="text-xs text-gray-secondary">Respon Moderasi</span>
+              </div>
+              <div>
+                <span class="block text-2xl font-black text-black-primary">24/7</span>
+                <span class="text-xs text-gray-secondary">Proteksi Grup</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Kanan: Visual Card / Dashboard Graphic Split (5 Columns) -->
+          <div class="lg:col-span-5 relative">
+            
+            <!-- SVG Blob Decorative Backing -->
+            <div class="absolute -top-6 -right-6 w-full h-full bg-main-muted/50 rounded-3xl -rotate-2 -z-10"></div>
+            
+            <!-- Visual Container Panel -->
+            <div class="bg-white-primary border border-white-accent p-6 rounded-3xl shadow-xl space-y-4 relative">
+              <div class="flex items-center justify-between pb-3 border-b border-white-accent">
+                <div class="flex items-center gap-2">
+                  <span class="w-3 h-3 rounded-full bg-main-primary inline-block"></span>
+                  <span class="w-3 h-3 rounded-full bg-gray-primary inline-block"></span>
+                  <span class="w-3 h-3 rounded-full bg-whatsApp inline-block"></span>
+                </div>
+                <span class="text-xs font-mono font-bold text-gray-secondary">LIVE MONITORING</span>
+              </div>
+
+              <!-- SVG Wave / Chart Visualization -->
+              <div class="bg-black-secondary rounded-2xl p-4 text-white-primary relative overflow-hidden">
+                <div class="flex justify-between items-center mb-2">
+                  <span class="text-xs text-gray-accent font-medium">Tingkat Keamanan Grup</span>
+                  <span class="text-xs font-bold text-whatsApp">+18% Stabil</span>
+                </div>
+                <div class="h-20 w-full">
+                  <svg class="w-full h-full" viewBox="0 0 300 80" fill="none" preserveAspectRatio="none">
+                    <path d="M0 60 Q 50 20, 100 45 T 200 25 T 300 10 L 300 80 L 0 80 Z" fill="url(#chart-grad)" />
+                    <path d="M0 60 Q 50 20, 100 45 T 200 25 T 300 10" stroke="var(--color-whatsApp, #24cc63)" stroke-width="3" fill="none" />
+                    <defs>
+                      <linearGradient id="chart-grad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="var(--color-whatsApp, #24cc63)" stop-opacity="0.4"/>
+                        <stop offset="100%" stop-color="var(--color-whatsApp, #24cc63)" stop-opacity="0.0"/>
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                </div>
+              </div>
+
+              <!-- Live Log Feed Sample -->
+              <div class="space-y-2">
+                <div class="p-3 bg-white-secondary rounded-xl text-xs flex items-center justify-between">
+                  <div class="flex items-center gap-2.5">
+                    <i class="fa-solid fa-shield-cat text-main-primary text-sm"></i>
+                    <div>
+                      <p class="font-bold text-black-primary">Ujaran Terdeteksi</p>
+                      <p class="text-[10px] text-gray-secondary">Anggota #4810 • Otomatis Dihapus</p>
+                    </div>
+                  </div>
+                  <span class="px-2 py-0.5 bg-main-muted text-main-primary font-bold text-[10px] rounded">Tinggi</span>
+                </div>
+
+                <div class="p-3 bg-white-secondary rounded-xl text-xs flex items-center justify-between">
+                  <div class="flex items-center gap-2.5">
+                    <i class="fa-solid fa-circle-check text-whatsApp text-sm"></i>
+                    <div>
+                      <p class="font-bold text-black-primary">Sistem Normal</p>
+                      <p class="text-[10px] text-gray-secondary">Grup Komunitas Kompatibel</p>
+                    </div>
+                  </div>
+                  <span class="px-2 py-0.5 bg-whatsApp/10 text-whatsApp font-bold text-[10px] rounded">Aman</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. ANALISIS KATEGORI PELANGGARAN -->
+    <section id="analisis" class="py-16 md:py-20 relative">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto mb-12">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-black-primary mb-3">Klasifikasi Pelanggaran Etika</h2>
+          <p class="text-gray-secondary text-sm sm:text-base">Mendeteksi berbagai tingkat teks yang berpotensi mengganggu kenyamanan anggota grup WhatsApp.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          
+          <!-- Card 1 -->
+          <div class="bg-white-primary p-6 sm:p-8 rounded-2xl border border-white-accent shadow-sm hover:shadow-md transition relative overflow-hidden group">
+            <div class="w-12 h-12 bg-main-muted text-main-primary rounded-xl flex items-center justify-center text-xl mb-6 group-hover:scale-110 transition-transform">
+              <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h3 class="text-lg font-bold text-black-primary mb-2">Ujaran Kebencian & SARA</h3>
+            <p class="text-sm text-gray-secondary leading-relaxed mb-4">
+              Pesan berbentuk diskriminasi, ujaran kebencian, dan ancaman yang dapat merusak kerukunan komunitas.
+            </p>
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-main-muted text-main-secondary text-xs font-bold rounded-md">
+              <i class="fa-solid fa-user-slash text-[10px]"></i> Kick / Ban Otomatis
+            </span>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="bg-white-primary p-6 sm:p-8 rounded-2xl border border-white-accent shadow-sm hover:shadow-md transition relative overflow-hidden group">
+            <div class="w-12 h-12 bg-whatsApp/10 text-whatsApp rounded-xl flex items-center justify-center text-xl mb-6 group-hover:scale-110 transition-transform">
+              <i class="fa-solid fa-comment-slash"></i>
+            </div>
+            <h3 class="text-lg font-bold text-black-primary mb-2">Kata Kasar & Toksisitas</h3>
+            <p class="text-sm text-gray-secondary leading-relaxed mb-4">
+              Penggunaan kosa kata eksplisit atau umpatan yang tidak sesuai dengan aturan etika grup.
+            </p>
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-whatsApp/10 text-whatsApp text-xs font-bold rounded-md">
+              <i class="fa-solid fa-bell text-[10px]"></i> Hapus & Peringatan
+            </span>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="bg-white-primary p-6 sm:p-8 rounded-2xl border border-white-accent shadow-sm hover:shadow-md transition relative overflow-hidden group">
+            <div class="w-12 h-12 bg-white-accent text-black-accent rounded-xl flex items-center justify-center text-xl mb-6 group-hover:scale-110 transition-transform">
+              <i class="fa-solid fa-arrows-rotate"></i>
+            </div>
+            <h3 class="text-lg font-bold text-black-primary mb-2">Spam & Tautan Berisiko</h3>
+            <p class="text-sm text-gray-secondary leading-relaxed mb-4">
+              Pengiriman pesan berulang atau tautan mencurigakan yang berpotensi membahayakan keamanan anggota.
+            </p>
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-white-accent text-black-muted text-xs font-bold rounded-md">
+              <i class="fa-solid fa-eye text-[10px]"></i> Catat dalam Log
+            </span>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. BOT WHATSAPP & WEB DASHBOARD INTEGRATION -->
+    <section id="bot-dashboard" class="bg-white-primary border-y border-white-accent py-16 md:py-20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-whatsApp mb-2 block">
+              <i class="fa-solid fa-cubes text-xs mr-1"></i> Integrasi Lintas Platform
+            </span>
+            <h2 class="text-2xl sm:text-4xl font-extrabold text-black-primary mb-6 leading-tight">
+              Bot WhatsApp Pintar, Kendali Penuh Lewat Web Dashboard
+            </h2>
+            
+            <div class="space-y-6">
+              <div class="flex gap-4">
+                <div class="w-9 h-9 rounded-full bg-whatsApp/10 text-whatsApp flex-shrink-0 flex items-center justify-center font-bold text-sm">
+                  <i class="fa-solid fa-qrcode"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold text-black-primary text-base">Koneksi Cepat via QR Code</h4>
+                  <p class="text-sm text-gray-secondary mt-1">Cukup pemindaian QR Code dari aplikasi WhatsApp untuk mengaktifkan bot di dalam grup Anda.</p>
+                </div>
+              </div>
+
+              <div class="flex gap-4">
+                <div class="w-9 h-9 rounded-full bg-whatsApp/10 text-whatsApp flex-shrink-0 flex items-center justify-center font-bold text-sm">
+                  <i class="fa-solid fa-sliders"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold text-black-primary text-base">Atur Sensitivitas Filter Kata</h4>
+                  <p class="text-sm text-gray-secondary mt-1">Tentukan batasan toleransi bahasa yang diperbolehkan di grup langsung dari dashboard web.</p>
+                </div>
+              </div>
+
+              <div class="flex gap-4">
+                <div class="w-9 h-9 rounded-full bg-whatsApp/10 text-whatsApp flex-shrink-0 flex items-center justify-center font-bold text-sm">
+                  <i class="fa-solid fa-chart-line"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold text-black-primary text-base">Analitik & Laporan Real-Time</h4>
+                  <p class="text-sm text-gray-secondary mt-1">Pantau grafik aktivitas grup, rekap peringatan, dan daftar anggota yang sering melanggar etika.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-8">
+              <button class="bg-whatsApp hover:bg-whatsApp/90 text-white-primary px-6 py-3 rounded-xl font-bold text-sm shadow-md shadow-whatsApp/20 flex items-center gap-2">
+                <i class="fa-solid fa-arrow-right-to-bracket"></i> Buka Web Dashboard
+              </button>
+            </div>
+          </div>
+
+          <!-- UI Mockup WhatsApp Chat Frame -->
+          <div class="p-4 sm:p-6 rounded-2xl border border-white-accent bg-white-secondary shadow-inner relative">
+            
+            <!-- WA Header Mock -->
+            <div class="bg-black-secondary text-white-primary p-3 rounded-t-xl flex items-center justify-between text-xs">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-whatsApp flex items-center justify-center font-bold text-sm">
+                  <i class="fa-solid fa-users"></i>
+                </div>
+                <div>
+                  <span class="font-bold block text-sm">Grup Komunitas Resmi</span>
+                  <span class="text-[10px] text-gray-primary">324 Anggota • Online</span>
+                </div>
+              </div>
+              <div class="flex gap-3 text-gray-accent text-sm">
+                <i class="fa-solid fa-ellipsis-vertical"></i>
+              </div>
+            </div>
+
+            <!-- WA Chat Body Mock -->
+            <div class="bg-[#efeae2] p-4 rounded-b-xl space-y-3 font-sans text-xs">
+              <!-- Chat Left (Normal) -->
+              <div class="bg-white-primary p-2.5 rounded-lg rounded-tl-none shadow-sm max-w-[80%] border border-black-accent/5">
+                <span class="font-bold text-whatsApp block text-[11px]">+62 812-3456-7890</span>
+                <p class="text-black-primary text-xs mt-0.5">Halo rekan-rekan, mohon gunakan bahasa yang sopan di grup ini ya.</p>
+                <span class="text-[9px] text-gray-primary text-right block mt-1">10:42 AM</span>
+              </div>
+
+              <!-- Chat Left (Violation) -->
+              <div class="bg-white-primary p-2.5 rounded-lg rounded-tl-none shadow-sm max-w-[80%] border border-main-accent/30">
+                <span class="font-bold text-main-primary block text-[11px]">+62 899-0000-1111</span>
+                <p class="text-gray-primary italic text-xs mt-0.5">
+                  <i class="fa-solid fa-ban text-main-primary mr-1"></i> Pesan ini telah dihapus oleh Bot Moderasi.
+                </p>
+                <span class="text-[9px] text-gray-primary text-right block mt-1">10:43 AM</span>
+              </div>
+
+              <!-- Chat Right (Bot System Message) -->
+              <div class="bg-white-primary p-2.5 rounded-lg rounded-tr-none shadow-sm max-w-[85%] ml-auto border border-whatsApp/20">
+                <span class="font-bold text-whatsApp block text-[11px]">
+                  <i class="fa-solid fa-robot mr-1"></i> WA SafeGuard Bot
+                </span>
+                <p class="text-black-primary text-xs mt-0.5">⚠️ <strong>Peringatan Otomatis:</strong> Pesan terdeteksi mengandung kata-kata berisiko dan telah dibersihkan.</p>
+                <span class="text-[9px] text-gray-primary text-right block mt-1">10:43 AM <i class="fa-solid fa-check-double text-whatsApp"></i></span>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="bg-white-primary border-t border-white-accent py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-secondary">
+      <div class="flex items-center gap-2">
+        <div class="w-6 h-6 bg-whatsApp text-white-primary rounded-md flex items-center justify-center font-bold text-xs">
+          <i class="fa-brands fa-whatsapp"></i>
+        </div>
+        <span class="font-bold text-black-primary">WA SafeGuard Systems</span>
+      </div>
+      <p>&copy; 2026 WA SafeGuard. Hak Cipta Dilindungi.</p>
+    </div>
+  </footer>
+
+  <script>
+    function appData() {
+      return {
+        mobileMenuOpen: false,
+        inputText: '',
+        result: null,
+      }
+    }
+  </script>
+</div>

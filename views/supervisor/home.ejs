@@ -1,6 +1,6 @@
 <div
   class="bg-white-secondary text-black-primary font-sans antialiased min-h-screen flex flex-col justify-between"
-  x-data="{ sidebarOpen: false, activeTab: 'overview' }"
+  x-data="init"
 >
   <header
     class="bg-black-primary text-white-primary shadow-md px-6 py-4 flex justify-between items-center sticky top-0 z-50"
@@ -65,7 +65,7 @@
       </div>
 
       <span class="text-sm text-white-secondary hidden md:inline"
-        >Halo, <strong>Supervisor</strong></span
+        >Halo, <strong x-text="supervisor.username"></strong></span
       >
       <div
         class="w-10 h-10 rounded-full bg-main-secondary flex items-center justify-center text-white-primary font-bold border-2 border-main-accent"
@@ -76,53 +76,81 @@
   </header>
 
   <div class="flex grow">
-    <!-- SIDEBAR NAVIGATION -->
+    <!-- sidebar navigation -->
     <aside
       :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
       class="fixed md:static inset-y-0 left-0 w-64 bg-black-secondary text-white-secondary p-4 space-y-6 transform md:translate-x-0 transition-transform duration-200 ease-in-out z-40 flex flex-col justify-between border-r border-black-accent"
     >
-      <div class="space-y-4">
-        <div
-          class="text-xs font-bold tracking-wider text-gray-primary uppercase px-3"
-        >
-          Menu Utama
-        </div>
-        <nav class="space-y-1">
-          <button
-            @click.prevent="activeTab = 'overview'; sidebarOpen = false"
-            :class="activeTab === 'overview' ? 'bg-main-primary text-white-primary' : 'hover:bg-black-accent text-gray-accent hover:text-white-primary'"
-            class="flex items-center space-x-3 px-3 py-2.5 rounded-lg transition duration-200"
-          >
-            <i class="fas fa-home w-5"></i> <span>Overview</span>
-          </button>
+    
+<div class="space-y-6">
+  <div class="space-y-2">
+    <div class="text-[10px] font-bold tracking-widest text-gray-primary uppercase px-3 opacity-60">
+      Menu Utama
+    </div>
+    <nav class="space-y-1 flex flex-col">
+      <button
+        @click.prevent="activeTab = 'overview'; sidebarOpen = false"
+        :class="activeTab === 'overview' ? 'bg-main-primary text-white-primary' : 'hover:bg-black-accent text-gray-accent hover:text-white-primary'"
+        class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg transition duration-200 text-left"
+      >
+        <i class="fas fa-home w-5 text-center"></i> 
+        <span>Overview</span>
+      </button>
 
-          <a
-            href="/supervisor/user/create"
-            @click.prevent="activeTab = 'create-user'; sidebarOpen = false"
-            :class="activeTab === 'create-user' ? 'bg-main-primary text-white-primary' : 'hover:bg-black-accent text-gray-accent hover:text-white-primary'"
-            class="flex items-center space-x-3 px-3 py-2.5 rounded-lg transition duration-200"
-          >
-            <i class="fas fa-user-plus w-5"></i> <span>Create New User</span>
-          </a>
+      <button
+        @click.prevent="activeTab = 'create-user'; sidebarOpen = false"
+        :class="activeTab === 'create-user' ? 'bg-main-primary text-white-primary' : 'hover:bg-black-accent text-gray-accent hover:text-white-primary'"
+        class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg transition duration-200 text-left"
+      >
+        <i class="fas fa-user-plus w-5 text-center"></i> 
+        <span>Create New User</span>
+      </button>
 
-          <button
-            @click.prevent="activeTab = 'users'; sidebarOpen = false"
-            :class="activeTab === 'users' ? 'bg-main-primary text-white-primary' : 'hover:bg-black-accent text-gray-accent hover:text-white-primary'"
-            class="flex items-center space-x-3 px-3 py-2.5 rounded-lg transition duration-200"
-          >
-            <i class="fas fa-users w-5"></i> <span>Data Pengguna</span>
-          </button>
+      <button
+        @click.prevent="activeTab = 'users'; sidebarOpen = false"
+        :class="activeTab === 'users' ? 'bg-main-primary text-white-primary' : 'hover:bg-black-accent text-gray-accent hover:text-white-primary'"
+        class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg transition duration-200 text-left"
+      >
+        <i class="fas fa-users w-5 text-center"></i> 
+        <span>Data Pengguna</span>
+      </button>
 
-          <button
-            @click.prevent="activeTab = 'logs'; sidebarOpen = false"
-            :class="activeTab === 'logs' ? 'bg-main-primary text-white-primary' : 'hover:bg-black-accent text-gray-accent hover:text-white-primary'"
-            class="flex items-center space-x-3 px-3 py-2.5 rounded-lg transition duration-200"
-          >
-            <i class="fas fa-history w-5"></i> <span>Log Aktivitas</span>
-          </button>
-        </nav>
-      </div>
+      <button
+        @click.prevent="activeTab = 'logs'; sidebarOpen = false"
+        :class="activeTab === 'logs' ? 'bg-main-primary text-white-primary' : 'hover:bg-black-accent text-gray-accent hover:text-white-primary'"
+        class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg transition duration-200 text-left"
+      >
+        <i class="fas fa-history w-5 text-center"></i> 
+        <span>Log Aktivitas</span>
+      </button>
+    </nav>
+  </div>
 
+  <!-- halaman pengguna (tautan eksternal/halaman lain) -->
+  <div class="space-y-2">
+    <div class="text-[10px] font-bold tracking-widest text-gray-primary uppercase px-3 opacity-60">
+      Menu Halaman
+    </div>
+    <nav class="space-y-1 flex flex-col">
+      <a 
+        href="/user/profile"
+        class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg transition duration-200 hover:bg-black-accent text-gray-accent hover:text-white-primary"
+      >
+        <i class="fas fa-user-circle w-5 text-center text-lg"></i> 
+        <span>Profil Saya</span>
+      </a>
+      
+      <a 
+        href="/"
+        class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg transition duration-200 hover:bg-red-500/10 text-red-400 hover:text-red-500"
+      >
+        <i class="fas fa-sign-out-alt w-5 text-center"></i> 
+        <span>Dashboard</span>
+      </a>
+    </nav>
+  </div>
+
+</div>
       <div>
         <button
           class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg bg-black-accent hover:bg-main-secondary text-white-primary text-sm font-semibold transition duration-200"
@@ -133,7 +161,7 @@
     </aside>
 
     <!-- MAIN CONTENT -->
-    <main class="flex grow p-4 md:p-8 space-y-6">
+    <main class="flex grow p-4 md:p-2.5 space-y-6 overflow-scrool">
       <main class="grow p-4 md:p-8">
         <div x-show="activeTab === 'overview'" x-transition>
           <%- include("./components/overview") %>
@@ -146,8 +174,13 @@
         <div x-show="activeTab === 'logs'" x-transition>
           <%- include("./components/log-aktivitas") %>
         </div>
-      </main>
-    </main>
+  <div x-show="activeTab === 'create-user'" x-transition>
+          <%- include("./user-components/create.ejs") %>
+        </div>
+ 
+ </main>
+    <!-- MAIN CONTENT -->
+
   </div>
 
   <footer
@@ -156,3 +189,22 @@
     &copy; 2026 Admin Panel — Crafted for Supervisor. All rights reserved.
   </footer>
 </div>
+
+
+<script>
+
+document.addEventListener('alpine:init', () => {
+  Alpine.data('init', () => ({
+    sidebarOpen: false,
+    activeTab: 'overview',
+    supervisor: <%- JSON.stringify(supervisor) %> || {},
+    info: <%- JSON.stringify(info) %> || {},
+    user : <%- JSON.stringify(user) %> || {}, 
+
+
+
+  }));
+});
+
+
+</script>

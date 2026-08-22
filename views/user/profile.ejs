@@ -7,7 +7,6 @@
   };
 
   function onTelegramAuth(data) {
-    console.log('>>> [GLOBAL] Data dari Popup Telegram:', data);
     // Kirim event ke Alpine.js
     window.dispatchEvent(new CustomEvent('telegram-popup-response',{ detail: data }));
   }
@@ -317,6 +316,37 @@
           </template>
           <!-- ---------------- TEKLEGRAM AUTH --------------- -->
 
+          <!-- ---------------- WHATSAPP AUTH --------------- -->
+          <template x-if="!whatsappId">
+            <a
+              href="https://whatsapp.com<%= typeof whatsappBotNumber !== 'undefined' ? whatsappBotNumber : '' %>"
+              class="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-[#25D366] hover:bg-[#20ba5a] text-white text-sm font-semibold rounded-xl shadow-md transition duration-200 cursor-pointer"
+            >
+              <i class="fab fa-whatsapp text-lg"></i> Hubungkan ke WhatsApp
+            </a>
+          </template>
+
+          <template x-if="whatsappId">
+            <a
+              href="/sosmed/whatsapp"
+              target="_blank"
+              class="w-full flex items-center justify-between px-4 py-2.5 bg-gradient-to-r from-[#25D366]/10 to-[#25D366]/5 hover:from-[#25D366]/20 hover:to-[#25D366]/10 border border-[#25D366]/20 text-[#20ba5a] rounded-xl shadow-sm transition-all duration-200 group"
+            >
+              <div class="flex items-center gap-2.5">
+                <i class="fab fa-whatsapp text-xl"></i>
+                <span class="text-xs font-bold tracking-wide"
+                  >Halaman WhatsApp Anda</span
+                >
+              </div>
+
+              <!-- Icon External Link -->
+              <i
+                class="fas fa-arrow-up-right-from-square text-xs opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all"
+              ></i>
+            </a>
+          </template>
+          <!-- ---------------- WHATSAPP AUTH --------------- -->
+
           <!-- Tempat menampilkan pesan sukses/gagal secara reaktif -->
           <!-- <template x-if="user">
               <p style="color: green; margin-top: 10px">
@@ -355,6 +385,7 @@
       // id sosmed jika ada atau belu
       telegramId: initialData.sosmed.telegramId,
       discordId: initialData.sosmed.discordId,
+      whatsappId: initialData.sosmed.whatsappId,
 
       loading: false,
       loadingTelegramOpenid: false,

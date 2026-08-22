@@ -1,15 +1,15 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 import { HydratedDocument, Types } from 'mongoose';
-import { ForumDTO, ForumMemberRole, ForumVisibility } from 'src/dto/forumis.dto';
+import { ForumisVisibility, ForumisMemberRole } from 'src/dto/forumis.dto';
 
 /**
  * Forum member schema.
  */
+// export class ForumMember implements ForumMemberDTO { // tidak cocok dengan type Response yang mengguankan string dari pada type database , walaupun database support
 @Schema({
   _id: false,
 })
-// export class ForumMember implements ForumMemberDTO { // tidak cocok dengan type Response yang mengguankan string dari pada type database , walaupun database support
 export class ForumisMember {
   /**
    * User ID.
@@ -18,7 +18,6 @@ export class ForumisMember {
     type: Types.ObjectId,
 
     ref: 'User',
-
     required: true,
   })
   userId: Types.ObjectId;
@@ -35,7 +34,7 @@ export class ForumisMember {
   @Prop({
     type: String,
 
-    enum: Object.values(ForumMemberRole),
+    enum: Object.values(ForumisMemberRole),
 
     default: 'member',
   })
@@ -125,11 +124,11 @@ export class Forumis {
   @Prop({
     type: String,
 
-    enum: ForumVisibility,
+    enum: ForumisVisibility,
 
-    default: ForumVisibility.PUBLIC,
+    default: ForumisVisibility.PUBLIC,
   })
-  visibility: ForumVisibility;
+  visibility: ForumisVisibility;
 
   /**
    * Forum owner supervisor/admin.
@@ -148,7 +147,6 @@ export class Forumis {
    */
   @Prop({
     type: [ForumMemberSchema],
-
     default: [],
   })
   members: ForumisMember[];

@@ -1,58 +1,106 @@
 
-<div class="flex justify-center p-10">
+<div class="flex justify-center p-4 sm:p-10 bg-[var(--color-white-secondary)] min-h-screen" 
+     x-data="{ activeTab: 'group', openStepGroup: null, openStepPrivate: null }">
 
-<div class="w-[80%] bg-white shadow-lg rounded-lg p-10">
+  <div class="w-full lg:w-[80%] bg-[var(--color-white-primary)] shadow-xl rounded-2xl p-5 sm:p-10 border border-[var(--color-white-accent)]">
+    
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8 pb-6 border-b border-[var(--color-white-accent)]">
+      <div>
+        <h1 class="text-2xl sm:text-4xl font-extrabold text-[var(--color-black-primary)] tracking-tight">
+          <%= title %>
+        </h1>
+        <p class="text-[var(--color-gray-secondary)] text-sm sm:text-base mt-1">
+          Tutorial Guide • WhatsApp Bot Integration
+        </p>
+      </div>
+      
+      <div class="flex items-center gap-2 self-start md:self-center px-4 py-2 bg-[var(--color-whatsApp)] text-white font-semibold rounded-full text-sm shadow-md">
+        <i class="fa-brands fa-whatsapp text-lg animate-bounce"></i>
+        <span>WhatsApp Bot Connected</span>
+      </div>
+    </div>
 
-<!-- Title -->
-<h1 class="text-4xl font-bold text-blackmain mb-4">
-<%= title %>
-</h1>
+    <div class="grid grid-cols-2 gap-2 p-1.5 bg-[var(--color-white-secondary)] rounded-xl mb-8">
+      <button 
+        @click="activeTab = 'group'"
+        :class="activeTab === 'group' ? 'bg-[var(--color-main-primary)] text-white shadow-md' : 'text-[var(--color-black-secondary)] hover:bg-[var(--color-white-accent)]'"
+        class="flex items-center justify-center gap-2 py-3 text-sm sm:text-base font-bold rounded-lg transition-all duration-200">
+        <i class="fa-solid fa-users"></i>
+        <span>Tambah ke Grup</span>
+      </button>
+      <button 
+        @click="activeTab = 'private'"
+        :class="activeTab === 'private' ? 'bg-[var(--color-main-primary)] text-white shadow-md' : 'text-[var(--color-black-secondary)] hover:bg-[var(--color-white-accent)]'"
+        class="flex items-center justify-center gap-2 py-3 text-sm sm:text-base font-bold rounded-lg transition-all duration-200">
+        <i class="fa-solid fa-user shadow-sm"></i>
+        <span>Chat Pribadi</span>
+      </button>
+    </div>
 
-<p class="text-graymid mb-10">
-Tutorial Guide
-</p>
+    <div x-show="activeTab === 'group'" x-transition class="space-y-4">
+      <% if (typeof stepsGroup !== 'undefined') { %>
+        <% stepsGroup.forEach((step, index) => { %>
+          <div class="border border-[var(--color-white-accent)] rounded-xl overflow-hidden shadow-sm bg-[var(--color-white-primary)]">
+            <div 
+              @click="openStepGroup === <%= index %> ? openStepGroup = null : openStepGroup = <%= index %>"
+              class="flex items-center justify-between cursor-pointer p-4 sm:p-6 hover:bg-[var(--color-white-secondary)] transition-colors duration-150">
+              
+              <div class="flex items-center flex-1 pr-4">
+                <!-- Nomor Langkah -->
+                <div class="w-8 h-8 sm:w-12 sm:h-12 flex-shrink-0 flex items-center justify-center bg-[var(--color-main-primary)] text-white font-bold rounded-full mr-3 sm:mr-6 text-sm sm:text-lg shadow-sm">
+                  <%= index + 1 %>
+                </div>
+                <h2 class="text-base sm:text-xl font-bold text-[var(--color-black-secondary)] leading-snug">
+                  <%= step.title %>
+                </h2>
+              </div>
 
-<div x-data="{ openStep: null }" class="space-y-6">
+              <i class="fa-solid fa-chevron-down text-[var(--color-gray-primary)] transition-transform duration-200"
+                 :class="openStepGroup === <%= index %> ? 'rotate-180' : ''"></i>
+            </div>
 
-<% steps.forEach((step, index) => { %>
+            <!-- Konten Isi Panduan -->
+            <div x-show="openStepGroup === <%= index %>" x-transition.opacity class="p-5 sm:p-6 border-t border-[var(--color-white-accent)] bg-[var(--color-white-secondary)] text-sm sm:text-base text-[var(--color-black-accent)] leading-relaxed">
+              <p><%= step.content %></p>
+            </div>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <p class="text-center text-[var(--color-gray-secondary)] py-4">Data panduan grup tidak ditemukan.</p>
+      <% } %>
+    </div>
+    <div x-show="activeTab === 'private'" x-transition class="space-y-4">
+      <% if (typeof stepsPrivate !== 'undefined') { %>
+        <% stepsPrivate.forEach((step, index) => { %>
+          <div class="border border-[var(--color-white-accent)] rounded-xl overflow-hidden shadow-sm bg-[var(--color-white-primary)]">
+            <div 
+              @click="openStepPrivate === <%= index %> ? openStepPrivate = null : openStepPrivate = <%= index %>"
+              class="flex items-center justify-between cursor-pointer p-4 sm:p-6 hover:bg-[var(--color-white-secondary)] transition-colors duration-150">
+              
+              <div class="flex items-center flex-1 pr-4">
+                <!-- Nomor Langkah -->
+                <div class="w-8 h-8 sm:w-12 sm:h-12 flex-shrink-0 flex items-center justify-center bg-[var(--color-black-primary)] text-white font-bold rounded-full mr-3 sm:mr-6 text-sm sm:text-lg shadow-sm">
+                  <%= index + 1 %>
+                </div>
+                <h2 class="text-base sm:text-xl font-bold text-[var(--color-black-secondary)] leading-snug">
+                  <%= step.title %>
+                </h2>
+              </div>
 
-<div class="border rounded-lg overflow-hidden">
+              <i class="fa-solid fa-chevron-down text-[var(--color-gray-primary)] transition-transform duration-200"
+                 :class="openStepPrivate === <%= index %> ? 'rotate-180' : ''"></i>
+            </div>
 
-<div 
-@click="openStep === <%= index %> ? openStep = null : openStep = <%= index %>"
-class="flex items-center cursor-pointer p-6 hover:bg-gray-100">
+            <div x-show="openStepPrivate === <%= index %>" x-transition.opacity class="p-5 sm:p-6 border-t border-[var(--color-white-accent)] bg-[var(--color-white-secondary)] text-sm sm:text-base text-[var(--color-black-accent)] leading-relaxed">
+              <p><%= step.content %></p>
+            </div>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <p class="text-center text-[var(--color-gray-secondary)] py-4">Data panduan chat pribadi tidak ditemukan.</p>
+      <% } %>
+    </div>
 
-<!-- Step Number -->
-<div class="w-12 h-12 flex items-center justify-center bg-primary text-white font-bold rounded-full mr-6">
-<%= index + 1 %>
+  </div>
 </div>
-
-<h2 class="text-xl font-semibold text-blackmain">
-<%= step.title %>
-</h2>
-
-</div>
-
-<!-- Step Content -->
-<div 
-x-show="openStep === <%= index %>"
-x-transition
-class="p-6 border-t text-lg text-blackmain leading-relaxed">
-
-<p>
-<%= step.content %>
-</p>
-
-</div>
-
-</div>
-
-<% }) %>
-
-</div>
-
-</div>
-
-</div>
-
 

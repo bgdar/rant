@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 
-import { UserDTO } from 'src/dto/user.dto';
+import { UserDTO, UserRole } from 'src/dto/user.dto';
 export type UserDocument = HydratedDocument<User>;
 
 @Schema({
@@ -24,9 +24,12 @@ export class User implements UserDTO {
   @Prop()
   telegramId: string;
 
+  @Prop() 
+  whatsappId: string; 
+
   @Prop({
     default: 'Normal',
-    enum: ['Normal', 'Suspicious', 'Dangerous', 'Extreme'],
+    enum: [UserRole],
   })
   role: string;
 }

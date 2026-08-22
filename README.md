@@ -1,3 +1,7 @@
+<h1 align="center">
+Rant
+</h1>
+
 ### Tech Stack
 
 <p align="center">
@@ -47,13 +51,16 @@
 </p>
 <br>
 
-[rant banner ](./baner.png)
+[rant banner ](baner.png)
 
 > rant bot to detect abusive words on several social media that use bots
 
 **_Tech Info_** :
 
-- `RabbitMQ` : Messaging yang cocok untuk komunikasi ke **api model server** dan aplikasi **_Bot_** lain
+- `mongodb` ( mongo:7.0 ) : database utama
+- `monggodb-express` ( mongo-express:1.0.2-20-alpine3.19 ) : antarmuka adminitratif berbasis web
+  > akses di web : localhost = `http://localhost:8081/db/rant/`
+- `RabbitMQ` ( rabbitmq:4.3.0-management-alpine ) : Messaging yang cocok untuk komunikasi ke **api model server** dan aplikasi **_Bot_** lain
 
 - `argon` : algoritma hashing password
 - `class-validator` : validasi pada DTO
@@ -85,9 +92,9 @@
 
 ### Bot
 
-- `bot discord` : https://github.com/bgdar/bot-discord/tree/rant
-- `bot-telegram` : https://github.com/bgdar/bot-telegram/tree/rant
-- `bot-whatsApp` ( coming soon ):
+- `bot discord` : <https://github.com/bgdar/bot-discord/tree/rant>
+- `bot-telegram` : <https://github.com/bgdar/bot-telegram/tree/rant>
+- `bot-whatsApp` : <https://github.com/bgdar/bot-WhatsApp/tree/rant>
 
 ### User
 
@@ -109,6 +116,9 @@ pendamping atau admin yang mengelola **grub**
 > Karena menggunakan session maka pilih
 > Id supervisor dengan id user itu 'BERBEDA'
 
+- data user baru yang bergabung ke groub akan di simpan id nya ke supervisor , sebagai user yg di awasi 
+
+
 ### Forumis
 
 Forumis: Sebutan resmi untuk orang yang aktif berpartisipasi atau menjadi bagian dari suatu forum.
@@ -128,11 +138,13 @@ Forumis: Sebutan resmi untuk orang yang aktif berpartisipasi atau menjadi bagian
 
 ##### Chat , Group , Forums
 
+> selebeihnya ada di `bot sosmed` dan `model api` utnuk generate collection dengan tanda kutip database di jalaakn nantik
+
 - Forums: Tempat atau wadah (kamar) diskusi besar yang berisi informasi grup, status akses, dan statistik obrolan komunitas.
 
-- Group: Koleksi data pesan/chat yang dikirim oleh anggota di dalam suatu Forums tertentu (dilengkapi fitur pelacakan baca banyak orang).
+- Group.message.<sosmed/forumis>: Koleksi data pesan/chat yang dikirim oleh anggota di dalam suatu Forums tertentu (dilengkapi fitur pelacakan baca banyak orang).
 
-- Chat: Koleksi data pesan/chat personal (1-on-1) antar-user yang terisolasi di dalam ruangan unik (roomId) tanpa terikat dengan forum mana pun.
+- Chat.message.(sosmed/forumis): Koleksi data pesan/chat personal (1-on-1) antar-user yang terisolasi di dalam ruangan unik (roomId) tanpa terikat dengan forum mana pun.
 
 ### Sosmed
 
@@ -195,7 +207,7 @@ _**Telegram**_
 
 ### RabbitMQ
 
-> RabbitMQ file ada fi module `rant`
+> RabbitMQ file ada fi module `provider`
 
 untuk masuk ke web RabbitMQ
 
@@ -270,10 +282,6 @@ data ( payload ) yang masuk ke server yang menjalakan model dan response nya
 
 **_docker compose_** :
 
-- `mongodb` : database utama
-- `monggodb-express` : antarmuka adminitratif berbasis web
-  > akses di web : localhost = `http://localhost:8081/db/rant/`
-
 ```bash
 # jalanakn di directory docker
 cd docker
@@ -295,7 +303,7 @@ docker exec -it mongodb-rant mongosh -u dar -p dar-rant --authenticationDatabase
 Database name : **`rant`**
 Biarkan WEb app ini menjadi pusat uatamanay , jadi semua data aakn di simpan di database 1 ini ( rant )
 
-> file dengan extensi nama_file.db.service.ts : adalah file model untuk database nya
+> file dengan extensi nama_file.db.repo.ts : adalah file model untuk database nya
 
 1. Data Dummmy untuk semua bot
 2. Table database rant menentukan spesifikasi bahasa untuk rant nya ( indo , aceh , english) itu berdasarkan table nya
@@ -333,9 +341,6 @@ dataset juga di simpan di sini
 - #999999 ( medium gray)
 
 ### Folder info
-
-- `forums.module` : modular untuk forums di web ini yang mempunyai `chat` , `grub`
-- `rant
 
 ### FIle info
 

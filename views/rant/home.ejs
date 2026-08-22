@@ -1,116 +1,138 @@
-<div class="bg-white-secondary min-h-screen flex items-center justify-center p-0 sm:p-4 antialiased font-sans text-black-primary">
-    <div class="bg-white-primary w-full max-w-md h-screen sm:h-[650px] sm:rounded-2xl shadow-2xl border border-white-accent flex flex-col overflow-hidden"
-         x-data="{
-            botUsername: '@SistemManajemenBot',
-            chatId: '628394021',
-            copiedField: '',
-            
-            copyToClipboard(text, field) {
-                navigator.clipboard.writeText(text);
-                this.copiedField = field;
-                setTimeout(() => { this.copiedField = '' }, 2000);
-            }
-         }">
-         
-        <div class="bg-black-primary p-4 text-white-primary flex items-center justify-between h-16 shrink-0 shadow-md border-b-2 border-main-primary">
-            <div class="flex items-center space-x-4">
-                <button class="text-white-primary hover:text-main-accent transition-colors">
-                    <i class="fas fa-arrow-left text-lg"></i>
-                </button>
-                <div class="flex flex-col">
-                    <div class="flex items-center space-x-1.5">
-                        <h1 class="text-base font-bold tracking-wide">Info Bot</h1>
-                        <i class="fas fa-circle-check text-xs text-main-primary"></i>
-                    </div>
-                    <p class="text-[11px] text-gray-accent">bot panduan sistem</p>
-                </div>
+
+<div class="bg-white-secondary min-h-screen w-full antialiased font-sans text-black-primary flex flex-col justify-between selection:bg-main-muted selection:text-main-secondary">
+    
+    <!-- <header class="bg-black-primary text-white-primary h-16 shrink-0 shadow-xl border-b-2 border-main-primary flex items-center justify-between px-4 sm:px-8 lg:px-12 sticky top-0 z-50">
+        <div class="flex items-center space-x-3 group cursor-pointer">
+            <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-main-accent to-main-primary flex items-center justify-center text-white-primary shadow-lg shadow-main-primary/20 group-hover:scale-105 transition-transform">
+                <i class="fas fa-fire text-base animate-pulse"></i>
             </div>
-            <button class="text-white-primary hover:text-main-accent transition-colors">
-                <i class="fas fa-ellipsis-vertical text-lg"></i>
+            <div class="flex flex-col">
+                <h1 class="text-lg font-black tracking-widest uppercase text-white-primary leading-none">Rant</h1>
+                <span class="text-[9px] text-main-accent font-bold tracking-wider uppercase mt-0.5">Dashboard</span>
+            </div>
+        </div>
+        
+        <div class="flex items-center space-x-4">
+            <span class="text-[10px] text-gray-accent font-mono bg-black-secondary px-3 py-1 rounded-md border border-black-accent uppercase tracking-wider hidden sm:inline-block">
+                System Active
+            </span>
+            <button class="text-white-primary hover:text-main-accent transition-all p-2 rounded-xl hover:bg-black-secondary border border-transparent hover:border-black-accent">
+                <i class="fas fa-th-large text-lg"></i>
             </button>
         </div>
+    </header> -->
 
-        <div class="flex-1 overflow-y-auto bg-white-secondary p-4 space-y-4">
+    <main class="flex-1 flex flex-col gap-1.5 items-center justify-center p-4 sm:p-8 lg:p-12">
+        
+        <div class="w-full max-w-4xl bg-white-primary rounded-3xl border border-white-accent p-6 sm:p-10 lg:p-12 shadow-[0_20px_50px_rgba(0,0,0,0.05)] text-center space-y-10 relative overflow-hidden">
             
-            <div class="bg-white-primary p-4 rounded-xl border border-white-accent flex items-center space-x-4 shadow-sm">
-                <div class="w-14 h-14 rounded-full bg-black-secondary border border-main-accent flex items-center justify-center text-main-primary text-2xl font-bold shadow-sm shrink-0">
-                    <i class="fab fa-telegram"></i>
+            <div class="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-main-primary via-main-accent to-main-secondary"></div>
+
+            <div class="space-y-3 max-w-xl mx-auto">
+                <div class="inline-flex items-center space-x-2 bg-main-muted text-main-secondary px-3 py-1 rounded-full text-xs font-bold border border-main-accent/20">
+                    <i class="fas fa-robot text-[11px]"></i>
+                    <span>Integrasi Multi-Platform</span>
                 </div>
-                <div class="overflow-hidden">
-                    <div class="flex items-center space-x-1.5">
-                        <h2 class="text-sm font-bold text-black-primary">Sistem Manajemen Bot</h2>
-                        <i class="fas fa-circle-check text-xs text-main-primary"></i>
-                    </div>
-                    <p class="text-xs text-black-accent mt-0.5 truncate" x-text="botUsername"></p>
-                    <p class="text-[11px] text-gray-secondary mt-0.5">bot otomatis untuk notifikasi & log</p>
-                </div>
+                <h2 class="text-2xl sm:text-3xl lg:text-4xl font-black text-black-primary tracking-tight">
+                    Pilih Menu <span class="text-ain-primary">Bot Anda</span>
+                </h2>
+                <p class="text-xs sm:text-sm text-black-muted leading-relaxed">
+                    Akses cepat ke setiap gateway bot sistem. Silakan pilih salah satu platform di bawah untuk mengonfigurasi dan memantau log aktivitas.
+                </p>
             </div>
 
-            <div class="space-y-1.5">
-                <span class="text-[10px] font-bold text-gray-secondary uppercase tracking-wider px-2 block">Langkah 1: Aktivasi</span>
-                <div class="bg-white-primary p-4 rounded-xl border border-white-accent space-y-3 shadow-sm">
-                    <p class="text-xs text-black-accent leading-relaxed">
-                        Cari username bot resmi kami di Telegram, lalu klik tombol <strong class="text-main-primary">Mulai / Start</strong> di bagian bawah obrolan.
-                    </p>
-                    <!-- Kotak Penyalinan Teks -->
-                    <div class="flex items-center justify-between bg-white-secondary p-2.5 rounded-lg border border-white-accent">
-                        <span class="text-xs font-mono font-bold text-black-primary select-all" x-text="botUsername"></span>
-                        <button @click="copyToClipboard(botUsername, 'username')" 
-                                class="px-3 py-1.5 rounded-md text-xs font-bold transition-all flex items-center space-x-1.5 shrink-0 border"
-                                :class="copiedField === 'username' ? 'bg-main-muted text-main-secondary border-main-accent' : 'bg-white-primary text-black-primary border-black-accent hover:bg-white-accent'">
-                            <i class="fas" :class="copiedField === 'username' ? 'fa-check' : 'fa-copy'"></i>
-                            <span x-text="copiedField === 'username' ? 'Tersalin' : 'Salin'"></span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="space-y-1.5">
-                <span class="text-[10px] font-bold text-gray-secondary uppercase tracking-wider px-2 block">Langkah 2: Sinkronisasi</span>
-                <div class="bg-white-primary p-4 rounded-xl border border-white-accent space-y-3 shadow-sm">
-                    <p class="text-xs text-black-accent leading-relaxed">
-                        Kirimkan pesan perintah <code class="bg-main-muted text-main-secondary px-1.5 py-0.5 rounded font-mono text-[11px] font-bold border border-main-accent">/myid</code> ke bot untuk mendapatkan nomor ID unik akun Telegram Anda.
-                    </p>
-                    <!-- Kotak Penyalinan Teks -->
-                    <div class="flex items-center justify-between bg-white-secondary p-2.5 rounded-lg border border-white-accent">
-                        <span class="text-xs font-mono font-bold text-gray-secondary select-all" x-text="chatId"></span>
-                        <button @click="copyToClipboard(chatId, 'chatid')" 
-                                class="px-3 py-1.5 rounded-md text-xs font-bold transition-all flex items-center space-x-1.5 shrink-0 border"
-                                :class="copiedField === 'chatid' ? 'bg-main-muted text-main-secondary border-main-accent' : 'bg-white-primary text-black-primary border-black-accent hover:bg-white-accent'">
-                            <i class="fas" :class="copiedField === 'chatid' ? 'fa-check' : 'fa-copy'"></i>
-                            <span x-text="copiedField === 'chatid' ? 'Tersalin' : 'Salin'"></span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="space-y-1.5 pb-6">
-                <span class="text-[10px] font-bold text-gray-secondary uppercase tracking-wider px-2 block">Daftar Perintah (Commands)</span>
-                <div class="bg-white-primary rounded-xl border border-white-accent divide-y divide-white-accent overflow-hidden shadow-sm">
-                    
-                    <!-- Row 1 -->
-                    <div class="p-3 flex items-start space-x-3 hover:bg-white-secondary/40 transition-colors">
-                        <span class="text-main-primary font-mono text-xs font-bold shrink-0 w-16">/start</span>
-                        <div class="text-xs">
-                            <p class="font-bold text-black-primary">Mulai Sesi</p>
-                            <p class="text-gray-secondary mt-0.5">Mengaktifkan bot dan memunculkan pesan selamat datang.</p>
-                        </div>
-                    </div>
-
-                    <!-- Row 2 -->
-                    <div class="p-3 flex items-start space-x-3 hover:bg-white-secondary/40 transition-colors">
-                        <span class="text-main-primary font-mono text-xs font-bold shrink-0 w-16">/status</span>
-                        <div class="text-xs">
-                            <p class="font-bold text-black-primary">Cek Koneksi</p>
-                            <p class="text-gray-secondary mt-0.5">Memeriksa apakah ID akun Anda sudah terhubung ke panel web.</p>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
+       
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+                
+    <!-- TOMBOL 1: WHATSAPP -->
+    <a href="/sosmed/whatsapp" 
+       class="group bg-white-secondary p-6 sm:p-8 rounded-2xl border border-white-accent hover:border-main-primary shadow-sm hover:shadow-2xl hover:shadow-main-primary/10 hover:-translate-y-1.5 transition-all duration-500 flex flex-col items-center justify-center relative overflow-hidden">
+        
+        <div class="absolute inset-x-0 bottom-0 w-full h-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0">
+            <svg class="absolute bottom-0 w-[200%] h-32 text-main-muted fill-current animate-[wave_12s_linear_infinite]" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M0,60 C150,90 350,30 500,60 C650,90 850,30 1000,60 C1150,90 1350,30 1500,60 L1500,120 L0,120 Z"></path>
+            </svg>
+            <svg class="absolute bottom-0 w-[200%] h-28 text-main-accent/10 fill-current animate-[wave_8s_linear_infinite_reverse] opacity-70" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M0,50 C100,20 250,80 400,50 C550,20 700,80 850,50 C1000,20 1150,80 1300,50 L1300,120 L0,120 Z"></path>
+            </svg>
         </div>
-    </div>
+        
+        <!-- Lingkaran Tempat Ikon -->
+        <div class="w-16 h-16 rounded-2xl bg-black-primary text-white-primary flex items-center justify-center text-3xl shadow-lg border border-black-accent group-hover:bg-main-primary group-hover:border-main-accent group-hover:rotate-6 transition-all duration-300 relative z-10">
+            <i class="fab fa-whatsapp"></i>
+        </div>
+        
+        <!-- Teks Deskripsi -->
+        <span class="mt-5 text-base font-extrabold text-black-primary group-hover:text-main-primary transition-colors relative z-10">WhatsApp Bot</span>
+        <span class="mt-1 text-[11px] text-black-muted font-medium relative z-10 group-hover:text-black-secondary transition-colors">Gateway & Notifikasi</span>
+        
+        <!-- Panah Indikator Pojok Kanan Atas -->
+        <i class="fas fa-arrow-up-right-from-square absolute top-4 right-4 text-[10px] text-gray-primary opacity-0 group-hover:opacity-100 group-hover:text-main-primary transition-all duration-300 z-10"></i>
+    </a>
 
+    <!-- TOMBOL 2: DISCORD -->
+    <a href="/sosmed/discord" 
+       class="group bg-white-secondary p-6 sm:p-8 rounded-2xl border border-white-accent hover:border-main-primary shadow-sm hover:shadow-2xl hover:shadow-main-primary/10 hover:-translate-y-1.5 transition-all duration-500 flex flex-col items-center justify-center relative overflow-hidden">
+        
+        <!-- EFEK OMBAK BERANIMASI -->
+        <div class="absolute inset-x-0 bottom-0 w-full h-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0">
+            <svg class="absolute bottom-0 w-[200%] h-32 text-main-muted fill-current animate-[wave_12s_linear_infinite]" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M0,60 C150,90 350,30 500,60 C650,90 850,30 1000,60 C1150,90 1350,30 1500,60 L1500,120 L0,120 Z"></path>
+            </svg>
+            <svg class="absolute bottom-0 w-[200%] h-28 text-main-accent/10 fill-current animate-[wave_8s_linear_infinite_reverse] opacity-70" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M0,50 C100,20 250,80 400,50 C550,20 700,80 850,50 C1000,20 1150,80 1300,50 L1300,120 L0,120 Z"></path>
+            </svg>
+        </div>
+        
+        <div class="w-16 h-16 rounded-2xl bg-black-primary text-white-primary flex items-center justify-center text-2xl shadow-lg border border-black-accent group-hover:bg-main-primary group-hover:border-main-accent group-hover:rotate-6 transition-all duration-300 relative z-10">
+            <i class="fab fa-discord"></i>
+        </div>
+        
+        <span class="mt-5 text-base font-extrabold text-black-primary group-hover:text-main-primary transition-colors relative z-10">Discord Bot</span>
+        <span class="mt-1 text-[11px] text-black-muted font-medium relative z-10 group-hover:text-black-secondary transition-colors">Webhook & Web Panel</span>
+        
+        <i class="fas fa-arrow-up-right-from-square absolute top-4 right-4 text-[10px] text-gray-primary opacity-0 group-hover:opacity-100 group-hover:text-main-primary transition-all duration-300 z-10"></i>
+    </a>
+
+    <!-- TOMBOL 3: TELEGRAM -->
+    <a href="/sosmed/telegram" 
+       class="group bg-white-secondary p-6 sm:p-8 rounded-2xl border border-white-accent hover:border-main-primary shadow-sm hover:shadow-2xl hover:shadow-main-primary/10 hover:-translate-y-1.5 transition-all duration-500 flex flex-col items-center justify-center relative overflow-hidden">
+        
+        <!-- EFEK OMBAK BERANIMASI -->
+        <div class="absolute inset-x-0 bottom-0 w-full h-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0">
+            <svg class="absolute bottom-0 w-[200%] h-32 text-main-muted fill-current animate-[wave_12s_linear_infinite]" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M0,60 C150,90 350,30 500,60 C650,90 850,30 1000,60 C1150,90 1350,30 1500,60 L1500,120 L0,120 Z"></path>
+            </svg>
+            <svg class="absolute bottom-0 w-[200%] h-28 text-main-accent/10 fill-current animate-[wave_8s_linear_infinite_reverse] opacity-70" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M0,50 C100,20 250,80 400,50 C550,20 700,80 850,50 C1000,20 1150,80 1300,50 L1300,120 L0,120 Z"></path>
+            </svg>
+        </div>
+        
+        <div class="w-16 h-16 rounded-2xl bg-black-primary text-white-primary flex items-center justify-center text-2xl shadow-lg border border-black-accent group-hover:bg-main-primary group-hover:border-main-accent group-hover:rotate-6 transition-all duration-300 relative z-10">
+            <i class="fab fa-telegram-plane"></i>
+        </div>
+        
+        <span class="mt-5 text-base font-extrabold text-black-primary group-hover:text-main-primary transition-colors relative z-10">Telegram Bot</span>
+        <span class="mt-1 text-[11px] text-black-muted font-medium relative z-10 group-hover:text-black-secondary transition-colors">Perintah & Sinkron ID</span>
+        
+        <i class="fas fa-arrow-up-right-from-square absolute top-4 right-4 text-[10px] text-gray-primary opacity-0 group-hover:opacity-100 group-hover:text-main-primary transition-all duration-300 z-10"></i>
+    </a>
+
+
+</div>
+    <a href="/" 
+       class=" bg-white-secondary p-6 sm:p-8 rounded-2xl border border-white-accent hover:border-main-primary shadow-sm hover:shadow-2xl hover:shadow-main-primary/10 w-full ">
+        Back
+    </a>
+
+    </main>
+
+    <footer class="w-full text-center py-4 bg-black-primary border-t border-black-accent shrink-0 px-4 flex flex-col sm:flex-row items-center justify-between text-[11px] text-gray-primary font-mono tracking-wider">
+        <div>&copy; 2026 <span class="text-white-primary font-bold">Rant Studio</span>Rant. All rights reserved.</div>
+        <div class="mt-1 sm:mt-0 flex items-center space-x-2">
+            <span class="inline-block w-2 h-2 rounded-full bg-green-500 animate-ping"></span>
+            <span>All Nodes Operational</span>
+        </div>
+    </footer>
 </div>
 

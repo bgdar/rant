@@ -157,3 +157,5 @@ export class TelegramUserDto {
   @IsOptional()
   phone_number?: string;
 }
+
+export class WhatsAppUserDto {}

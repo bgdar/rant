@@ -2,6 +2,7 @@
 navbar untuk user dan supervisor
       Parameter :
       responsivNav : 'left' || 'top'  2 pilihan , default top-->
+
 <% const navType = typeof responsivNav !== 'undefined' ? responsivNav : 'top';
 %>
 
@@ -131,6 +132,9 @@ navbar untuk user dan supervisor
 
       menuItems: [
         { title: 'Dashboard', url: '/', icon: 'fas fa-home', isAccent: false },
+
+{ title: 'Rant', url: '/rant', icon: 'fas fa-biohazard', isAccent: true, },
+
         {
           title: 'Forums',
           url: '/forums',

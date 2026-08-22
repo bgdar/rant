@@ -29,6 +29,8 @@ export class UserDTO {
   discordId: string;
   @IsOptional()
   telegramId: string;
+  @IsOptional()
+  whatsappId: string;
 }
 
 // sama dengan UserDTO cuman penambahan ID

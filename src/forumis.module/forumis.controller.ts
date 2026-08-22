@@ -14,13 +14,14 @@ import {
 } from '@nestjs/common';
 
 import {
-  CreateForumDTO,
-  ForumMemberRole,
-  ForumVisibility,
-  UpdateForumDTO,
+  CreateForumisDTO,
+  ForumisDTO,
+  ForumisMemberRole,
+  ForumisVisibility,
+  UpdateForumisDTO,
 } from 'src/dto/forumis.dto';
+import { ForumisRepository } from '@/repository/forumis.repository';
 
-import { ForumsDbService } from './forumis.db.service';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import { AuthUserGuard } from 'src/guards/auth.user';
 import { request } from 'http';
@@ -28,20 +29,20 @@ import { UserDTO, UserSessionDTO } from 'src/dto/user.dto';
 import { Types } from 'mongoose';
 import { AuthSupervisorGuard } from 'src/guards/auth.supervisor';
 import { SupervisorSessionDTO } from 'src/dto/supervisor.dto';
-import { SupervisorDbService } from 'src/supervisor.module/supervisor.db.service';
-import { UserDbService } from 'src/user.module/user.db.service';
-import { GroupDbService } from './group.db.service';
-import { ChatDbService } from './chat.db.service';
+import { SupervisorRepository } from '@/repository/supervisor.repository';
+import { UserRepository } from '@/repository/user.repository';
+import { GroupMessageForumisRepository } from '@/repository/group.message.forumis.repository';
+import { ChatMessageForumisRepository } from '@/repository/chat.message.forumis.repository';
 
 @UseGuards(AuthUserGuard)
 @Controller('forums')
 export class ForumsController {
   constructor(
-    private readonly forumsDbService: ForumsDbService,
-    private readonly supervisorDbService: SupervisorDbService,
-    private readonly userDbService: UserDbService,
-    private readonly chatDbService: ChatDbService,
-    private readonly groupDbService: GroupDbService,
+    private readonly forumisRepo: ForumisRepository,
+    private readonly supervisorRepo: SupervisorRepository,
+    private readonly userRepo: UserRepository,
+    private readonly chatRepo: ChatMessageForumisRepository,
+    private readonly groupRepo: GroupMessageForumisRepository,
   ) {}
 
   /**
@@ -54,18 +55,17 @@ export class ForumsController {
 
     // Ambil data User untuk "Pajangan" (sidebar atau list chat baru)
     // ini masuk ke katagori user , jadi pakai id user
-    const userRecent = await this.chatDbService.getRecentChats(user.id);
+    const userRecent = await this.chatRepo.getRecentChats(user.id);
 
-    console.info('user Recent : ', userRecent, '\n');
 
-    // --- KONDISI 1 JIKA SESSION SUPERVISOR AKTIF ---
+    // --- kondisi 1 jika session supervisor aktif ---
     if (svss) {
       const svid = new Types.ObjectId(svss.id);
       const userId = new Types.ObjectId(user.id);
 
       // Ambil forum milik Supervisor (berdasarkan ID Supervisor)
       const rawForumsSupervisor =
-        await this.forumsDbService.findAllSupervisorForums(svid);
+        await this.forumisRepo.findAllSupervisorForumis(svid);
       const forumsSupervisor = rawForumsSupervisor.map((forum) => {
         const obj = forum.toObject ? forum.toObject() : forum;
         obj.id = obj._id.toString(); // Penting untuk :key Alpine.js
@@ -73,17 +73,15 @@ export class ForumsController {
       });
 
       // Ambil forum milik User Biasa (berdasarkan ID User biasa)
-      const rawForumsUser =
-        await this.forumsDbService.findAllUserForums(userId);
+      const rawForumsUser = await this.forumisRepo.findAllUserForumis(userId);
       const forumsUser = rawForumsUser.map((forum) => {
         const obj = forum.toObject ? forum.toObject() : forum;
         obj.id = obj._id.toString();
         return obj;
       });
 
-      console.info('data user forums : ', forumsUser);
 
-      return res.view('forums/home.ejs', {
+      return res.view('forumis/home.ejs', {
         title: 'Supervisor Forums',
         username: svss.username,
         status: 'supervisor', // Tab default yang aktif
@@ -94,9 +92,9 @@ export class ForumsController {
       });
     }
 
-    // --- KONDISI 2 JIKA HANYA USER BIASA ---
+    // --- kondisi 2 jika hanya user biasa ---
     const userId = new Types.ObjectId(user.id);
-    const rawForumsUser = await this.forumsDbService.findAllUserForums(userId);
+    const rawForumsUser = await this.forumisRepo.findAllUserForumis(userId);
     const forumsUser = rawForumsUser.map((forum) => {
       const obj = forum.toObject ? forum.toObject() : forum;
       obj.id = obj._id.toString();
@@ -105,7 +103,7 @@ export class ForumsController {
 
     console.info(`[User Mode] Mengirim ${forumsUser.length} forum User.`);
 
-    return res.view('forums/home.ejs', {
+    return res.view('forumis/home.ejs', {
       title: 'Home Forums',
       username: user.username,
       status: 'user', // Tab default yang aktif
@@ -121,12 +119,12 @@ export class ForumsController {
    */
   @UseGuards(AuthSupervisorGuard)
   @Get('create-group')
-  @Render('forums/create-group.ejs')
+  @Render('forumis/create-group.ejs')
   createForums(@Session() session: Record<string, any>) {
     const svss = session?.supervisor as SupervisorSessionDTO;
 
     // panggil dari DB karena butuh id dari si supervisor
-    // const supervisor = await this.supervisorDbService.findByUsernameEmail(
+    // const supervisor = await this.supervisorRepo.findByUsernameEmail(
     //   svss.username,
     //   svss.email,
     // );
@@ -138,7 +136,7 @@ export class ForumsController {
         supervisorId: svss.id || null,
         role: svss?.role,
       },
-      forumsVisibility: Object.values(ForumVisibility), // kirim semua unuk di pilih retunt array
+      forumsVisibility: Object.values(ForumisVisibility), // kirim semua unuk di pilih retunt array
       title: 'Create Forum',
     };
   }
@@ -148,18 +146,18 @@ export class ForumsController {
    */
   @Post('create-forum')
   async createForumPost(
-    @Body() data: CreateForumDTO,
+    @Body() data: CreateForumisDTO,
 
     @Session() session: Record<string, any>,
 
     @Res() res: FastifyReply,
   ) {
     try {
-      // Add supervisor ID
-      // Create forum
 
-      const forum = await this.forumsDbService.createForum(data);
-      console.info('forums :data ->', forum);
+      console.info("data : ",data)
+
+
+      const forum = await this.forumisRepo.createForumis(data);
 
       return res.status(HttpStatus.OK).send({
         message: 'Forum created successfully',
@@ -177,11 +175,11 @@ export class ForumsController {
    * Forums home page.
    */
   @Get('search-group')
-  @Render('forums/search-group.ejs')
+  @Render('forumis/search-group.ejs')
   async searchGrubView() {
     // nantik mungkin jika project nya sangat besar , maka metode mengambil semua data harus di ubah
-    const forums = await this.forumsDbService.findAllForums();
-    const totalForums = await this.forumsDbService.countForums();
+    const forums = await this.forumisRepo.findAllForumis();
+    const totalForums = await this.forumisRepo.countForums();
 
     return {
       title: 'Home Forums',
@@ -199,18 +197,17 @@ export class ForumsController {
     /*
      | Search forums berdasarkan nama member ( supervisor akan punya tag khusu nantik )
      */
-    console.info('search key : ', search);
     const user = (request as any).session?.user as UserSessionDTO;
-    const totalForums = await this.forumsDbService.countForums();
+    const totalForums = await this.forumisRepo.countForums();
 
     if (!search || search?.trim() === '') {
       return {
-        forums: this.forumsDbService.findAllForums(),
+        forums: this.forumisRepo.findAllForumis(),
         totalForums: totalForums || 0,
       };
     } else {
       const userId = new Types.ObjectId(user.id);
-      const forums = await this.forumsDbService.searchforums(search, userId);
+      const forums = await this.forumisRepo.searchforumis(search, userId);
 
       console.info('frums data : ', forums);
 
@@ -225,7 +222,7 @@ export class ForumsController {
    * FronEnd akan mengambil data secara terus menerus selam 1 detik ke enpoin ini
    */
   @Get('search-chat')
-  @Render('forums/search-chat.ejs') // Render dipindah ke GET agar halaman mau terbuka saat diakses url-nya
+  @Render('forumis/search-chat.ejs') // Render dipindah ke GET agar halaman mau terbuka saat diakses url-nya
   async searchChatView(
     @Session() session: Record<string, any>,
     @Query('search') search?: string,
@@ -245,18 +242,15 @@ export class ForumsController {
 
       // Ambil daftar user berdasarkan nama/username, kecualikan diri sendiri (currentUser.id)
 
-      users = await this.userDbService.searchUsersExceptMe(
-        search,
-        currentUser.id,
-      );
+      users = await this.userRepo.searchUsersExceptMe(search, currentUser.id);
     } else {
       //  Tampilkan beberapa user rekomendasi/terbaru jika kolom search masih kosong
-      users = await this.userDbService.getRecentActiveUsers(currentUser.id);
+      users = await this.userRepo.getRecentActiveUsers(currentUser.id);
     }
 
     return {
       title: 'Cari Kontak Chat',
-      users, // Sekarang yang dikirim adalah daftar USER, bukan forums!
+      users, // di yang dikirim adalah daftar USER, utuk p2p
       search: search || '',
       // stats: {
       //   totalChats: , // comming soon
@@ -279,13 +273,18 @@ export class ForumsController {
   ) {
     try {
       const user = session.user as UserSessionDTO;
+      const supervisor = session.supervisor as SupervisorSessionDTO;
       console.info('id yang join : ', user.username);
 
-      const forum = await this.forumsDbService.addMember(
+      const forum = await this.forumisRepo.addMember(
         forumId,
         user.id,
-        ForumMemberRole.MEMBER,
+        ForumisMemberRole.MEMBER,
       );
+
+      // update supervisor agar menerima id users untuk di simpan
+      // - seharusnya gak akan di tambah user yang pembuat groub atau user pertama , karena ini aktif wakttu join
+      await this.supervisorRepo.addNewUser(supervisor.id, user.id);
 
       return res.status(HttpStatus.OK).send({
         message: 'Successfully joined forum',
@@ -312,7 +311,7 @@ export class ForumsController {
     @Res() res: FastifyReply,
   ) {
     try {
-      const forum = await this.forumsDbService.removeMember(
+      const forum = await this.forumisRepo.removeMember(
         forumId,
 
         session.user._id,
@@ -337,12 +336,12 @@ export class ForumsController {
   async updateForum(
     @Param('id') id: string,
 
-    @Body() data: UpdateForumDTO,
+    @Body() data: UpdateForumisDTO,
 
     @Res() res: FastifyReply,
   ) {
     try {
-      const forum = await this.forumsDbService.updateForum(id, data);
+      const forum = await this.forumisRepo.updateForumis(id, data);
 
       return res.status(200).send({
         message: 'Forum updated successfully',
@@ -366,7 +365,7 @@ export class ForumsController {
     @Res() res: FastifyReply,
   ) {
     try {
-      await this.forumsDbService.deleteForum(id);
+      await this.forumisRepo.deleteForumis(id);
 
       return res.status(200).send({
         message: 'Forum deleted successfully',

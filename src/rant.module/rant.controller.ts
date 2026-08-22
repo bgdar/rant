@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Query, Render } from '@nestjs/common';
-import { RabbitMqDashboardClientProvider } from './rabbitMq.dashboard.client.provider';
+import { DashboardClientRabbitMq } from '@/rabbitmq/dashboard.client.rabbitmq';
 
 @Controller('rant')
 export class RantController {
