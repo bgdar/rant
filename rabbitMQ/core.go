@@ -12,7 +12,7 @@ import (
 // -  beberpapa pengirim surat ata =u publisher
 // -beberapa queuu atau kotak surat
 // agar efesient
-
+// di sini aja gak di pindha ke constans
 type RantMessage struct {
 	env  *rmq.Environment
 	conn *rmq.AmqpConnection
@@ -21,11 +21,13 @@ type RantMessage struct {
 	TelegramConsumer     *rmq.Consumer
 	DiscordConsumer      *rmq.Consumer
 	WebDashboardConsumer *rmq.Consumer
+	WhatsAppConsumer     *rmq.Consumer
 
 	// Pengirim (Publishers)
 	TelegramResponsePublisher     *rmq.Publisher
 	DiscordResponsePublisher      *rmq.Publisher
 	WebDashboardResponsePublisher *rmq.Publisher
+	WhatsAppResponsePublisher     *rmq.Publisher
 }
 
 // gunakan untuk meng umbrela ke type Struc nantik
@@ -41,11 +43,13 @@ const (
 	queueTelegram  = "queue-telegram"
 	queueDiscord   = "queue-discord"
 	queueDashboard = "queue-dashboard"
+	queueWhatsApp  = "queue-whatsapp"
 
 	// untuk response nya , nantik untuk di kirim hasi modellnya
 	queueTelegramResponse  = "queue-telegram-response"
 	queueDiscordResponse   = "queue-discord-response"
 	queueDashboardResponse = "queue-dashboard-response"
+	queueWhatsAppResponse  = "queue-whatsapp-response"
 )
 
 var queues = []string{
@@ -53,7 +57,7 @@ var queues = []string{
 	queueTelegramResponse, queueDiscordResponse, queueDashboardResponse,
 }
 
-// FUNGSI INISIALISASI
+// fungsi inisialisasi
 func InitGateway(ctx context.Context, brokerURI string) (*RantMessage, error) {
 	env := rmq.NewEnvironment(brokerURI, nil)
 	conn, err := env.NewConnection(ctx)
@@ -91,7 +95,7 @@ func InitGateway(ctx context.Context, brokerURI string) (*RantMessage, error) {
 		}
 	}
 
-	// 2. INISIALISASI PUBLISHERS
+	// INISIALISASI PUBLISHERS
 	tgResPub, err := conn.NewPublisher(ctx, &rmq.QueueAddress{Queue: queueTelegramResponse}, nil)
 	if err != nil {
 		return nil, err
@@ -107,7 +111,7 @@ func InitGateway(ctx context.Context, brokerURI string) (*RantMessage, error) {
 		return nil, err
 	}
 
-	// 3. INISIALISASI CONSUMERS
+	// INISIALISASI CONSUMERS
 	tgCs, err := conn.NewConsumer(ctx, queueTelegram, nil)
 	if err != nil {
 		return nil, err

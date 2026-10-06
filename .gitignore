@@ -1,5 +1,34 @@
 
+.env
+
 
 # Runtime onxx 
 ./onnxruntime-linux-x64-1.26.0/
 /onnxruntime-linux-x64-1.26.0/
+
+
+
+# data yang di ambil dari hunggiface , jadi gak perlu di simpan 
+/datakeyword/data.keyword.aceh.json
+/datakeyword/data.keyword.indo.json
+./datakeyword/data.keyword.aceh.json
+./datakeyword/data.keyword.indo.json
+
+/dataset/dataset.response.indo.json
+/dataset/dataset_response_aceh.json
+/dataset/dataset.response.indo.json
+/dataset/dataset.response_aceh.json
+
+
+
+
+
+# imag belum saya masukin dulu 
+./onxx/img/ 
+onxx/img/ 
+/onxx/img/
+
+./service/model.img.service.go 
+/service/model.img.service.go 
+service/model.img.service.go 
+

@@ -1,0 +1,11 @@
+
+commit #3 update structure folder & management data external ( hunggiface )
+- memisakhan semau types ke 1 module constants
+- menambah kan repository (template) untuk mendatakan data dari hunggiface 
+- membatalkan dataRes dan dataKeyword untuk tidak di simpan ke github ( karena sudah ada di 1 tempat  di hunggiface)
+- add: menambhakan file upsert-data.sh yang mengmanagement serta menjalana scripp downlaod exc-data.go langsung
+-  replace : semua data yg berbentuk assert seperti model dan data untuk menjalakannya di matikan di local , jadi download aja lewat file upsert-assert.sh 
+- merapikan structure #1
+
+
+

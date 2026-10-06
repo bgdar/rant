@@ -1,9 +1,11 @@
-package service
+// *Bgdar : di sini akan menjalana runtime .onxx dan menjalana model yang sudah saya tarining ke runtime .onxx
+
+package model
 
 import (
 	"fmt"
 	"log"
-	"rant/core"
+	"rant/constants"
 	"strings"
 
 	ort "github.com/yalue/onnxruntime_go"
@@ -15,11 +17,9 @@ func ContextInputOuput(pathModel string) (inputNames []string, ouputNames []stri
 	if err != nil {
 		log.Fatal("Gagal membaca info model:", err)
 	}
-	fmt.Println("=== Input Model ===")
 	for _, info := range inputs {
 		inputNames = append(inputNames, info.Name)
 	}
-	fmt.Println("=== Output Model ===")
 	for _, info := range outputs {
 		ouputNames = append(ouputNames, info.Name)
 	}
@@ -29,8 +29,8 @@ func ContextInputOuput(pathModel string) (inputNames []string, ouputNames []stri
 
 // prediksi text yang di berikan
 // pastikan Ylabel berformat sama
-func Predict(session *ort.DynamicAdvancedSession, text string) (*core.OuputToxic, error) {
-	jumlahYlabel := int64(len(core.YLabels))
+func Predict(session *ort.DynamicAdvancedSession, text string) (*constans.OuputToxic, error) {
+	jumlahYlabel := int64(len(constans.YLabels))
 	// -- Input: StringTensor shape [batchSize, 1] --
 	inputTensor, err := ort.NewStringTensor(ort.NewShape(1, 1))
 	if err != nil {
@@ -38,13 +38,11 @@ func Predict(session *ort.DynamicAdvancedSession, text string) (*core.OuputToxic
 	}
 	defer inputTensor.Destroy()
 
-	//  1 fix — SetElement DULU, baru debug, baru Run()
 	if err := inputTensor.SetElement(0, text); err != nil {
 		return nil, fmt.Errorf("gagal set teks: %w", err)
 	}
-	// Tambahkan ini tepat SETELAH SetElement, SEBELUM Run()
-	cek, _ := inputTensor.GetElement(0)
-	fmt.Printf(">>> Teks di dalam tensor: %q\n", cek)
+	// cek, _ := inputTensor.GetElement(0)
+	// fmt.Printf(">>> Teks di dalam tensor: %q\n", cek)
 
 	labelTensor, err := ort.NewEmptyTensor[int64](ort.NewShape(1, jumlahYlabel))
 	if err != nil {
@@ -63,21 +61,19 @@ func Predict(session *ort.DynamicAdvancedSession, text string) (*core.OuputToxic
 	// Baca hasil label , misalnya :  [0, 0, 1, 0, 0, 0] , berdasarkan YLabel
 	rawLabels := labelTensor.GetData()
 
-	return &core.OuputToxic{
-		Text:     text,
-		RawLabel: append([]int64{}, rawLabels...),
-		AdaToxic: rawLabels[0] == 1,
+	return &constans.OuputToxic{
+		Text:      text,
+		RawLabel:  append([]int64{}, rawLabels...),
+		AdaToxic:  rawLabels[0] == 1,
+		InputText: text,
 	}, nil
 
 }
 
 // tampilkanHasil mencetak hasil deteksi dengan format yang mudah dibaca
-func DebugResult(h *core.OuputToxic) {
+func DebugResult(h *constans.OuputToxic) {
 	fmt.Println(strings.Repeat("─", 55))
-	fmt.Printf("📝 Teks    : %q\n", h.Text)
-	fmt.Printf("🔢 Raw     : %v\n", h.RawLabel)
+	fmt.Printf("Teks    : %q\n", h.Text)
+	fmt.Printf("Raw     : %v\n", h.RawLabel)
 	fmt.Println(strings.Repeat("─", 55))
 }
-
-
-

@@ -1,7 +1,5 @@
 <h1 align="center">Rant Model Api </h1>
 
-
-
 ### Tech 
  
 1. `RabbitMQ` : ini pengganti web server jadi akan di kirim berdasarkan antarian permintaan, untuk 3 alasan utama:
@@ -28,3 +26,27 @@ username : quest
     ```
 
 
+### Files 
+
+- `upsert-asset.sh` : panggil file ini untuk mengexcecusi file dan mendownload file file yang di butuhkan ke di folder `/data` 
+
+
+### Model 
+
+
+##### text
+
+##### Img 
+> commin soon
+> Di sini akan di jalankan model 
+
+datasetd di dapat dari : 
+Hasil dataset yang di dapat : 
+drawing/ - Artistic drawings and illustrations
+hentai/ - Anime/manga-style explicit content
+neutral/ - Safe and appropriate content
+porn/ - Explicit adult content
+sexy/ - Suggestive but not explicit content
+
+### info 
+-  nantik pastikn data gambar yang di kirim dari pusat agar ringan bisa di ubah ke `Base64` 

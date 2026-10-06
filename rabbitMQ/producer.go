@@ -2,34 +2,67 @@ package rabbitmq
 
 import (
 	"context"
+	"encoding/json"
+	"log"
+	constans "rant/constants"
+
 	rmq "github.com/rabbitmq/rabbitmq-amqp-go-client/pkg/rabbitmqamqp"
 )
 
 // FUNGSI PENGIRIM PESAN (MENGEMBALIKAN RESPONSE)
-// 1. Fungsi Kirim/Response Telegram
-func (g *RantMessage) SendResponseTelegram(ctx context.Context, data []byte) error {
+// Fungsi Kirim/Response Telegram
+func (g *RantMessage) SendResponseTelegram(ctx context.Context, data *constans.PayloadRabbitProducer) error {
+
+	toByte, err := json.Marshal(data)
+	if err != nil {
+		log.Print("gagal merubah ke byte \n")
+	}
 	// Membungkus []byte ke dalam objek amqp.Message
-	msg := rmq.NewMessage(data)
+	msg := rmq.NewMessage(toByte)
 
 	// Tangkap kedua return value-nya, lalu return error-nya saja
-	_, err := g.TelegramResponsePublisher.Publish(ctx, msg)
+	_, err = g.TelegramResponsePublisher.Publish(ctx, msg)
 	return err
 }
 
-// 2. Fungsi Kirim/Response Discord
-func (g *RantMessage) SendResponseDiscord(ctx context.Context, data []byte) error {
-	// Membungkus []byte ke dalam objek amqp.Message
-	msg := rmq.NewMessage(data)
+// Fungsi Kirim/Response Discord
+func (g *RantMessage) SendResponseDiscord(ctx context.Context, data *constans.PayloadRabbitProducer) error {
+	toByte, err := json.Marshal(data)
+	if err != nil {
+		log.Print("gagal merubah ke byte \n")
+	}
 
-	_, err := g.DiscordResponsePublisher.Publish(ctx, msg)
+	// Membungkus []byte ke dalam objek amqp.Message
+	msg := rmq.NewMessage(toByte)
+
+	_, err = g.DiscordResponsePublisher.Publish(ctx, msg)
 	return err
 }
 
-// 3. Fungsi Kirim/Response Web Dashboard
-func (g *RantMessage) SendResponseDashboard(ctx context.Context, data []byte) error {
+// Fungsi Kirim/Response Web Dashboard
+func (g *RantMessage) SendResponseDashboard(ctx context.Context, data *constans.PayloadRabbitProducer) error {
 	// Membungkus []byte ke dalam objek amqp.Message
-	msg := rmq.NewMessage(data)
+	// msg := rmq.NewMessage([]byte(data)) // string
+	toByte, err := json.Marshal(data)
+	if err != nil {
+		log.Print("gagal merubah ke byte Dashboard \n")
+	}
+	msg := rmq.NewMessage(toByte)
 
-	_, err := g.WebDashboardResponsePublisher.Publish(ctx, msg)
+	_, err = g.DiscordResponsePublisher.Publish(ctx, msg)
+	return err
+}
+
+// Fungsi Kirim/Response WhatsApp
+func (g *RantMessage) SendResponseWhatsApp(ctx context.Context, data *constans.PayloadRabbitProducer) error {
+	toByte, err := json.Marshal(data)
+	if err != nil {
+		log.Print("gagal merubah ke byte \n")
+	}
+
+	// Membungkus []byte ke dalam objek amqp.Message
+	msg := rmq.NewMessage(toByte)
+
+	_, err = g.DiscordResponsePublisher.Publish(ctx, msg)
 	return err
 }
